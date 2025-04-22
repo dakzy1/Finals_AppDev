@@ -5,7 +5,7 @@
         <div class="avatar"></div>
         <nav class="nav-links">
             <a href="{{ route('home') }}">Home</a>
-            <a href="{{ route('dashboard') }}">Class</a>
+            <a href="{{ route('classes.index') }}">Class</a>
             <a href="{{ route('about') }}">About</a>
         </nav>
     </header>
@@ -13,29 +13,15 @@
     <style>
         .header {
             background-color: #8A4AF3;
-            padding: 15px 15px;
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            margin: 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-
-        }
-
-        .nav-content {
+            padding: 15px 20px;
             display: flex;
             align-items: center;
             gap: 20px;
         }
 
         .avatar {
-            position: fixed;
-            top: 10px;
-            left: 15px;
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             background-color: #FFFFFF;
             border-radius: 50%;
         }
@@ -115,7 +101,7 @@
         }
 
         .sidebar {
-            width: 20%;
+            width: 30%;
             padding: 20px;
             border-right: 2px solid #0000FF;
         }

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ClassPageController;
 use Illuminate\Http\Request;   
 
 Route::get('/', function () {
@@ -15,9 +16,22 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard')->middleware('auth');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Route for the Class page (dashboard)
+Route::get('/dashboard', [ClassPageController::class, 'index'])->name('dashboard');
+
+// Route for Home page
+Route::get('/', function () {
+    return view('home');
+})->name('home');
+
+// Route for About page
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+// Route for Class page (alternative, if needed)
+Route::get('/classes', [ClassPageController::class, 'index'])->name('classes.index');
 
 
 Route::get('/auth/login', function () {
