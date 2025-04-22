@@ -1,0 +1,58 @@
+
+services:
+  # Laravel + Apache + PHP
+  webserver:
+    build:
+      context: .
+      dockerfile: docker/apache/Dockerfile
+    container_name: laravel_web
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/apache/vhost.conf:/etc/apache2/sites-available/000-default.conf
+    working_dir: /var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - laravel
+
+  # MySQL DB
+  mysql:
+    image: mysql:8.0
+    container_name: laravel_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fitness
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - laravel
+
+  # phpMyAdmin UI
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: laravel_phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - mysql
+    networks:
+      - laravel
+
+volumes:
+  dbdata:
+
+networks:
+  laravel:
+    driver: bridge

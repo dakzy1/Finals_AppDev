@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+        }
+        table {
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #aaa;
+        }
+        th, td {
+            padding: 10px;
+        }
+        a, button {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    @yield('content')
+</body>
+</html>
