@@ -19,6 +19,7 @@ Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard'
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
+//  ADMIN FUNCTION
 
 Route::get('/auth/login', function () {
     return view('auth.login');
@@ -58,5 +59,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('/delete{id}', [UserController::class, 'destroy'])->name('destroy');
 });
 
+ // testing phase
+Route::get('/auth/test', function () {
+    return view ('auth.test');
+})->name('auth.test'); 
 
-
+//Redirect to homepage
+Route::get('/home', function () {
+    return view('home'); 
+})->name('home');

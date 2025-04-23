@@ -21,4 +21,3 @@
         <h2>Contact Page</h2>
         <p>Get in touch via the Contact section.</p>
     </div>
-@endsection
