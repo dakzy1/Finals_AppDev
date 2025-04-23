@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard</title>
+    <title>FitZone</title>
     <style>
         body {
             font-family: Arial, sans-serif;
