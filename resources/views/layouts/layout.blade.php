@@ -6,6 +6,8 @@
         .hidden { display: none; }
         .active-btn { background-color: #3490dc; color: white; }
         .nav-btn { padding: 10px 20px; border: 1px solid #ccc; cursor: pointer; }
+
+        
     </style>
 </head>
 <body>
