@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Panel</title>
+    <title>FitZone</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,6 +23,7 @@
     </style>
 </head>
 <body>
+    @yield('header') <!-- Ensure the header section is yielded -->
     @yield('content')
 </body>
 </html>
