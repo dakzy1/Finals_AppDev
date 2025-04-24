@@ -24,11 +24,15 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Dashboard Route (handled by ClassPageController)
 Route::get('/dashboard', [ClassPageController::class, 'index'])->name('dashboard')->middleware('auth');
 
-// Public Routes
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
+// Viewclass Route
+Route::get('/viewclass/{id}', [ClassPageController::class, 'viewClass'])->name('viewclass')->middleware('auth');
 
+// Booking Routes
+Route::get('/bookclass/{id}', [ClassPageController::class, 'bookClass'])->name('bookclass.show');
+Route::post('/bookclass/{id}', [ClassPageController::class, 'store'])->name('bookclass.store');
+Route::get('/bookclass', [ClassPageController::class, 'index'])->name('bookclass'); // Redirect to dashboard
+
+// Public Routes
 Route::get('/about', function () {
     return view('about');
 })->name('about');
@@ -59,12 +63,16 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->name('admin.dashboard');
 
+// FitnessClass CRUD
+Route::post('/class/store', [UserController::class, 'storeFitnessClass'])->name('class.store');
+Route::put('/class/update/{id}', [UserController::class, 'updateFitnessClass'])->name('class.update');
+Route::delete('/class/delete/{id}', [UserController::class, 'destroyFitnessClass'])->name('class.destroy');
+
 // Admin logout
 Route::post('/admin/logout', function () {
     session()->forget('is_admin');
     return redirect()->route('auth.login');
 })->name('admin.logout');
-
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
@@ -77,7 +85,7 @@ Route::get('/auth/test', function () {
     return view ('auth.test');
 })->name('auth.test'); 
 
-//Redirect to homepage
+// Redirect to homepage
 Route::get('/home', function () {
     return view('home'); 
 })->name('home');

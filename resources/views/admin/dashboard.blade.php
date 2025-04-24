@@ -38,6 +38,7 @@
         margin: 30px auto;
         width: 80%;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        position: relative;
     }
 
     h2 {
@@ -86,15 +87,20 @@
     .tab-content.active {
         display: block;
     }
+
     .edit-user-form {
-    background-color: #fff0f6;
-    max-width: 500px;
-    margin: 20px auto;
-    padding: 20px 25px;
-    margin-bottom: 30px;
-    border: 2px solid #dba0c6;
-    border-radius: 16px;
-    box-shadow: 0 4px 8px rgba(130, 70, 116, 0.1);
+        background-color: #fff0f6;
+        max-width: 500px;
+        margin: 20px auto;
+        padding: 20px 25px;
+        border: 2px solid #dba0c6;
+        border-radius: 16px;
+        box-shadow: 0 4px 8px rgba(130, 70, 116, 0.1);
+        display: none;
+    }
+
+    .edit-user-form.active {
+        display: block;
     }
 
     .edit-user-form h3 {
@@ -160,11 +166,12 @@
     .btn-cancel:hover {
         background-color: #b3b3b3;
     }
+
     .logout-container {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 100;
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 100;
     }
 
     .logout-btn {
@@ -184,14 +191,33 @@
         transform: scale(1.05);
     }
 
+    .toggle-form-btn {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background-color: #824674;
+        color: white;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .toggle-form-btn:hover {
+        background-color: #6a3a5b;
+        transform: scale(1.05);
+    }
 </style>
+
 <div class="logout-container">
     <form method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="submit" class="logout-btn">Logout</button>
     </form>
 </div>
-
 
 <div class="nav-bar">
     <div><strong>Admin</strong></div>
@@ -210,7 +236,7 @@
         @endif
 
         @isset($editUser)
-        <div class="edit-user-form">
+        <div class="edit-user-form active">
             <h3>Edit User</h3>
             <form method="POST" action="{{ route('admin.update', $editUser->id) }}">
                 @csrf
@@ -262,28 +288,122 @@
     </div>
 </div>
 
-
 <div id="class" class="tab-content">
     <div class="container">
         <h2>Class Management</h2>
-        <p>This section will contain class-related management features.</p>
-        {{-- You can expand this with your class list and database data --}}
+
+        @if(session('success'))
+            <div style="color: green; margin-bottom: 10px;">{{ session('success') }}</div>
+        @endif
+
+        @if($editClass)
+        <div class="edit-user-form active">
+            <h3>Edit Class</h3>
+            <form method="POST" action="{{ route('class.update', $editClass->id) }}">
+                @csrf
+                @method('PUT')
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" value="{{ $editClass->name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="level">Level</label>
+                    <input type="text" id="level" name="level" value="{{ $editClass->level }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="duration">Duration</label>
+                    <input type="text" id="duration" name="duration" value="{{ $editClass->duration }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="trainer">Trainer</label>
+                    <input type="text" id="trainer" name="trainer" value="{{ $editClass->trainer }}" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">Update Class</button>
+                    <a href="{{ route('admin.dashboard') }}" class="btn-cancel">Cancel</a>
+                </div>
+            </form>
+        </div>
+        @else
+        <div class="edit-user-form" id="add-class-form">
+            <h3>Add New Class</h3>
+            <form method="POST" action="{{ route('class.store') }}">
+                @csrf
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="level">Level</label>
+                    <input type="text" id="level" name="level" required>
+                </div>
+                <div class="form-group">
+                    <label for="duration">Duration</label>
+                    <input type="text" id="duration" name="duration" required>
+                </div>
+                <div class="form-group">
+                    <label for="trainer">Trainer</label>
+                    <input type="text" id="trainer" name="trainer" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">Add Class</button>
+                </div>
+            </form>
+        </div>
+        @endif
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Level</th>
+                    <th>Duration</th>
+                    <th>Trainer</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($fitnessClasses as $class)
+                <tr>
+                    <td>{{ $class->name }}</td>
+                    <td>{{ $class->level }}</td>
+                    <td>{{ $class->duration }}</td>
+                    <td>{{ $class->trainer }}</td>
+                    <td>
+                        <a href="{{ route('admin.dashboard', ['edit_class' => $class->id]) }}" class="btn-edit">Edit</a>
+                        <form action="{{ route('class.destroy', $class->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-delete" onclick="return confirm('Delete this class?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        @if(!$editClass)
+        <button class="toggle-form-btn" onclick="toggleAddClassForm()">Add Class</button>
+        @endif
     </div>
 </div>
 
 <script>
     function switchTab(tabId) {
-        // Toggle content visibility
         document.querySelectorAll('.tab-content').forEach(div => {
             div.classList.remove('active');
         });
         document.getElementById(tabId).classList.add('active');
 
-        // Toggle button active style
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.remove('active');
         });
         event.target.classList.add('active');
+    }
+
+    function toggleAddClassForm() {
+        const form = document.getElementById('add-class-form');
+        form.classList.toggle('active');
     }
 </script>
 @endsection

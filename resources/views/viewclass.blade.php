@@ -20,46 +20,43 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <h2>Schedule</h2>
-            <div class="schedule-items">
-                @if (session('success'))
-                    <div style="color: green; margin-bottom: 10px;">{{ session('success') }}</div>
-                @endif
-                @if($schedules->isEmpty())
-                    <p>No schedules booked yet.</p>
-                @else
-                    @foreach($schedules as $schedule)
-                        <div class="class-box">
-                            <h4>{{ $schedule->classes->name }}</h4>
-                            <p>{{ \Carbon\Carbon::parse($schedule->date)->format('m/d/y') }}</p>
-                            <p>{{ \Carbon\Carbon::parse($schedule->time, 'h:i A')->format('h:i A') }}</p>
-                            <p>{{ $schedule->trainer }}</p>
-                            <button class="edit-btn">Edit</button>
-                        </div>
-                    @endforeach
-                @endif
-            </div>
+            @if($schedules->isEmpty())
+                <p>No schedules booked for this class yet.</p>
+            @else
+                @foreach($schedules as $schedule)
+                    <div class="class-box">
+                        <h4>{{ $schedule->fitnessClass->name }}</h4>
+                        <p>{{ \Carbon\Carbon::parse($schedule->date)->format('m/d/y') }}</p>
+                        <p>{{ \Carbon\Carbon::parse($schedule->time, 'h:i A')->format('h:i A') }}</p>
+                        <p>{{ $schedule->trainer }}</p>
+                        <button class="edit-btn">Edit</button>
+                    </div>
+                @endforeach
+            @endif
         </aside>
 
-        <!-- Classes Section -->
+        <!-- Class Details -->
         <section class="class-details">
-            <h2>Classes</h2>
-            <div class="class-cards">
-                @if($classes->isEmpty())
-                    <p>No classes available.</p>
-                @else
-                    @foreach($classes as $class)
-                    <div class="class-card">
-                        <div class="class-info">
-                            <h3>{{ $class->name }}</h3>
-                            <p><strong>Level:</strong> {{ $class->level }}</p>
-                            <p><strong>Duration:</strong> {{ $class->duration }}</p>
-                            <p><strong>Trainer:</strong> {{ $class->trainer }}</p>
-                        </div>
-                        <a href="{{ route('viewclass', $class->id) }}" class="btn-book">View</a>
-                    </div>
-                    @endforeach
-                @endif
+            <h1>{{ $class->name }}</h1>
+            <p class="description">
+                Yoga is a physical, mental, and spiritual practice that originated in ancient India. It combines gentle physical postures (called asanas), breathing techniques (pranayama), and meditation to promote overall well-being.
+            </p>
+
+            <div class="book-box">
+            <a href="{{ route('bookclass', $class->id) }}" class="btn-book">Book Now</a>
+                <p><strong>Level:</strong> {{ $class->level }}</p>
+                <p><strong>Duration:</strong> {{ $class->duration }}</p>
+                <p><strong>Trainer:</strong> {{ $class->trainer }}</p>
             </div>
+
+            <h3>Key Benefits of Yoga:</h3>
+            <ul class="benefits">
+                <li>Increases flexibility and strength</li>
+                <li>Improves posture and balance</li>
+                <li>Reduces stress and anxiety</li>
+                <li>Enhances focus, mindfulness, and relaxation</li>
+                <li>Supports respiratory and cardiovascular health</li>
+            </ul>
         </section>
     </div>
 </div>
@@ -70,6 +67,7 @@ body {
     background-color: #f5eaf3;
     margin: 0;
     padding: 0;
+    height: 100vh;
 }
 
 .top-nav {
@@ -81,6 +79,7 @@ body {
 .nav-links {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 30px;
 }
 
@@ -115,6 +114,7 @@ body {
     display: flex;
     gap: 20px;
     padding: 40px;
+    min-height: calc(100vh - 80px);
 }
 
 .sidebar {
@@ -163,44 +163,44 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-.class-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.class-details h1 {
+    color: #4c305f;
+    margin-bottom: 15px;
 }
 
-.class-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #d87384;
-    padding: 20px;
-    border-radius: 12px;
-    color: white;
+.description {
+    color: #333;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
 }
 
-.class-info h3 {
-    margin-bottom: 10px;
-    font-size: 1.25rem;
-}
-
-.class-info p {
-    margin: 3px 0;
-    font-size: 0.95rem;
+.book-box {
+    padding: 10px 0;
+    margin-bottom: 30px;
+    border-left: 2px solid #4c305f;
+    padding-left: 20px;
 }
 
 .btn-book {
-    background-color: #fff;
-    color: #d87384;
+    display: inline-block;
+    background-color: #d87384;
+    color: white;
     padding: 10px 20px;
     border-radius: 8px;
     text-decoration: none;
     font-weight: bold;
-    transition: background-color 0.3s;
+    margin-bottom: 10px;
 }
 
-.btn-book:hover {
-    background-color: #f0f0f0;
+.benefits {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.benefits li {
+    margin-bottom: 8px;
+    color: #4c305f;
 }
 </style>
 @endsection
