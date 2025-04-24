@@ -32,7 +32,7 @@ class AuthController extends Controller
         
         Auth::login($user);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('landingpage');
     }
 
     public function showLogin()
@@ -45,7 +45,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->route('dashboard');
+            return redirect()->route('landingpage');
         }
 
         return back()->withErrors([
@@ -53,9 +53,9 @@ class AuthController extends Controller
         ]);
     }
 
-    public function dashboard()
+    public function landingpage()
     {
-        return view('dashboard');
+        return view('landingpage');
     }
 
     public function logout()

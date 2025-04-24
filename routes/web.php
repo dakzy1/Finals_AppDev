@@ -15,7 +15,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard')->middleware('auth');
+Route::get('/landingpage', [AuthController::class, 'landingpage'])->name('landingpage')->middleware('auth');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
