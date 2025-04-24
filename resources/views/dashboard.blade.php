@@ -2,12 +2,18 @@
 
 @section('header')
     <header class="header">
-        <div class="avatar"></div>
-        <nav class="nav-links">
-            <a href="{{ route('home') }}">Home</a>
-            <a href="{{ route('dashboard') }}">Class</a>
-            <a href="{{ route('about') }}">About</a>
-        </nav>
+        <div class="nav-content">
+            <div class="avatar"></div>
+            <nav class="nav-links">
+                <a href="{{ route('home') }}">Home</a>
+                <a href="{{ route('dashboard') }}">Class</a>
+                <a href="{{ route('about') }}">About</a>
+                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                    @csrf
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </nav>
+        </div>
     </header>
 
     <style>
@@ -21,19 +27,18 @@
             position: fixed;
             top: 0;
             left: 0;
-
+            z-index: 1000;
         }
 
         .nav-content {
+            max-width: 1200px;
+            width: 100%;
             display: flex;
             align-items: center;
             gap: 20px;
         }
 
         .avatar {
-            position: fixed;
-            top: 10px;
-            left: 15px;
             width: 35px;
             height: 35px;
             background-color: #FFFFFF;
@@ -43,6 +48,7 @@
         .nav-links {
             display: flex;
             gap: 30px;
+            align-items: center;
         }
 
         .nav-links a {
@@ -54,6 +60,20 @@
 
         .nav-links a:hover {
             text-decoration: underline;
+        }
+
+        .logout-btn {
+            background-color: #FFFFFF;
+            color: #8A4AF3;
+            padding: 5px 15px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background-color: #F0F0F0;
         }
     </style>
 @endsection
@@ -106,7 +126,7 @@
     <style>
         .dashboard-container {
             max-width: 1200px;
-            margin: 20px auto;
+            margin: 60px auto 20px auto; /* Adjusted for fixed header */
             display: flex;
             background-color: #F5E6F5;
             border: 2px solid #0000FF;

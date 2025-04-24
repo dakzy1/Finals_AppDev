@@ -12,6 +12,6 @@ class ClassPageController extends Controller
     {
         $schedules = Schedule::all();
         $classes = FitnessClass::all();
-        return view('dashboard', compact('schedules', 'classes')); // Pass both variables
+        return view('dashboard', compact('schedules', 'classes'));
     }
 }

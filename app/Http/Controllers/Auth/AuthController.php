@@ -26,10 +26,9 @@ class AuthController extends Controller
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
-            'password' => $request->password
+            'password' => Hash::make($request->password), // Hash the password
         ]);
 
-        
         Auth::login($user);
 
         return redirect()->route('landingpage');
@@ -45,6 +44,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
+            $request->session()->regenerate(); // Regenerate session to prevent fixation
             return redirect()->route('landingpage');
         }
 
@@ -58,9 +58,11 @@ class AuthController extends Controller
         return view('landingpage');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect()->route('login');
     }
 }

@@ -1,18 +1,26 @@
-<!-- resources/views/welcome.blade.php -->
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to FitZone</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
         }
-        .container {
+
+        .landing-container {
             display: flex;
-            height: 100vh;
+            width: 100vw; /* Full width */
+            height: 100vh; /* Full height */
         }
+
         .left {
             background-color: #4b2953;
             color: white;
@@ -24,50 +32,97 @@
             justify-content: center;
             text-align: center;
         }
+
         .left h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: 3em;
+            margin-bottom: 15px;
+            line-height: 1.2;
         }
+
         .left p {
-            font-size: 1.2em;
+            font-size: 1.5em;
             margin-bottom: 40px;
+            line-height: 1.4;
         }
+
         .class-box {
             background-color: #A76CAB;
-            padding: 20px;
+            padding: 25px;
             border-radius: 12px;
             width: fit-content;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
         .class-box h3 {
             margin: 0;
-            font-size: 1.5em;
+            font-size: 1.8em;
         }
+
         .class-box small {
             display: block;
             margin-top: 5px;
+            font-size: 0.9em;
+            opacity: 0.8;
         }
+
         .right {
-            background: url('/images/yoga-bg.png') no-repeat center center/cover;
             width: 50%;
             position: relative;
+            background: url('/images/yoga-bg.png') no-repeat center center/cover;
         }
+
         .right button {
             position: absolute;
-            bottom: 60px;
+            bottom: 80px;
             left: 50%;
             transform: translateX(-50%);
-            padding: 15px 25px;
+            padding: 15px 30px;
             background-color: #5D2E7E;
             color: white;
-            font-size: 1em;
+            font-size: 1.2em;
+            font-weight: bold;
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .right button:hover {
+            background-color: #4A2366;
+        }
+
+        @media (max-width: 768px) {
+            .landing-container {
+                flex-direction: column;
+            }
+
+            .left, .right {
+                width: 100%;
+                min-height: 50vh;
+            }
+
+            .left {
+                padding: 30px;
+            }
+
+            .left h1 {
+                font-size: 2em;
+            }
+
+            .left p {
+                font-size: 1.2em;
+            }
+
+            .right button {
+                bottom: 40px;
+                padding: 12px 20px;
+                font-size: 1em;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="landing-container">
         <div class="left">
             <h1>Welcome to<br>FitZone</h1>
             <p>Track your fitness journey<br>and book classes</p>
@@ -80,7 +135,7 @@
         </div>
 
         <div class="right">
-            <a href="{{ route('home') }}">
+            <a href="{{ route('dashboard') }}">
                 <button>Book a Class Now!!</button>
             </a>
         </div>
