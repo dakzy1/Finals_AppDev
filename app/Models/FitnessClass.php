@@ -9,7 +9,7 @@ class FitnessClass extends Model
 {
     use HasFactory;
 
-    protected $table = 'classes'; // Important: This tells Laravel to use the 'classes' table
+    protected $table = 'fitness_classes'; // Changed to fitness_classes
 
     protected $fillable = [
         'name',
