@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>FitZone - Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ asset('images/yoga-bg.png') }}" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         * { box-sizing: border-box; }
@@ -82,6 +83,7 @@
             border: none;
             border-bottom: 1px solid #f9eebd;
             color: #fff;
+            outline: none;
         }
 
         input::placeholder {
@@ -196,9 +198,9 @@
             color: #4b2953;
             font-family: 'Segoe UI', sans-serif;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: bold;
             padding: 8px 16px;
-            border-radius: 25px;
+            border-radius: 5px;
             border: none;
             box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
