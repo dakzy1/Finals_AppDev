@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Laravel Navigation Tabs</title>
+    <link rel="shortcut icon" href="{{ asset('images/exercise-weight-icon-6.png') }}" type="image/x-icon">
     <style>
         .hidden { display: none; }
         .active-btn { background-color: #3490dc; color: white; }
