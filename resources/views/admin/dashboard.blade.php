@@ -299,22 +299,27 @@
         @if($editClass)
         <div class="edit-user-form active">
             <h3>Edit Class</h3>
-            <form method="POST" action="{{ route('admin.class.update', $editClass->id) }}" onsubmit="return confirm('Are you sure you want to update this class?')">                @csrf
+            <form method="POST" action="{{ route('admin.update', $editClass->id) }}" onsubmit="return confirm('Are you sure you want to update this class?')">
+                @csrf
                 @method('PUT')
                 <div class="form-group">
-                    <label for="name">Name</label>
+                    <label for="name">Class Name</label>
                     <input type="text" id="name" name="name" value="{{ $editClass->name }}" required>
                 </div>
                 <div class="form-group">
-                    <label for="level">Level</label>
-                    <input type="text" id="level" name="level" value="{{ $editClass->level }}" required>
+                    <label for="level">Difficulty Level</label>
+                    <select id="level" name="level" required>
+                        <option value="Beginner" {{ $editClass->level == 'Beginner' ? 'selected' : '' }}>Beginner</option>
+                        <option value="Intermediate" {{ $editClass->level == 'Intermediate' ? 'selected' : '' }}>Intermediate</option>
+                        <option value="Advanced" {{ $editClass->level == 'Advanced' ? 'selected' : '' }}>Advanced</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="duration">Duration</label>
-                    <input type="text" id="duration" name="duration" value="{{ $editClass->duration }}" required>
+                    <label for="duration">Duration (minutes)</label>
+                    <input type="number" id="duration" name="duration" value="{{ $editClass->duration }}" required>
                 </div>
                 <div class="form-group">
-                    <label for="trainer">Trainer</label>
+                    <label for="trainer">Trainer Name</label>
                     <input type="text" id="trainer" name="trainer" value="{{ $editClass->trainer }}" required>
                 </div>
                 <div class="form-actions">
