@@ -8,18 +8,21 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('fitness_classes', function (Blueprint $table) { // Changed to fitness_classes
+        Schema::create('fitness_classes', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
-            $table->date('date');
-            $table->time('time');
-            $table->string('category');
-            $table->string('trainer');
+            $table->string('name');        // Added to store the class name
+            $table->string('level');       // Added to store the difficulty level
+            $table->string('duration');    // Added to store the duration (e.g., "60 mins")
+            $table->string('trainer');     // Existing column
+            $table->date('date')->nullable();         // Existing column
+            $table->time('time')->nullable();         // Existing column
+            $table->string('category')->nullable();    // Existing column
+            $table->timestamps();          // Existing, adds created_at and updated_at
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('fitness_classes'); // Changed to fitness_classes
+        Schema::dropIfExists('fitness_classes');
     }
 };

@@ -11,11 +11,14 @@ class FitnessClass extends Model
 
     protected $table = 'fitness_classes'; // Changed to fitness_classes
 
-    protected $fillable = [
-        'name',
+    protected $fillable = [ 
+        'name', 
         'level',
         'duration',
         'trainer',
+        'date',
+        'time',
+        'category',
     ];
 
     public function schedules()
