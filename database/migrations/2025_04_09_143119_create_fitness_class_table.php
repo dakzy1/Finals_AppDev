@@ -6,12 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('fitness_class', function (Blueprint $table) {
+        Schema::create('fitness_classes', function (Blueprint $table) { // Changed to fitness_classes
             $table->id();
             $table->timestamps();
             $table->date('date');
@@ -21,11 +18,8 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('fitness_class');
+        Schema::dropIfExists('fitness_classes'); // Changed to fitness_classes
     }
 };
