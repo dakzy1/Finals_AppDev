@@ -119,7 +119,7 @@
     </style>
 </head>
 <body>
-<div class="navbar">
+    <div class="navbar">
         <div>
             <a href="{{ route('landingpage') }}">Home</a>
             <a href="{{ route('dashboard') }}">Class</a>
@@ -131,14 +131,14 @@
             <button class="btn-delete">Delete</button>
             <div class="class-details">
                 <h2>{{ $class->name }}</h2>
-                <p><strong>Duration:</strong> {{ $class->duration }} hour</p>
-                <p><strong>Difficulty:</strong> {{ $class->difficulty }}</p>
-                <p><strong>Location:</strong> {{ $class->location }}</p>
+                <p><strong>Duration:</strong> {{ $class->duration }}</p>
+                <p><strong>Difficulty:</strong> {{ $class->level }}</p>
+                <p><strong>Location:</strong> {{ $class->location ?? 'Not specified' }}</p>
             </div>
             <form class="booking-form" method="POST" action="{{ route('bookclass.store', $class->id) }}">
                 @csrf
                 <label for="trainer">Trainer:</label>
-                <input type="text" id="trainer" name="trainer" value="{{ old('trainer') }}" required>
+                <input type="text" id="trainer" name="trainer" value="{{ old('trainer', $class->trainer) }}" required>
                 @error('trainer')
                     <div class="error">{{ $message }}</div>
                 @enderror

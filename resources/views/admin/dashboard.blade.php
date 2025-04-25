@@ -299,8 +299,7 @@
         @if($editClass)
         <div class="edit-user-form active">
             <h3>Edit Class</h3>
-            <form method="POST" action="{{ route('class.update', $editClass->id) }}">
-                @csrf
+            <form method="POST" action="{{ route('admin.class.update', $editClass->id) }}" onsubmit="return confirm('Are you sure you want to update this class?')">                @csrf
                 @method('PUT')
                 <div class="form-group">
                     <label for="name">Name</label>

@@ -29,9 +29,9 @@
                 @else
                     @foreach($schedules as $schedule)
                         <div class="class-box">
-                            <h4>{{ $schedule->classes->name }}</h4>
+                            <h4>{{ $schedule->fitnessClass->name }}</h4>
                             <p>{{ \Carbon\Carbon::parse($schedule->date)->format('m/d/y') }}</p>
-                            <p>{{ \Carbon\Carbon::parse($schedule->time, 'h:i A')->format('h:i A') }}</p>
+                            <p>{{ \Carbon\Carbon::parse($schedule->time)->format('h:i A') }}</p>
                             <p>{{ $schedule->trainer }}</p>
                             <button class="edit-btn">Edit</button>
                         </div>
