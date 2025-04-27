@@ -238,18 +238,51 @@
         @isset($editUser)
         <div class="edit-user-form active">
             <h3>Edit User</h3>
+            @if ($errors->any())
+                <div style="color: red; margin-bottom: 10px;">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <form method="POST" action="{{ route('admin.update', $editUser->id) }}">
                 @csrf
                 @method('PUT')
 
                 <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" value="{{ $editUser->name }}" required>
+                    <label for="firstname">First Name</label>
+                    <input type="text" id="first_name" name="first_name" value="{{ $editUser->first_name }}" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ $editUser->email }}" required>
+                    <label for="middlename">Middle Name</label>
+                    <input type="text" id="middle_name" name="middle_name" value="{{ $editUser->middle_name }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastname">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" value="{{ $editUser->last_name }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Last Name</label>
+                    <input type="text" id="email" name="email" value="{{ $editUser->email }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                        <option value="male" {{ $editUser->gender == 'male' ? 'selected' : '' }}>Male</option>
+                        <option value="female" {{ $editUser->gender == 'female' ? 'selected' : '' }}>Female</option>
+                        <option value="other" {{ $editUser->gender == 'other' ? 'selected' : '' }}>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" value="{{ old('password') }}" placeholder="Leave blank to keep the current password">
                 </div>
 
                 <div class="form-actions">
@@ -260,10 +293,14 @@
         </div>
         @endisset
 
+
         <table>
             <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>First Name</th>
+                    <th>Middle Name</th>
+                    <th>Last Name</th>
+                    <th>Gender</th>
                     <th>E-mail</th>
                     <th>Actions</th>
                 </tr>
@@ -271,7 +308,10 @@
             <tbody>
                 @foreach ($users as $user)
                 <tr>
-                    <td>{{ $user->name }}</td>
+                    <td>{{ $user->first_name }}</td>
+                    <td>{{ $user->middle_name }}</td>
+                    <td>{{ $user->last_name }}</td>
+                    <td>{{ $user->gender }}</td>
                     <td>{{ $user->email }}</td>
                     <td>
                         <a href="{{ route('admin.dashboard', ['edit' => $user->id]) }}" class="btn-edit">Edit</a>

@@ -14,7 +14,7 @@ class ClassPageController extends Controller
         $user = Auth::user();
         $schedules = Schedule::where('user_id', $user->id)->with('fitnessClass')->get();       
         $classes = FitnessClass::all();
-        return view('dashboard', compact('schedules', 'classes'));
+        return view('bookclass', compact('schedules', 'classes'));
     }
 
     public function viewClass($id)

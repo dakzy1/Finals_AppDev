@@ -83,7 +83,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
  // testing phase
 Route::get('/auth/test', function () {
     return view ('auth.test');
-})->name('auth.test'); 
+})->name('auth.test');
 
 // Redirect to homepage
 Route::get('/home', function () {

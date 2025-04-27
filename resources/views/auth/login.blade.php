@@ -124,42 +124,64 @@
         .register-popup {
             display: none;
             position: absolute;
-            top: 5%;
+            top: 10%;
             left: 50%;
             transform: translateX(-50%);
-            width: 90%;
-            max-width: 500px;
+            width: 80%;
+            max-width: 400px; /* smaller box */
             background: #774c8b;
             color: #fbeec1;
-            padding: 2rem;
-            border-radius: 20px;
+            padding: 1.5rem; /* slightly smaller padding */
+            border-radius: 15px; /* a little tighter */
             animation: slideIn 0.5s forwards;
             z-index: 10;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.25); /* a little softer shadow */
         }
 
         @keyframes slideIn {
             0% { transform: translate(-50%, -20%) scale(0.8); opacity: 0; }
             100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
         }
+        .register-popup form .mb-2, 
+        .register-popup form .mb-3 {
+            margin-bottom: 0.6rem; /* tighter space between fields */
+        }
+
+        .register-popup input, 
+        .register-popup select {
+            padding: 6px 10px; /* smaller input box height */
+            font-size: 0.9rem;
+        }
+
+        .register-popup {
+            padding: 1.5rem 1.2rem; /* less padding inside popup */
+            max-height: 90vh; /* prevent modal from getting too tall */
+            overflow-y: auto; /* enable scroll if needed */
+        }
 
         .register-popup h4 {
             color: #fbeec1;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             text-align: center;
+            font-size: 1.5rem; /* slightly smaller title */
         }
 
         .register-popup label {
             color: #fbeec1;
+            font-size: 0.9rem; /* smaller labels */
         }
 
-        .register-popup input {
+        .register-popup input,
+        .register-popup select {
             background-color: #fbeec1;
             color: #512e5f;
             border: none;
+            font-size: 0.9rem; /* smaller input text */
+            padding: 8px; /* smaller input box height */
         }
 
-        .register-popup input:focus {
+        .register-popup input:focus,
+        .register-popup select:focus {
             outline: 2px solid #f2547d;
             box-shadow: none;
         }
@@ -167,9 +189,14 @@
         .alert-error {
             background-color: #f2547d;
             color: #fff;
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 8px;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-success, .btn-secondary {
+            padding: 8px 12px;
             font-size: 0.9rem;
         }
 
@@ -189,6 +216,7 @@
             background-color: #fbeec1;
             color: #512e5f;
         }
+        
         .admin-login-btn {
             bottom: 20px;
             right: 20px;
@@ -234,7 +262,7 @@
     </div>
 
     <div class="right">
-        <h1>Fit N Right</h1>
+        <h1>FitZone</h1>
         <div class="login-box">
             <h3>Login</h3>
             <form method="POST" action="{{ route('login') }}">
@@ -271,8 +299,25 @@
             <form method="POST" action="/register">
                 @csrf
                 <div class="mb-2">
-                    <label>Name</label>
-                    <input type="text" name="name" class="form-control" required>
+                    <label>First Name</label>
+                    <input type="text" name="first_name" class="form-control" required>
+                </div>
+                <div class="mb-2">
+                    <label>Middle Name</label>
+                    <input type="text" name="middle_name" class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label>Last Name</label>
+                    <input type="text" name="last_name" class="form-control" required>
+                </div>
+                <div class="mb-2">
+                    <label>Gender</label>
+                    <select name="gender" class="form-control" required>
+                        <option value="" disabled selected>Select your gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
                 <div class="mb-2">
                     <label>Email</label>
@@ -292,8 +337,6 @@
                 </div>
             </form>
         </div>
-    </div>
-</div>
 
 <!-- Admin Login Button (Bottom Right Corner) -->
 <button class="btn position-fixed admin-login-btn" data-bs-toggle="modal" data-bs-target="#adminLoginModal">
