@@ -28,9 +28,8 @@ Route::get('/dashboard', [ClassPageController::class, 'index'])->name('dashboard
 Route::get('/viewclass/{id}', [ClassPageController::class, 'viewClass'])->name('viewclass')->middleware('auth');
 
 // Booking Routes
-Route::get('/bookclass/{id}', [ClassPageController::class, 'bookClass'])->name('bookclass.show');
-Route::post('/bookclass/{id}', [ClassPageController::class, 'store'])->name('bookclass.store');
-Route::get('/bookclass', [ClassPageController::class, 'index'])->name('bookclass'); // Redirect to dashboard
+Route::get('/class/{id}/book', [ClassPageController::class, 'bookclass'])->name('bookclass');
+Route::post('/class/{id}/book', [ClassPageController::class, 'store'])->name('bookclass.store');
 
 // Public Routes
 Route::get('/about', function () {
