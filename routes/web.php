@@ -18,8 +18,9 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-Route::get('/landingpage', [AuthController::class, 'landingpage'])->name('landingpage')->middleware('auth');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/landingpage', [ClassPageController::class, 'landingpage'])->name('landingpage');
 
 // Dashboard Route (handled by ClassPageController)
 Route::get('/dashboard', [ClassPageController::class, 'index'])->name('dashboard')->middleware('auth');
