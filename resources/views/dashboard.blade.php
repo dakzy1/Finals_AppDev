@@ -29,11 +29,15 @@
                 @else
                     @foreach($schedules as $schedule)
                         <div class="class-box">
-                            <h4>{{ $schedule->fitnessClass->name }}</h4>
-                            <p>{{ \Carbon\Carbon::parse($schedule->date)->format('m/d/y') }}</p>
-                            <p>{{ \Carbon\Carbon::parse($schedule->time)->format('h:i A') }}</p>
-                            <p>{{ $schedule->trainer }}</p>
-                            <button class="edit-btn">Edit</button>
+                            <div class="class-header" onclick="toggleDetails(this)">
+                                <h4>{{ $schedule->fitnessClass->name }}</h4>
+                            </div>
+                            <div class="class-details-content" style="display: none;">
+                                <p><strong>Date:</strong> {{ \Carbon\Carbon::parse($schedule->date)->format('m/d/y') }}</p>
+                                <p><strong>Time:</strong> {{ \Carbon\Carbon::parse($schedule->time)->format('h:i A') }}</p>
+                                <p><strong>Trainer:</strong> {{ $schedule->trainer }}</p>
+                                <button class="edit-btn">Edit</button>
+                            </div>
                         </div>
                     @endforeach
                 @endif
@@ -48,15 +52,15 @@
                     <p>No classes available.</p>
                 @else
                     @foreach($classes as $class)
-                    <div class="class-card">
-                        <div class="class-info">
-                            <h3>{{ $class->name }}</h3>
-                            <p><strong>Level:</strong> {{ $class->level }}</p>
-                            <p><strong>Duration:</strong> {{ $class->duration }}</p>
-                            <p><strong>Trainer:</strong> {{ $class->trainer }}</p>
+                        <div class="class-card">
+                            <div class="class-info">
+                                <h3>{{ $class->name }}</h3>
+                                <p><strong>Level:</strong> {{ $class->level }}</p>
+                                <p><strong>Duration:</strong> {{ $class->duration }}</p>
+                                <p><strong>Trainer:</strong> {{ $class->trainer }}</p>
+                            </div>
+                            <a href="{{ route('viewclass', $class->id) }}" class="btn-book">View</a>
                         </div>
-                        <a href="{{ route('viewclass', $class->id) }}" class="btn-book">View</a>
-                    </div>
                     @endforeach
                 @endif
             </div>
@@ -64,6 +68,7 @@
     </div>
 </div>
 
+<!-- ✅ Styles and Script placed properly inside the same file -->
 <style>
 body {
     font-family: 'Poppins', sans-serif;
@@ -131,6 +136,15 @@ body {
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.class-header {
+    font-weight: bold;
+}
+
+.class-details-content {
+    margin-top: 10px;
 }
 
 .edit-btn {
@@ -140,18 +154,6 @@ body {
     border: none;
     border-radius: 5px;
     padding: 5px 10px;
-    cursor: pointer;
-}
-
-.secondary-class-btn {
-    margin-top: 15px;
-    background-color: #d87384;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 15px;
-    width: 100%;
-    font-weight: bold;
     cursor: pointer;
 }
 
@@ -203,4 +205,15 @@ body {
     background-color: #f0f0f0;
 }
 </style>
+
+<script>
+function toggleDetails(header) {
+    const details = header.nextElementSibling;
+    if (details.style.display === "none" || details.style.display === "") {
+        details.style.display = "block";
+    } else {
+        details.style.display = "none";
+    }
+}
+</script>
 @endsection
