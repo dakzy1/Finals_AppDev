@@ -21,6 +21,17 @@ class ClassPageController extends Controller
         return view('dashboard', compact('schedules', 'classes'));
     }
 
+    public function landingpage()
+    {
+        $upcomingSchedule = Schedule::where('date', '>=', now()->toDateString())
+            ->orderBy('date')
+            ->orderBy('time')
+            ->with('fitnessClass')
+            ->first();
+
+        return view('landingpage', compact('upcomingSchedule'));
+    }
+
     public function viewClass($id)
     {
         $class = FitnessClass::findOrFail($id);

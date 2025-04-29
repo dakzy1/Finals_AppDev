@@ -130,8 +130,17 @@
 
             <div class="class-box">
                 <small>Upcoming Class</small>
-                <h3>Yoga Class</h3>
-                <small>April 9, 9:00 AM</small>
+
+                @if ($upcomingSchedule)
+                    <h3>{{ $upcomingSchedule->fitnessClass->name }}</h3>
+                    <small>
+                        {{ \Carbon\Carbon::parse($upcomingSchedule->date)->format('F j') }},
+                        {{ \Carbon\Carbon::parse($upcomingSchedule->time)->format('g:i A') }}
+                    </small>
+                @else
+                    <h3>No Upcoming Class</h3>
+                    <small>Please book a class!</small>
+                @endif
             </div>
         </div>
 
@@ -142,4 +151,5 @@
         </div>
     </div>
 </body>
+
 </html>
