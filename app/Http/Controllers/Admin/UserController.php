@@ -137,4 +137,33 @@ class UserController extends Controller
         $schedule->delete();
         return redirect()->route('admin.dashboard')->with('success', 'Schedule deleted successfully');
     }
+    public function redirectToPage(Request $request)
+    {
+        $users = User::all();
+        $fitnessClasses = FitnessClass::all();
+        $schedules = Schedule::all();
+        $editUser = null;
+        $editClass = null;
+
+        if ($request->has('edit')) {
+            $editUser = User::find($request->input('edit'));
+        }
+
+        if ($request->has('edit_class')) {
+            $editClass = FitnessClass::find($request->input('edit_class'));
+        }
+
+        return view('admin.classmanage', compact('users', 'editUser', 'fitnessClasses', 'schedules', 'editClass'));
+    }
+    public function classManage(Request $request)
+    {
+        $editClass = null;
+        if ($request->has('edit_class')) {
+            $editClass = FitnessClass::find($request->input('edit_class'));
+        }
+
+        $fitnessClasses = FitnessClass::all();
+        return view('admin.classmanage', compact('fitnessClasses', 'editClass'));
+    }
+
 }

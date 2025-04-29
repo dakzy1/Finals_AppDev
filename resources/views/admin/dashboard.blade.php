@@ -224,6 +224,9 @@
     <div>
         <button class="tab-btn active" onclick="switchTab('user')">User</button>
         <button class="tab-btn" onclick="switchTab('class')">Class</button>
+        <form action="{{ route('redirect.page') }}" method="GET">
+            <button type="submit">Go to Another Page</button>
+        </form>
     </div>
 </div>
 
