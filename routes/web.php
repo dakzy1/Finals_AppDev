@@ -31,6 +31,8 @@ Route::get('/viewclass/{id}', [ClassPageController::class, 'viewClass'])->name('
 // Booking Routes
 Route::get('/class/{id}/book', [ClassPageController::class, 'bookclass'])->name('bookclass');
 Route::post('/class/{id}/book', [ClassPageController::class, 'store'])->name('bookclass.store');
+Route::put('/class//{id}/book', [ClassPageController::class, 'update'])->name('bookclass.update');
+
 
 // Public Routes
 Route::get('/about', function () {

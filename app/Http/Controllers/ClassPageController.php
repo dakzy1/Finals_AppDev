@@ -70,4 +70,22 @@ class ClassPageController extends Controller
     
         return redirect()->route('dashboard')->with('success', 'Class booked successfully!');
     }
+
+    public function update(Request $request, $id)
+{
+    $request->validate([
+        'date' => 'required|date',
+        'time' => 'required',
+        'trainer' => 'required|string|max:255',
+    ]);
+
+    $schedule = Schedule::findOrFail($id);
+
+    $schedule->date = $request->date;
+    $schedule->time = $request->time;
+    $schedule->trainer = $request->trainer;
+    $schedule->save();
+
+    return redirect()->back()->with('success', 'Schedule updated successfully.');
+}
 }
