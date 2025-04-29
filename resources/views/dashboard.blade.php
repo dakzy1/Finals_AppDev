@@ -1,18 +1,4 @@
-@extends('layouts.app')
-
-@section('header')
-<header class="top-nav">
-    <div class="nav-links">
-        <a href="{{ route('landingpage') }}" class="nav-link">Home</a>
-        <a href="{{ route('dashboard') }}" class="nav-link active">Class</a>
-        <a href="{{ route('about') }}" class="nav-link">About</a>
-        <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-            @csrf
-            <button type="submit" class="logout-btn">Logout</button>
-        </form>
-    </div>
-</header>
-@endsection
+@extends('layouts.navbar')
 
 @section('content')
 <div class="custom-container">
