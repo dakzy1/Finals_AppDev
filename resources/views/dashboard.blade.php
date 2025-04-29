@@ -19,8 +19,8 @@
                             <div class="class-header" onclick="toggleDetails(this)">
                                 <h4>{{ $schedule->fitnessClass->name }}</h4>
                             </div>
-                            <div class="class-details-content" style="display: none;">
-                                {{-- View mode --}}
+                            <div class="class-details-content">
+                            {{-- View mode --}}
                                 <div class="view-mode">
                                     <p><strong>Date:</strong> <span class="view-date">{{ \Carbon\Carbon::parse($schedule->date)->format('Y-m-d') }}</span></p>
                                     <p><strong>Time:</strong> <span class="view-time">{{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }}</span></p>
@@ -51,25 +51,6 @@
             </div>
         </aside>
 
-<script>
-    function toggleDetails(header) {
-        const details = header.nextElementSibling;
-        details.style.display = details.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function enableEdit(button) {
-        const container = button.closest('.class-details-content');
-        container.querySelector('.view-mode').style.display = 'none';
-        container.querySelector('.edit-form').style.display = 'block';
-    }
-
-    function cancelEdit(button) {
-        const container = button.closest('.class-details-content');
-        container.querySelector('.edit-form').style.display = 'none';
-        container.querySelector('.view-mode').style.display = 'block';
-    }
-</script>
-
         <!-- Classes Section -->
         <section class="class-details">
             <h2>Classes</h2>
@@ -95,207 +76,232 @@
 </div>
 
 <!-- ✅ Styles and Script placed properly inside the same file -->
-<style>
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #f5eaf3;
-    margin: 0;
-    padding: 0;
-}
-
-.top-nav {
-    background-color: #834c71;
-    padding: 15px;
-    text-align: center;
-}
-
-.nav-links {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-}
-
-.nav-link {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1rem;
-}
-
-.nav-link.active {
-    text-decoration: underline;
-}
-
-.logout-btn {
-    background-color: #fff;
-    color: #834c71;
-    padding: 5px 15px;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.custom-container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 0;
-}
-
-.main-content {
-    display: flex;
-    gap: 20px;
-    padding: 40px;
-}
-
-.sidebar {
-    width: 25%;
-    background-color: #fff;
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.class-box {
-    background-color: #d87384;
-    color: white;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    cursor: pointer;
-}
-
-.class-header {
-    font-weight: bold;
-}
-
-.class-details-content {
-    margin-top: 10px;
-}
-
-.edit-btn {
-    margin-top: 10px;
-    background-color: #a84f61;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
-.class-details {
-    width: 75%;
-    background-color: #f7d9eb;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.class-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.class-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #d87384;
-    padding: 20px;
-    border-radius: 12px;
-    color: white;
-}
-
-.class-info h3 {
-    margin-bottom: 10px;
-    font-size: 1.25rem;
-}
-
-.class-info p {
-    margin: 3px 0;
-    font-size: 0.95rem;
-}
-
-.btn-book {
-    background-color: #fff;
-    color: #d87384;
-    padding: 10px 20px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s;
-}
-
-.btn-book:hover {
-    background-color: #f0f0f0;
-}
-
-.edit-form {
-    margin-top: 15px;
-    display: grid;
-    grid-template-columns: 100px 1fr;
-    row-gap: 10px;
-    column-gap: 10px;
-    align-items: center;
-    
-}
-
-.edit-form label {
-    font-weight: bold;
-    color: #fff;
-    
-}
-
-.edit-form input[type="date"],
-.edit-form input[type="time"],
-.edit-form input[type="text"] {
-    padding: 8px;
-    border-radius: 6px;
-    border: none;
-    background-color: #f7d9eb;
-    color: #333;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9rem;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.save-btn,
-.cancel-btn {
-    grid-column: span 2;
-    padding: 8px 8px;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    font-family: 'Poppins', sans-serif;
-    cursor: pointer;
-    margin-top: 5px;
-    margin-right: 8px;
-    width: 70px;
-}
-
-.save-btn {
-    background-color: #fff;
-    color: #a84f61;
-}
-
-.cancel-btn {
-    background-color: transparent;
-    color: #fff;
-    border: 2px solid #fff;
-}
-
-</style>
-
-<script>
-function toggleDetails(header) {
-    const details = header.nextElementSibling;
-    if (details.style.display === "none" || details.style.display === "") {
-        details.style.display = "block";
-    } else {
-        details.style.display = "none";
+    <style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f5eaf3;
+        margin: 0;
+        padding: 0;
     }
-}
-</script>
+
+    .custom-container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 0;
+    }
+
+    .main-content {
+        display: flex;
+        gap: 20px;
+        padding: 40px;
+    }
+
+    .sidebar {
+        width: 25%;
+        background-color: #fff;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .class-box {
+        background-color: #d87384;
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        cursor: pointer;
+    }
+
+    .class-header {
+        font-weight: bold;
+    }
+
+    .class-details-content {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.4s ease, opacity 0.4s ease;
+    }
+
+    .class-details-content.open {
+        max-height: 300px; /* Large enough to hold content */
+        opacity: 1;
+        overflow: visible;
+    }
+
+    .edit-btn {
+        margin-top: 10px;
+        background-color: #a84f61;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    .class-details {
+        width: 75%;
+        background-color: #f7d9eb;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .class-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .class-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #d87384;
+        padding: 20px;
+        border-radius: 12px;
+        color: white;
+    }
+
+    .class-info h3 {
+        margin-bottom: 10px;
+        font-size: 1.25rem;
+    }
+
+    .class-info p {
+        margin: 3px 0;
+        font-size: 0.95rem;
+    }
+
+    .btn-book {
+        background-color: #fff;
+        color: #d87384;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .btn-book:hover {
+        background-color: #f0f0f0;
+    }
+
+    .edit-form {
+        margin-top: 15px;
+        display: grid;
+        grid-template-columns: 100px 1fr;
+        row-gap: 10px;
+        column-gap: 10px;
+        align-items: center;
+        
+    }
+
+    .edit-form label {
+        font-weight: bold;
+        color: #fff;        
+    }
+
+    .edit-form input[type="date"],
+    .edit-form input[type="time"],
+    .edit-form input[type="text"] {
+        padding: 8px;
+        border-radius: 6px;
+        border: none;
+        background-color: #f7d9eb;
+        color: #333;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.9rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .save-btn,
+    .cancel-btn {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        margin-top: 5px;
+        margin-right: 1px;
+        width: 70px;
+    }
+
+    .save-btn {
+        background-color: #fff;
+        color: #a84f61;
+    }
+
+    .cancel-btn {
+        background-color: transparent;
+        color: #fff;
+        border: 2px solid #fff;
+    }
+
+    /* Smooth transition for edit/view forms */
+    .class-details-content .view-mode,
+    .class-details-content .edit-form {
+        transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    /* Hide with animation */
+    .hidden-fade {
+        opacity: 0;
+        transform: translateY(-10px);
+        pointer-events: none;
+    }
+
+    /* Show with animation */
+    .visible-fade {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+    </style>
+
+    <script>
+        function toggleDetails(header) {
+            const details = header.nextElementSibling;
+            details.classList.toggle('open');
+        }
+
+        function enableEdit(button) {
+            const container = button.closest('.class-details-content');
+            const viewMode = container.querySelector('.view-mode');
+            const editForm = container.querySelector('.edit-form');
+
+            // Animate hiding view mode
+            viewMode.classList.remove('visible-fade');
+            viewMode.classList.add('hidden-fade');
+
+            // Animate showing edit form after a short delay
+            setTimeout(() => {
+                viewMode.style.display = 'none';
+                editForm.style.display = 'grid';
+                editForm.classList.remove('hidden-fade');
+                editForm.classList.add('visible-fade');
+            }, 300);
+        }
+
+        function cancelEdit(button) {
+            const container = button.closest('.class-details-content');
+            const viewMode = container.querySelector('.view-mode');
+            const editForm = container.querySelector('.edit-form');
+
+            // Animate hiding edit form
+            editForm.classList.remove('visible-fade');
+            editForm.classList.add('hidden-fade');
+
+            // Animate showing view mode after a short delay
+            setTimeout(() => {
+                editForm.style.display = 'none';
+                viewMode.style.display = 'block';
+                viewMode.classList.remove('hidden-fade');
+                viewMode.classList.add('visible-fade');
+            }, 300);
+        }
+        </script>
 @endsection

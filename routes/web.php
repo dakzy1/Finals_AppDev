@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ClassPageController;
+use App\Http\Controllers\ProfileController;
+
 
 use Illuminate\Http\Request;   
 
@@ -24,6 +26,13 @@ Route::get('/landingpage', [ClassPageController::class, 'landingpage'])->name('l
 
 // Dashboard Route (handled by ClassPageController)
 Route::get('/dashboard', [ClassPageController::class, 'index'])->name('dashboard')->middleware('auth');
+
+//Profile
+Route::middleware('auth')->group(function () {
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
 
 // Viewclass Route
 Route::get('/viewclass/{id}', [ClassPageController::class, 'viewClass'])->name('viewclass')->middleware('auth');

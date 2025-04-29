@@ -47,11 +47,104 @@
             position: fixed;
             top: 10px;
             left: 15px;
-            width: 35px;
+            width: 40px;
             height: 35px;
             background-color: #fff;
-            border-radius: 50%;
+            border-radius: 70%;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+}
+        .avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
         }
+
+        /* Profile Overlay Styling */
+        
+        .profile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            backdrop-filter: blur(6px); /* background blur */
+            background-color: rgba(0, 0, 0, 0.3); /* semi-transparent dark background */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        /* Modal container */
+        .profile-modal {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .profile-overlay.hidden {
+            display: none;
+        }
+
+        .profile-modal h2 {
+            margin-top: 0;
+            color: #9c27b0;
+        }
+        .profile-modal label {
+            display: block;
+            margin: 15px 0 5px;
+        }
+        .profile-modal input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        .profile-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .btn-save {
+            background-color: #9c27b0;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        .btn-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+        }
+
+        /* Optional: blur background when overlay is active */
+        .blurred {
+            overflow: hidden;
+        }
+
         .nav-links {
             display: flex;
             gap: 30px;
@@ -115,7 +208,35 @@
 
     <!-- Fixed Header -->
     <div class="header">
-        <div class="avatar"></div>
+        <button onclick="openProfile()" class="avatar" title="Profile">
+        <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Profile" style="width: 40px; height: 40px; border-radius: 30%;">
+        </button>
+
+        <!-- Profile Overlay -->
+        <div id="profileOverlay" class="profile-overlay hidden">
+            <div class="profile-modal">
+            <button class="btn-close" onclick="closeProfile()">×</button>
+                <h2>User Profile</h2>
+                <form action="{{ route('profile.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <label>Name:</label>
+                    <input type="text" name="name" value="{{ Auth::user()->name }}" required>
+
+                    <label>Email:</label>
+                    <input type="email" name="email" value="{{ Auth::user()->email }}" required>
+
+                    <div class="profile-actions">
+                        <button type="submit" class="btn-save">Save</button>
+                        <a href="{{ route('profile.destroy') }}" class="btn-delete"
+                        onclick="return confirm('Are you sure you want to delete your account?');">Delete Account</a>
+                    </div>
+                </form>
+                <button onclick="closeProfile()" class="btn-close">&times;</button>
+            </div>
+        </div>
+
+
         <div class="nav-links">
             <a href="{{ url('/landingpage') }}" class="{{ Request::is('/landingpage') ? 'active' : '' }}">Home</a>
             <a href="{{ url('/dashboard') }}" class="{{ Request::is('dashboard') ? 'active' : '' }}">Class</a>
@@ -136,6 +257,19 @@
     <div class="container">
         @yield('content')
     </div>
+
+    <script>
+    function openProfile() {
+        document.getElementById('profileOverlay').classList.remove('hidden');
+        document.body.classList.add('blurred');
+    }
+
+    function closeProfile() {
+        document.getElementById('profileOverlay').classList.add('hidden');
+        document.body.classList.remove('blurred');
+    }
+</script>
+
 
 </body>
 </html>
