@@ -12,11 +12,6 @@
         body {
             font-family: Arial, sans-serif;
             padding: 30px;
-            opacity: 0;
-            transition: opacity 0.1s ease-in;
-        }
-        body.loaded {
-            opacity: 1;
         }
         
         table {
@@ -141,12 +136,6 @@
     <div class="container">
         @yield('content')
     </div>
-
-    <script>
-        window.addEventListener('load', () => {
-            document.body.classList.add('loaded');
-        });
-    </script>
 
 </body>
 </html>
