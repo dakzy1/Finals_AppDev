@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.navbar')
 
 @section('header')
 <header class="top-nav">
@@ -20,19 +20,49 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <h2>Schedule</h2>
-            @if($schedules->isEmpty())
-                <p>No schedules booked for this class yet.</p>
-            @else
-                @foreach($schedules as $schedule)
-                    <div class="class-box">
-                        <h4>{{ $schedule->fitnessClass->name }}</h4>
-                        <p>{{ \Carbon\Carbon::parse($schedule->date)->format('m/d/y') }}</p>
-                        <p>{{ \Carbon\Carbon::createFromFormat('H:i:s', $schedule->time)->format('h:i A') }}</p>
-                        <p>{{ $schedule->trainer }}</p>
-                        <button class="edit-btn">Edit</button>
-                    </div>
-                @endforeach
-            @endif
+            <div class="schedule-items">
+                @if (session('success'))
+                    <div style="color: green; margin-bottom: 10px;">{{ session('success') }}</div>
+                @endif
+
+                @if($schedules->isEmpty())
+                    <p>No schedules booked yet.</p>
+                @else
+                    @foreach($schedules as $schedule)
+                        <div class="class-box" data-schedule-id="{{ $schedule->id }}">
+                            <div class="class-header" onclick="toggleDetails(this)">
+                                <h4>{{ $schedule->fitnessClass->name }}</h4>
+                            </div>
+                            <div class="class-details-content">
+                            {{-- View mode --}}
+                                <div class="view-mode">
+                                    <p><strong>Date:</strong> <span class="view-date">{{ \Carbon\Carbon::parse($schedule->date)->format('Y-m-d') }}</span></p>
+                                    <p><strong>Time:</strong> <span class="view-time">{{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }}</span></p>
+                                    <p><strong>Trainer:</strong> <span class="view-trainer">{{ $schedule->trainer }}</span></p>
+                                    <button class="edit-btn" onclick="enableEdit(this)">Edit</button>
+                                </div>
+
+                                {{-- Edit mode --}}
+                                <form class="edit-form" action="{{ route('bookclass.update', $schedule->id) }}" method="POST" style="display: none;">
+                                    @csrf
+                                    @method('PUT')
+                                    <label for="date-{{ $schedule->id }}">Date:</label>
+                                    <input type="date" name="date" id="date-{{ $schedule->id }}" value="{{ \Carbon\Carbon::parse($schedule->date)->format('Y-m-d') }}" required>
+
+                                    <label for="time-{{ $schedule->id }}">Time:</label>
+                                    <input type="time" name="time" id="time-{{ $schedule->id }}" value="{{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }}" required>
+
+                                    <label for="trainer-{{ $schedule->id }}">Trainer:</label>
+                                    <input type="text" name="trainer" id="trainer-{{ $schedule->id }}" value="{{ $schedule->trainer }}" required>
+
+                                    <button type="submit" class="save-btn">Save</button>
+                                    <button type="button" class="cancel-btn" onclick="cancelEdit(this)">Cancel</button>
+                                </form>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
+            </div>
         </aside>
 
         <!-- Class Details -->
@@ -62,145 +92,242 @@
 </div>
 
 <style>
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #f5eaf3;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-}
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f5eaf3;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+    }
 
-.top-nav {
-    background-color: #834c71;
-    padding: 15px;
-    text-align: center;
-}
+    .custom-container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 0;
+    }
 
-.nav-links {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-}
+    .main-content {
+        display: flex;
+        gap: 20px;
+        padding: 40px;
+        min-height: calc(100vh - 80px);
+    }
 
-.nav-link {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1rem;
-}
+    .sidebar {
+        width: 25%;
+        background-color: #fff;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
 
-.nav-link.active {
-    text-decoration: underline;
-}
+    .class-box {
+        background-color: #d87384;
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        cursor: pointer;
+    }
 
-.logout-btn {
-    background-color: #fff;
-    color: #834c71;
-    padding: 5px 15px;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-}
+    .class-header {
+        font-weight: bold;
+    }
 
-.custom-container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 0;
-}
+    .class-details-content {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.4s ease, opacity 0.4s ease;
+    }
 
-.main-content {
-    display: flex;
-    gap: 20px;
-    padding: 40px;
-    min-height: calc(100vh - 80px);
-}
+    .class-details-content.open {
+        max-height: 300px; /* Large enough to hold content */
+        opacity: 1;
+        overflow: visible;
+    }
+    .edit-btn {
+        margin-top: 10px;
+        background-color: #a84f61;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+                            /*DIDI nag stop */
+    .secondary-class-btn {
+        margin-top: 15px;
+        background-color: #d87384;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 15px;
+        width: 100%;
+        font-weight: bold;
+        cursor: pointer;
+    }
 
-.sidebar {
-    width: 25%;
-    background-color: #fff;
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
+    .class-details {
+        width: 75%;
+        background-color: #f7d9eb;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
 
-.class-box {
-    background-color: #d87384;
-    color: white;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 15px;
-}
+    .class-details h1 {
+        color: #4c305f;
+        margin-bottom: 15px;
+    }
 
-.edit-btn {
-    margin-top: 10px;
-    background-color: #a84f61;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-}
+    .description {
+        color: #333;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
 
-.secondary-class-btn {
-    margin-top: 15px;
-    background-color: #d87384;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 15px;
-    width: 100%;
-    font-weight: bold;
-    cursor: pointer;
-}
+    .book-box {
+        padding: 10px 0;
+        margin-bottom: 30px;
+        border-left: 2px solid #4c305f;
+        padding-left: 20px;
+    }
 
-.class-details {
-    width: 75%;
-    background-color: #f7d9eb;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
+    .btn-book {
+        display: inline-block;
+        background-color: #d87384;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
 
-.class-details h1 {
-    color: #4c305f;
-    margin-bottom: 15px;
-}
+    .benefits {
+        list-style-type: disc;
+        padding-left: 20px;
+    }
 
-.description {
-    color: #333;
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
+    .benefits li {
+        margin-bottom: 8px;
+        color: #4c305f;
+    }
+    .edit-form {
+        margin-top: 15px;
+        display: grid;
+        grid-template-columns: 100px 1fr;
+        row-gap: 10px;
+        column-gap: 10px;
+        align-items: center;
+    }
 
-.book-box {
-    padding: 10px 0;
-    margin-bottom: 30px;
-    border-left: 2px solid #4c305f;
-    padding-left: 20px;
-}
+    .edit-form label {
+        font-weight: bold;
+        color: #fff;    
+    }
 
-.btn-book {
-    display: inline-block;
-    background-color: #d87384;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
+    .edit-form input[type="date"],
+    .edit-form input[type="time"],
+    .edit-form input[type="text"] {
+        padding: 8px;
+        border-radius: 6px;
+        border: none;
+        background-color: #f7d9eb;
+        color: #333;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.9rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
 
-.benefits {
-    list-style-type: disc;
-    padding-left: 20px;
-}
+    .save-btn,
+    .cancel-btn {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        margin-top: 5px;
+        margin-right: 1px;
+        width: 70px;
+    }
 
-.benefits li {
-    margin-bottom: 8px;
-    color: #4c305f;
-}
+    .save-btn {
+        background-color: #fff;
+        color: #a84f61;
+    }
+
+    .cancel-btn {
+        background-color: transparent;
+        color: #fff;
+        border: 2px solid #fff;
+    }
+
+    /* Smooth transition for edit/view forms */
+    .class-details-content .view-mode,
+    .class-details-content .edit-form {
+        transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    /* Hide with animation */
+    .hidden-fade {
+        opacity: 0;
+        transform: translateY(-10px);
+        pointer-events: none;
+    }
+
+    /* Show with animation */
+    .visible-fade {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
 </style>
+
+        <script>
+        function toggleDetails(header) {
+            const details = header.nextElementSibling;
+            details.classList.toggle('open');
+        }
+
+        function enableEdit(button) {
+            const container = button.closest('.class-details-content');
+            const viewMode = container.querySelector('.view-mode');
+            const editForm = container.querySelector('.edit-form');
+
+            // Animate hiding view mode
+            viewMode.classList.remove('visible-fade');
+            viewMode.classList.add('hidden-fade');
+
+            // Animate showing edit form after a short delay
+            setTimeout(() => {
+                viewMode.style.display = 'none';
+                editForm.style.display = 'grid';
+                editForm.classList.remove('hidden-fade');
+                editForm.classList.add('visible-fade');
+            }, 300);
+        }
+
+        function cancelEdit(button) {
+            const container = button.closest('.class-details-content');
+            const viewMode = container.querySelector('.view-mode');
+            const editForm = container.querySelector('.edit-form');
+
+            // Animate hiding edit form
+            editForm.classList.remove('visible-fade');
+            editForm.classList.add('hidden-fade');
+
+            // Animate showing view mode after a short delay
+            setTimeout(() => {
+                editForm.style.display = 'none';
+                viewMode.style.display = 'block';
+                viewMode.classList.remove('hidden-fade');
+                viewMode.classList.add('visible-fade');
+            }, 300);
+        }
+        </script>
 @endsection
