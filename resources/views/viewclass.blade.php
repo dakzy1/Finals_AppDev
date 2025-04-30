@@ -75,7 +75,7 @@
             <div class="book-box">
             <a href="{{ route('bookclass', $class->id) }}" class="btn-book">Book Now</a>
                 <p><strong>Level:</strong> {{ $class->level }}</p>
-                <p><strong>Duration:</strong> {{ $class->duration }}</p>
+                <p><strong>Duration:</strong> {{ $class->duration }} Minutes</p>
                 <p><strong>Trainer:</strong> {{ $class->trainer }}</p>
             </div>
 

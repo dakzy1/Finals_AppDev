@@ -166,7 +166,7 @@
     <div class="left-panel">
         <div class="class-details">
             <h2>{{ $class->name }}</h2>
-            <p><strong>Duration:</strong> {{ $class->duration }}</p>
+            <p><strong>Duration:</strong> {{ $class->duration }} Minutes</p>
             <p><strong>Difficulty:</strong> {{ $class->level }}</p>
             <p><strong>Location:</strong> {{ $class->location ?? 'Not specified' }}</p>
         </div>

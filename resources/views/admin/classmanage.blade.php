@@ -413,7 +413,7 @@
                 <div class="form-group">
                     <label for="duration">Duration</label>
                     <div style="display: flex; align-items: center;">
-                        <input type="number" id="duration" name="duration" maxlength="25" value="{{ $editClass->duration }}" required style="margin-right: 5px;">
+                        <input type="number" id="duration" name="duration" min="1" max="100" value="{{ $editClass->duration }}" required style="margin-right: 5px;">
                         <span>minutes</span>
                     </div>
                 </div>
@@ -470,7 +470,7 @@
                 <tr>
                     <td>{{ $class->name }}</td>
                     <td>{{ $class->level }}</td>
-                    <td>{{ $class->duration }}</td>
+                    <td>{{ $class->duration }} Minutes</td>
                     <td>{{ $class->trainer }}</td>
                     <td>
                         <a href="{{ route('admin.classmanage', ['edit_class' => $class->id]) }}" class="btn-edit">Edit</a>
@@ -489,6 +489,15 @@
         <button class="toggle-form-btn" onclick="toggleAddClassForm()">Add Class</button>
         @endif
     </div>
+    <script>
+    document.getElementById('duration').addEventListener('input', function () {
+        let value = this.value;
+
+        // Remove non-digit characters and limit to 3 digits
+        value = value.replace(/\D/g, '').slice(0, 2);
+        this.value = value;
+    });
+    </script>
 </div>
 </body>
 </html>

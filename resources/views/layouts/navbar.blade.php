@@ -217,14 +217,23 @@
             <div class="profile-modal">
             <button class="btn-close" onclick="closeProfile()">×</button>
                 <h2>User Profile</h2>
+                @if ($errors->any())
+                    <div style="color: red; margin-bottom: 10px;">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <form action="{{ route('profile.update') }}" method="POST">
                     @csrf
                     @method('PUT')
                     <label>Name:</label>
-                    <input type="text" name="name" value="{{ Auth::user()->name }}" required>
+                    <input type="text" name="first_name" maxlength="25" value="{{ Auth::user()->first_name }}" required>
 
                     <label>Email:</label>
-                    <input type="email" name="email" value="{{ Auth::user()->email }}" required>
+                    <input type="email" name="email" maxlength="25" value="{{ Auth::user()->email }}" required>
 
                     <div class="profile-actions">
                         <button type="submit" class="btn-save">Save</button>
