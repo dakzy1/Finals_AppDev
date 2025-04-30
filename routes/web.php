@@ -87,6 +87,8 @@ Route::post('/admin/logout', function () {
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+    Route::get('/admin/classmanage', [UserController::class, 'classManage'])->name('admin.classmanage');
+    Route::get('/classmanage', [UserController::class, 'redirectToPage'])->name('classmanage');
     Route::put('/update{id}', [UserController::class, 'update'])->name('update');
     Route::delete('/delete{id}', [UserController::class, 'destroy'])->name('destroy');
 });
@@ -100,3 +102,6 @@ Route::get('/auth/test', function () {
 Route::get('/home', function () {
     return view('home'); 
 })->name('home');
+
+// routes/web.php
+Route::get('/redirect-to-page', [UserController::class, 'redirectToPage'])->name('redirect.page');

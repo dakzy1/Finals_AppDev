@@ -79,7 +79,7 @@ class UserController extends Controller
         ]);
 
         FitnessClass::create($request->all());
-        return redirect()->route('admin.dashboard')->with('success', 'Fitness Class added successfully');
+        return redirect()->route('admin.classmanage')->with('success', 'Fitness Class added successfully');
     }
 
     public function updateFitnessClass(Request $request, $id)
@@ -93,14 +93,14 @@ class UserController extends Controller
 
         $fitnessClass = FitnessClass::findOrFail($id);
         $fitnessClass->update($request->all());
-        return redirect()->route('admin.dashboard')->with('success', 'Fitness Class updated successfully');
+        return redirect()->route('admin.classmanage')->with('success', 'Fitness Class updated successfully');
     }
 
     public function destroyFitnessClass($id)
     {
         $fitnessClass = FitnessClass::findOrFail($id);
         $fitnessClass->delete();
-        return redirect()->route('admin.dashboard')->with('success', 'Fitness Class deleted successfully');
+        return redirect()->route('admin.classmanage')->with('success', 'Fitness Class deleted successfully');
     }
 
     // CRUD for Schedule
@@ -137,4 +137,33 @@ class UserController extends Controller
         $schedule->delete();
         return redirect()->route('admin.dashboard')->with('success', 'Schedule deleted successfully');
     }
+    public function redirectToPage(Request $request)
+    {
+        $users = User::all();
+        $fitnessClasses = FitnessClass::all();
+        $schedules = Schedule::all();
+        $editUser = null;
+        $editClass = null;
+
+        if ($request->has('edit')) {
+            $editUser = User::find($request->input('edit'));
+        }
+
+        if ($request->has('edit_class')) {
+            $editClass = FitnessClass::find($request->input('edit_class'));
+        }
+
+        return view('admin.classmanage', compact('users', 'editUser', 'fitnessClasses', 'schedules', 'editClass'));
+    }
+    public function classManage(Request $request)
+    {
+        $editClass = null;
+        if ($request->has('edit_class')) {
+            $editClass = FitnessClass::find($request->input('edit_class'));
+        }
+
+        $fitnessClasses = FitnessClass::all();
+        return view('admin.classmanage', compact('fitnessClasses', 'editClass'));
+    }
+
 }
