@@ -79,7 +79,7 @@ class UserController extends Controller
         ]);
 
         FitnessClass::create($request->all());
-        return redirect()->route('admin.dashboard')->with('success', 'Fitness Class added successfully');
+        return redirect()->route('admin.classmanage')->with('success', 'Fitness Class added successfully');
     }
 
     public function updateFitnessClass(Request $request, $id)
@@ -93,14 +93,14 @@ class UserController extends Controller
 
         $fitnessClass = FitnessClass::findOrFail($id);
         $fitnessClass->update($request->all());
-        return redirect()->route('admin.dashboard')->with('success', 'Fitness Class updated successfully');
+        return redirect()->route('admin.classmanage')->with('success', 'Fitness Class updated successfully');
     }
 
     public function destroyFitnessClass($id)
     {
         $fitnessClass = FitnessClass::findOrFail($id);
         $fitnessClass->delete();
-        return redirect()->route('admin.dashboard')->with('success', 'Fitness Class deleted successfully');
+        return redirect()->route('admin.classmanage')->with('success', 'Fitness Class deleted successfully');
     }
 
     // CRUD for Schedule
