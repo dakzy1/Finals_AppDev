@@ -40,9 +40,24 @@
 
                                     <label for="trainer-{{ $schedule->id }}">Trainer:</label>
                                     <input type="text" name="trainer" id="trainer-{{ $schedule->id }}" value="{{ $schedule->trainer }}" required>
+                                 
+                                    <div class="edit-actions">
+                                    <div class="left-buttons">
+                                        <button type="submit" class="save-btn">Save</button>
+                                        <button type="button" class="cancel-btn" onclick="cancelEdit(this)">Cancel</button>
+                                    </div>
 
-                                    <button type="submit" class="save-btn">Save</button>
-                                    <button type="button" class="cancel-btn" onclick="cancelEdit(this)">Cancel</button>
+                                    <form action="{{ route('bookclass.destroy', $schedule->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this schedule?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="delete-btn" title="Delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red" viewBox="0 0 24 24">
+                                                <path d="M9 3v1H4v2h1v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5V3H9zm0 4h6v12H9V7z"/>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
+
                                 </form>
                             </div>
                         </div>
@@ -260,6 +275,37 @@
         transform: translateY(0);
         pointer-events: auto;
     }
+    .edit-actions {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
+    .left-buttons {
+        display: flex;
+        gap: 10px;
+        margin-right: 60px;
+    }
+
+    .edit-actions form {
+        margin-left: auto;
+    }
+
+    .delete-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+
+    }
+
+    .delete-btn svg {
+        transition: transform 0.2s ease;
+    }
+
+    .delete-btn:hover svg {
+        transform: scale(1.2);
+        fill: darkred;
+    }
+
     </style>
 
     <script>

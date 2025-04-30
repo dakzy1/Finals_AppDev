@@ -23,11 +23,14 @@ class ClassPageController extends Controller
 
     public function landingpage()
     {
-        $upcomingSchedule = Schedule::where('date', '>=', now()->toDateString())
-            ->orderBy('date')
-            ->orderBy('time')
-            ->with('fitnessClass')
-            ->first();
+        $upcomingSchedule = Schedule::whereRaw(
+            "STR_TO_DATE(CONCAT(date, ' ', time), '%Y-%m-%d %H:%i:%s') >= ?",
+            [now()]
+        )
+        ->orderBy('date')
+        ->orderBy('time')
+        ->with('fitnessClass')
+        ->first();
 
         return view('landingpage', compact('upcomingSchedule'));
     }
@@ -72,7 +75,7 @@ class ClassPageController extends Controller
     }
 
     public function update(Request $request, $id)
-{
+    {
     $request->validate([
         'date' => 'required|date',
         'time' => 'required',
@@ -87,5 +90,13 @@ class ClassPageController extends Controller
     $schedule->save();
 
     return redirect()->back()->with('success', 'Schedule updated successfully.');
-}
+    }
+    public function destroy($id)
+    {
+    $schedule = Schedule::findOrFail($id);
+    $schedule->delete();
+
+    return redirect()->back()->with('success', 'Schedule deleted successfully!');
+    }
+
 }

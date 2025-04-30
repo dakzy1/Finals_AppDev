@@ -40,7 +40,8 @@ Route::get('/viewclass/{id}', [ClassPageController::class, 'viewClass'])->name('
 // Booking Routes
 Route::get('/class/{id}/book', [ClassPageController::class, 'bookclass'])->name('bookclass');
 Route::post('/class/{id}/book', [ClassPageController::class, 'store'])->name('bookclass.store');
-Route::put('/class//{id}/book', [ClassPageController::class, 'update'])->name('bookclass.update');
+Route::put('/class/{id}/book', [ClassPageController::class, 'update'])->name('bookclass.update');
+Route::delete('/class/{id}/book', [ClassPageController::class, 'destroy'])->name('bookclass.destroy');
 
 
 // Public Routes
