@@ -268,7 +268,12 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
+                <div style="position: relative;">
+                    <input type="password" name="password" id="password" placeholder="Password" required style="width: 100%; padding-right: 40px;">
+                    <span onclick="togglePassword()" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+                        👁
+                    </span>
+                </div>
                 
                 <div class="remember-forgot">
                     <label><input type="checkbox" name="remember"> Remember me</label>
@@ -300,15 +305,15 @@
                 @csrf
                 <div class="mb-2">
                     <label>First Name</label>
-                    <input type="text" name="first_name" class="form-control" required>
+                    <input type="text" name="first_name" maxlength="25" class="form-control" required>
                 </div>
                 <div class="mb-2">
                     <label>Middle Name</label>
-                    <input type="text" name="middle_name" class="form-control">
+                    <input type="text" name="middle_name" maxlength="25" class="form-control">
                 </div>
                 <div class="mb-2">
                     <label>Last Name</label>
-                    <input type="text" name="last_name" class="form-control" required>
+                    <input type="text" name="last_name" maxlength="25" class="form-control" required>
                 </div>
                 <div class="mb-2">
                     <label>Gender</label>
@@ -321,15 +326,15 @@
                 </div>
                 <div class="mb-2">
                     <label>Email</label>
-                    <input type="email" name="email" class="form-control" required>
+                    <input type="email" name="email" maxlength="25" class="form-control" required>
                 </div>
                 <div class="mb-2">
                     <label>Password</label>
-                    <input type="password" name="password" class="form-control" required>
+                    <input type="password" name="password" maxlength="25" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label>Confirm Password</label>
-                    <input type="password" name="password_confirmation" class="form-control" required>
+                    <input type="password" name="password_confirmation" maxlength="25" class="form-control" required>
                 </div>
                 <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-success">Create Account</button>
@@ -395,6 +400,10 @@
     closeBtn.addEventListener("click", () => {
         registerPopup.style.display = "none";
     });
+    function togglePassword() {
+        const input = document.getElementById('password');
+        input.type = input.type === 'password' ? 'text' : 'password';
+    }
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

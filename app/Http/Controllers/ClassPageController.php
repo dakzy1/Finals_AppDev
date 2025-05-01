@@ -23,7 +23,10 @@ class ClassPageController extends Controller
 
     public function landingpage()
     {
-        $upcomingSchedule = Schedule::where('date', '>=', now()->toDateString())
+        $user = Auth::user();
+
+        $upcomingSchedule = Schedule::where('user_id', $user->id)
+            ->whereDate('date', '>=', now()->toDateString())
             ->orderBy('date')
             ->orderBy('time')
             ->with('fitnessClass')
