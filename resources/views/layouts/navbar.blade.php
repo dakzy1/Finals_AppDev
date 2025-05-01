@@ -5,6 +5,7 @@
     <title>@yield('title', 'FitZone')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="shortcut icon" href="{{ asset('images/exercise-weight-icon-6.png') }}" type="image/x-icon">
+    
     <style>
         /* Global styles */
         html {
@@ -247,9 +248,15 @@
 
 
         <div class="nav-links">
-            <a href="{{ url('/landingpage') }}" class="{{ Request::is('/landingpage') ? 'active' : '' }}">Home</a>
-            <a href="{{ url('/dashboard') }}" class="{{ Request::is('dashboard') ? 'active' : '' }}">Class</a>
-            <a href="{{ url('/about') }}" class="{{ Request::is('about') ? 'active' : '' }}">About</a>
+            <a href="{{ url('/landingpage') }}" class="{{ Request::is('/landingpage') ? 'active' : '' }}">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="{{ url('/dashboard') }}" class="{{ Request::is('dashboard') ? 'active' : '' }}">
+                <i class="fas fa-chalkboard-teacher"></i>Class
+            </a>
+            <a href="{{ url('/about') }}" class="{{ Request::is('about') ? 'active' : '' }}">
+                <i class="fas fa-info-circle"></i>About
+            </a>
         </div>
     <!-- Logout Button -->
         @auth

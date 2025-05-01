@@ -333,6 +333,12 @@
             <button type="submit">User Management</button>
         </form>
     </div>
+    <div class="logout-container">
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit">Logout</button>
+        </form>
+    </div>
 
 </div>
 
@@ -421,6 +427,14 @@
                     <label for="trainer">Trainer Name</label>
                     <input type="text" id="trainer" name="trainer" maxlength="25" value="{{ $editClass->trainer }}" required>
                 </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" maxlength="255" rows="4" required style="resize: both; max-width: 500px; max-height: 200px; overflow: auto;">{{ old('key_benefits', $editClass->description) }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="description_2">Key Benefits</label>
+                    <textarea id="description_2" name="key_benefits" maxlength="255" rows="4" required style="resize: both; max-width: 500px; max-height: 200px; overflow: auto;">{{ old('key_benefits', $editClass->key_benefits) }}</textarea>
+                </div>
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">Update Class</button>
                     <a href="{{ route('admin.classmanage') }}" class="btn-cancel">Cancel</a>
@@ -433,21 +447,42 @@
             <form method="POST" action="{{ route('class.store') }}">
                 @csrf
                 <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" required>
+                    <label for="name">Class Name</label>
+                    <select id="name" name="name" required>
+                        <option value="Yoga" {{ isset($editClass) && $editClass->name == 'Yoga' ? 'selected' : '' }}>Yoga</option>
+                        <option value="Zumba" {{ isset($editClass) && $editClass->name == 'Zumba' ? 'selected' : '' }}>Zumba</option>
+                        <option value="Cardio" {{ isset($editClass) && $editClass->name == 'Cardio' ? 'selected' : '' }}>Cardio</option>
+                        <option value="Pilates" {{ isset($editClass) && $editClass->name == 'Pilates' ? 'selected' : '' }}>Pilates</option>
+                        <option value="HIIT" {{ isset($editClass) && $editClass->name == 'HIIT' ? 'selected' : '' }}>HIIT</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="level">Level</label>
-                    <input type="text" id="level" name="level" required>
+                    <label for="level">Difficulty Level</label>
+                    <select id="level" name="level" required>
+                        <option value="Beginner" {{ isset($editClass) && $editClass->level == 'Beginner' ? 'selected' : '' }}>Beginner</option>
+                        <option value="Intermediate" {{ isset($editClass) && $editClass->level == 'Intermediate' ? 'selected' : '' }}>Intermediate</option>
+                        <option value="Advanced" {{ isset($editClass) && $editClass->level == 'Advanced' ? 'selected' : '' }}>Advanced</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="duration">Duration</label>
-                    <input type="text" id="duration" name="duration" required>
+                    <div style="display: flex; align-items: center;">
+                        <input type="number" id="duration" name="duration" min="1" max="100" required style="margin-right: 5px;">
+                        <span>minutes</span>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="trainer">Trainer</label>
-                    <input type="text" id="trainer" name="trainer" required>
+                    <label for="trainer">Trainer Name</label>
+                    <input type="text" id="trainer" name="trainer" maxlength="25" required>
                 </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="4" required style="resize: both; max-width: 500px; max-height: 200px; overflow: auto;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="description_2">Key Benefits</label>
+                    <textarea id="description_2" name="key_benefits" rows="4" required style="resize: both; max-width: 500px; max-height: 200px; overflow: auto;"></textarea>
+                </div> 
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">Add Class</button>
                 </div>
@@ -462,6 +497,8 @@
                     <th>Level</th>
                     <th>Duration</th>
                     <th>Trainer</th>
+                    <th>Description</th>
+                    <th>Key Benefits</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -472,6 +509,12 @@
                     <td>{{ $class->level }}</td>
                     <td>{{ $class->duration }} Minutes</td>
                     <td>{{ $class->trainer }}</td>
+                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
+                        {{ Str::limit($class->description, 10, '...') }}
+                    </td>
+                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
+                        {{ Str::limit($class->key_benefits, 10, '...') }}
+                    </td>
                     <td>
                         <a href="{{ route('admin.classmanage', ['edit_class' => $class->id]) }}" class="btn-edit">Edit</a>
                         <form action="{{ route('class.destroy', $class->id) }}" method="POST" style="display:inline;">
