@@ -2,24 +2,41 @@
 
 namespace Database\Seeders;
 
-use App\Models\Schedule;
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\FitnessClass;
+use App\Models\Schedule;
 
 class ScheduleSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
-        Schedule::create([
-            'class_name' => 'Yoga Class',
-            'date' => '2025-04-10',
-            'time' => '16:00:00',
-            'trainer' => 'Irvin Jaway',
-        ]);
-        Schedule::create([
-            'class_name' => 'Strength Class',
-            'date' => '2025-04-11',
-            'time' => '18:00:00',
-            'trainer' => 'Jane Doe',
-        ]);
+        $users = User::all();
+        $fitnessClasses = FitnessClass::all();
+
+        if ($users->isEmpty() || $fitnessClasses->isEmpty()) {
+            throw new \Exception('Please seed Users and FitnessClasses before seeding Schedules.');
+        }
+
+        $schedules = [
+            [
+                'user_id' => $users->random()->id,
+                'class_id' => $fitnessClasses->random()->id,
+                'date' => '2025-05-01',
+                'time' => '09:00',
+                'trainer' => 'Alice Smith',
+            ],
+            [
+                'user_id' => $users->random()->id,
+                'class_id' => $fitnessClasses->random()->id,
+                'date' => '2025-05-02',
+                'time' => '18:00',
+                'trainer' => 'Bob Johnson',
+            ],
+        ];
+
+        foreach ($schedules as $schedule) {
+            Schedule::create($schedule);
+        }
     }
 }

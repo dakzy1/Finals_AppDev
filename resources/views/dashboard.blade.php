@@ -78,7 +78,7 @@
                             <div class="class-info">
                                 <h3>{{ $class->name }}</h3>
                                 <p><strong>Level:</strong> {{ $class->level }}</p>
-                                <p><strong>Duration:</strong> {{ $class->duration }}</p>
+                                <p><strong>Duration:</strong> {{ $class->duration }} Minutes</p>
                                 <p><strong>Trainer:</strong> {{ $class->trainer }}</p>
                             </div>
                             <a href="{{ route('viewclass', $class->id) }}" class="btn-book">View</a>

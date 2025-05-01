@@ -1,231 +1,449 @@
-@extends('layouts.admin')
-
-@section('content')
-<style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="shortcut icon" href="{{ asset('images/exercise-weight-icon-6.png') }}" type="image/x-icon">
+    <style>
     body {
-        font-family: Arial, sans-serif;
-        background-color: #f7f0f7;
-    }
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
 
-    .nav-bar {
-        background-color: #824674;
-        padding: 10px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: white;
-    }
+        .nav-bar {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background-color: #2e3338;
+            color: white;
+            padding: 10px 20px;
+            height: 30px;
+        }
+        .nav-bar button {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-    .nav-bar button {
-        background: none;
-        border: none;
-        color: #f9c6a0;
-        font-weight: bold;
-        font-size: 16px;
-        margin: 0 15px;
-        cursor: pointer;
-    }
+        .nav-bar button:hover {
+            background-color: #0056b3;
+        }
 
-    .nav-bar button.active {
-        color: white;
-        text-decoration: underline;
-    }
+        /* Button container styling inside offcanvas */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 15px;
+            margin-top: 20px;
+        }
 
-    .container {
-        background-color: white;
-        padding: 30px;
-        border-radius: 30px;
-        margin: 30px auto;
-        width: 80%;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        position: relative;
-    }
+        .button-container form {
+            width: 100%;
+        }
 
-    h2 {
-        font-weight: bold;
-    }
+        .button-container button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
 
-    th, td {
-        text-align: left;
-        padding: 12px;
-        border: 1px solid #ccc;
-    }
+        .tab-btn {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #444;
+            color: white;
+            cursor: pointer;
+        }
 
-    th {
-        background-color: #f3e6f3;
-    }
+        .tab-btn.active {
+            background-color: #007bff;
+        }
 
-    .btn-edit {
-        background-color: #006080;
-        color: white;
-        border: none;
-        padding: 8px 15px;
-        border-radius: 8px;
-        cursor: pointer;
-        margin-right: 10px;
-    }
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
 
-    .btn-delete {
-        background-color: #d60000;
-        color: white;
-        border: none;
-        padding: 8px 15px;
-        border-radius: 8px;
-        cursor: pointer;
-    }
+        h2, h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-    .tab-content {
-        display: none;
-    }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
 
-    .tab-content.active {
-        display: block;
-    }
+        thead {
+            background-color: #2e3338;
+            color: white;
+        }
 
-    .edit-user-form {
-        background-color: #fff0f6;
-        max-width: 500px;
-        margin: 20px auto;
-        padding: 20px 25px;
-        border: 2px solid #dba0c6;
-        border-radius: 16px;
-        box-shadow: 0 4px 8px rgba(130, 70, 116, 0.1);
-        display: none;
-    }
+        th, td {
+            padding: 14px;
+            text-align: center;
+            border-bottom: 1px solid #ccc;
+        }
 
-    .edit-user-form.active {
-        display: block;
-    }
+        tr:nth-child(even) {
+            background-color: #f4f4f4;
+        }
 
-    .edit-user-form h3 {
-        margin-bottom: 20px;
-        color: #824674;
-        font-weight: bold;
-    }
+        .btn-edit {
+            background-color: #007bff;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
 
-    .form-group {
-        margin-bottom: 15px;
-    }
+        .btn-edit:hover {
+            background-color: #0056b3;
+        }
 
-    .form-group label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 6px;
-        color: #333;
-    }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-    .form-group input {
-        width: 100%;
-        padding: 10px 12px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        font-size: 14px;
-        background-color: #fff;
-        transition: border-color 0.3s ease-in-out;
-    }
+        .btn-delete:hover {
+            background-color: #b02a37;
+        }
 
-    .form-group input:focus {
-        border-color: #824674;
-        outline: none;
-    }
+        .btn-add {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+        }
 
-    .form-actions {
-        margin-top: 20px;
-    }
+        .btn-add:hover {
+            background-color: #218838;
+        }
 
-    .btn-submit {
-        background-color: #824674;
-        color: white;
-        padding: 10px 18px;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        margin-right: 10px;
-        font-weight: bold;
-    }
+        .form-group {
+            margin-bottom: 15px;
+        }
 
-    .btn-cancel {
-        background-color: #ccc;
-        padding: 10px 18px;
-        border-radius: 10px;
-        color: #333;
-        text-decoration: none;
-        font-weight: bold;
-    }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
 
-    .btn-submit:hover {
-        background-color: #6a3a5b;
-    }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
 
-    .btn-cancel:hover {
-        background-color: #b3b3b3;
-    }
+        .form-actions {
+            text-align: right;
+        }
 
-    .logout-container {
+        .btn-submit, .btn-cancel {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-cancel {
+            background-color: #6c757d;
+            text-decoration: none;
+            padding: 8px 16px;
+            display: inline-block;
+        }
+
+        .btn-cancel:hover {
+            background-color: #565e64;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+        .edit-user-form {
+            max-width: 500px;
+            margin: 0 auto 30px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fdfdfd;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .edit-user-form h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .edit-user-form .form-group {
+            margin-bottom: 10px;
+        }
+
+        .edit-user-form .form-group label {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .edit-user-form .form-group input,
+        .edit-user-form .form-group select {
+            padding: 6px 10px;
+            font-size: 14px;
+            height: 36px;
+        }
+
+        .edit-user-form .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .edit-user-form .btn-submit,
+        .edit-user-form .btn-cancel {
+            font-size: 14px;
+            padding: 6px 14px;
+        }
+        #backdrop {
         position: fixed;
-        bottom: 20px;
-        left: 20px;
-        z-index: 100;
-    }
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease;
+        z-index: 999;
+        }
 
-    .logout-btn {
-        background-color: #824674;
-        color: white;
-        padding: 10px 18px;
-        border: none;
-        border-radius: 10px;
-        font-weight: bold;
-        cursor: pointer;
-        box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
-        transition: background-color 0.3s ease, transform 0.2s ease;
-    }
+        #backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
 
-    .logout-btn:hover {
-        background-color: #6a3a5b;
-        transform: scale(1.05);
-    }
+        /* Offcanvas */
+        #offcanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background: #f8f9fa;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+            z-index: 1000;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    .toggle-form-btn {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        background-color: #824674;
-        color: white;
-        padding: 10px 18px;
-        border: none;
-        border-radius: 10px;
-        font-weight: bold;
-        cursor: pointer;
-        box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
-        transition: background-color 0.3s ease, transform 0.2s ease;
-    }
+        #offcanvas.active {
+            transform: translateX(0);
+        }
 
-    .toggle-form-btn:hover {
-        background-color: #6a3a5b;
-        transform: scale(1.05);
-    }
+        .logo-placeholder {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 12px;
+            border: 2px solid #dee2e6;
+        }
+
+        .logo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .admin-label {
+            font-weight: 600;
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .button-container form,
+        .logout-container form {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .button-container button,
+        .logout-container button {
+            width: 80%;
+            padding: 8px 0;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            border-radius: 5px;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .button-container button {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .logout-container {
+            margin-top: auto;
+            margin-bottom: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .logout-container button {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .logout-container button:hover {
+            background-color: #b02a37;
+        }
+
+        .nav-bar {
+            padding: 10px;
+        }
+
+        .nav-bar button {
+            padding: 8px 16px;
+            font-size: 16px;
+            background-color: #343a40;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .nav-bar button:hover {
+            background-color: #23272b;
+        }
 </style>
+  </style>
 
-<div class="logout-container">
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit" class="logout-btn">Logout</button>
-    </form>
-</div>
+</head>
+<body>
+<!-- Backdrop -->
+<div id="backdrop"></div>
 
-<div class="nav-bar">
-    <div><strong>Admin</strong></div>
-    <div>
-        <button class="tab-btn active" onclick="switchTab('user')">User</button>
-        <button class="tab-btn" onclick="switchTab('class')">Class</button>
+<!-- Offcanvas -->
+<div id="offcanvas">
+    <div class="logo-placeholder">
+        <img src="{{ asset('images/admin-logo.jpg') }}" alt="Logo">
+    </div>
+    <div class="admin-label">ADMIN</div>
+
+    <div class="button-container">
+        <form action="{{ route('redirect.page') }}" method="GET">
+            <button type="submit">Class Management</button>
+        </form>
+    </div>
+
+    <div class="logout-container">
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit">Logout</button>
+        </form>
     </div>
 </div>
+
+<!-- Navbar -->
+<div class="nav-bar">
+    <button onclick="toggleOffcanvas(true)">☰ Menu</button>
+</div>
+
+<!-- Script -->
+<script>
+    function toggleOffcanvas(show) {
+        const offcanvas = document.getElementById('offcanvas');
+        const backdrop = document.getElementById('backdrop');
+
+        if (show) {
+            offcanvas.classList.add('active');
+            backdrop.classList.add('active');
+        } else {
+            offcanvas.classList.remove('active');
+            backdrop.classList.remove('active');
+        }
+    }
+
+    document.getElementById('backdrop').addEventListener('click', () => {
+        toggleOffcanvas(false);
+    });
+
+    document.addEventListener('click', function (event) {
+        const offcanvas = document.getElementById('offcanvas');
+        if (!offcanvas.contains(event.target) && !event.target.closest('button')) {
+            toggleOffcanvas(false);
+        }
+    });
+</script>
 
 <div id="user" class="tab-content active">
     <div class="container">
@@ -238,18 +456,51 @@
         @isset($editUser)
         <div class="edit-user-form active">
             <h3>Edit User</h3>
+            @if ($errors->any())
+                <div style="color: red; margin-bottom: 10px;">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <form method="POST" action="{{ route('admin.update', $editUser->id) }}">
                 @csrf
                 @method('PUT')
 
                 <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" value="{{ $editUser->name }}" required>
+                    <label for="firstname">First Name</label>
+                    <input type="text" id="first_name" name="first_name" maxlength="25" value="{{ $editUser->first_name }}" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ $editUser->email }}" required>
+                    <label for="middlename">Middle Name</label>
+                    <input type="text" id="middle_name" name="middle_name" maxlength="25" value="{{ $editUser->middle_name }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastname">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" maxlength="25" value="{{ $editUser->last_name }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Last Name</label>
+                    <input type="text" id="email" name="email" maxlength="25" value="{{ $editUser->email }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                        <option value="male" {{ $editUser->gender == 'male' ? 'selected' : '' }}>Male</option>
+                        <option value="female" {{ $editUser->gender == 'female' ? 'selected' : '' }}>Female</option>
+                        <option value="other" {{ $editUser->gender == 'other' ? 'selected' : '' }}>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" maxlength="25" value="{{ old('password') }}" placeholder="Leave blank to keep the current password">
                 </div>
 
                 <div class="form-actions">
@@ -260,10 +511,14 @@
         </div>
         @endisset
 
+
         <table>
             <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>First Name</th>
+                    <th>Middle Name</th>
+                    <th>Last Name</th>
+                    <th>Gender</th>
                     <th>E-mail</th>
                     <th>Actions</th>
                 </tr>
@@ -271,7 +526,10 @@
             <tbody>
                 @foreach ($users as $user)
                 <tr>
-                    <td>{{ $user->name }}</td>
+                    <td>{{ $user->first_name }}</td>
+                    <td>{{ $user->middle_name }}</td>
+                    <td>{{ $user->last_name }}</td>
+                    <td>{{ $user->gender }}</td>
                     <td>{{ $user->email }}</td>
                     <td>
                         <a href="{{ route('admin.dashboard', ['edit' => $user->id]) }}" class="btn-edit">Edit</a>
@@ -287,122 +545,5 @@
         </table>
     </div>
 </div>
-
-<div id="class" class="tab-content">
-    <div class="container">
-        <h2>Class Management</h2>
-
-        @if(session('success'))
-            <div style="color: green; margin-bottom: 10px;">{{ session('success') }}</div>
-        @endif
-
-        @if($editClass)
-        <div class="edit-user-form active">
-            <h3>Edit Class</h3>
-            <form method="POST" action="{{ route('admin.class.update', $editClass->id) }}" onsubmit="return confirm('Are you sure you want to update this class?')">                @csrf
-                @method('PUT')
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" value="{{ $editClass->name }}" required>
-                </div>
-                <div class="form-group">
-                    <label for="level">Level</label>
-                    <input type="text" id="level" name="level" value="{{ $editClass->level }}" required>
-                </div>
-                <div class="form-group">
-                    <label for="duration">Duration</label>
-                    <input type="text" id="duration" name="duration" value="{{ $editClass->duration }}" required>
-                </div>
-                <div class="form-group">
-                    <label for="trainer">Trainer</label>
-                    <input type="text" id="trainer" name="trainer" value="{{ $editClass->trainer }}" required>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-submit">Update Class</button>
-                    <a href="{{ route('admin.dashboard') }}" class="btn-cancel">Cancel</a>
-                </div>
-            </form>
-        </div>
-        @else
-        <div class="edit-user-form" id="add-class-form">
-            <h3>Add New Class</h3>
-            <form method="POST" action="{{ route('class.store') }}">
-                @csrf
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="level">Level</label>
-                    <input type="text" id="level" name="level" required>
-                </div>
-                <div class="form-group">
-                    <label for="duration">Duration</label>
-                    <input type="text" id="duration" name="duration" required>
-                </div>
-                <div class="form-group">
-                    <label for="trainer">Trainer</label>
-                    <input type="text" id="trainer" name="trainer" required>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-submit">Add Class</button>
-                </div>
-            </form>
-        </div>
-        @endif
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Level</th>
-                    <th>Duration</th>
-                    <th>Trainer</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($fitnessClasses as $class)
-                <tr>
-                    <td>{{ $class->name }}</td>
-                    <td>{{ $class->level }}</td>
-                    <td>{{ $class->duration }}</td>
-                    <td>{{ $class->trainer }}</td>
-                    <td>
-                        <a href="{{ route('admin.dashboard', ['edit_class' => $class->id]) }}" class="btn-edit">Edit</a>
-                        <form action="{{ route('class.destroy', $class->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn-delete" onclick="return confirm('Delete this class?')">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        @if(!$editClass)
-        <button class="toggle-form-btn" onclick="toggleAddClassForm()">Add Class</button>
-        @endif
-    </div>
-</div>
-
-<script>
-    function switchTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(div => {
-            div.classList.remove('active');
-        });
-        document.getElementById(tabId).classList.add('active');
-
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        event.target.classList.add('active');
-    }
-
-    function toggleAddClassForm() {
-        const form = document.getElementById('add-class-form');
-        form.classList.toggle('active');
-    }
-</script>
-@endsection
+</body>
+</html>

@@ -4,6 +4,8 @@
 <head>
     <title>@yield('title', 'FitZone')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="shortcut icon" href="{{ asset('images/exercise-weight-icon-6.png') }}" type="image/x-icon">
+    
     <style>
         /* Global styles */
         html {
@@ -153,29 +155,28 @@
 
         .nav-links a {
             color: #fff;
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 16px;
+            font-weight: 600;
             text-decoration: none;
-            position: relative;
-            padding: 8px 16px;
-            border-radius: 20px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            padding: 6px 14px;
+            border-radius: 6px; /* Minimized from 20px */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s;
+            background-color: transparent;
         }
 
         .nav-links a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
         }
 
         .nav-links a.active {
             background-color: #fff;
             color: #834c71;
-            text-decoration: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         }
 
-        /* Optional: subtle shadow when active */
         .nav-links a.active:hover {
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            background-color: #f4f4f4;
         }
 
         .logout-form {
@@ -209,7 +210,7 @@
     <!-- Fixed Header -->
     <div class="header">
         <button onclick="openProfile()" class="avatar" title="Profile">
-        <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Profile" style="width: 40px; height: 40px; border-radius: 30%;">
+        <img src= "{{ asset('images/profile-user.png') }}" alt="Profile" style="width: 40px; height: 40px; border-radius: 30%;">
         </button>
 
         <!-- Profile Overlay -->
@@ -217,14 +218,23 @@
             <div class="profile-modal">
             <button class="btn-close" onclick="closeProfile()">×</button>
                 <h2>User Profile</h2>
+                @if ($errors->any())
+                    <div style="color: red; margin-bottom: 10px;">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <form action="{{ route('profile.update') }}" method="POST">
                     @csrf
                     @method('PUT')
                     <label>Name:</label>
-                    <input type="text" name="name" value="{{ Auth::user()->name }}" required>
+                    <input type="text" name="first_name" maxlength="25" value="{{ Auth::user()->first_name }}" required>
 
                     <label>Email:</label>
-                    <input type="email" name="email" value="{{ Auth::user()->email }}" required>
+                    <input type="email" name="email" maxlength="25" value="{{ Auth::user()->email }}" required>
 
                     <div class="profile-actions">
                         <button type="submit" class="btn-save">Save</button>
@@ -238,9 +248,15 @@
 
 
         <div class="nav-links">
-            <a href="{{ url('/landingpage') }}" class="{{ Request::is('/landingpage') ? 'active' : '' }}">Home</a>
-            <a href="{{ url('/dashboard') }}" class="{{ Request::is('dashboard') ? 'active' : '' }}">Class</a>
-            <a href="{{ url('/about') }}" class="{{ Request::is('about') ? 'active' : '' }}">About</a>
+            <a href="{{ url('/landingpage') }}" class="{{ Request::is('/landingpage') ? 'active' : '' }}">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="{{ url('/dashboard') }}" class="{{ Request::is('dashboard') ? 'active' : '' }}">
+                <i class="fas fa-chalkboard-teacher"></i>Class
+            </a>
+            <a href="{{ url('/about') }}" class="{{ Request::is('about') ? 'active' : '' }}">
+                <i class="fas fa-info-circle"></i>About
+            </a>
         </div>
     <!-- Logout Button -->
         @auth

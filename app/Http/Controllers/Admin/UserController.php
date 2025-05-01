@@ -31,13 +31,31 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+         // Validate all required fields
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email'
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'gender' => 'required|string|in:male,female,other',
+            'email' => 'required|email|max:255',
+            'password' => 'nullable|string|min:8', // Password is optional
         ]);
 
         $user = User::findOrFail($id);
-        $user->update($request->only('name', 'email'));
+
+        // Update user fields manually
+        $user->first_name = $request->first_name;
+        $user->middle_name = $request->middle_name;
+        $user->last_name = $request->last_name;
+        $user->gender = $request->gender;
+        $user->email = $request->email;
+
+        // Only update password if it is provided
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password);
+        }
+
+        $user->save();
 
         return redirect()->route('admin.dashboard')->with('success', 'User updated successfully.');
     }
@@ -58,10 +76,12 @@ class UserController extends Controller
             'level' => 'required|string|max:255',
             'duration' => 'required|string|max:255',
             'trainer' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'key_benefits' => 'required|string|max:255',
         ]);
 
         FitnessClass::create($request->all());
-        return redirect()->route('admin.dashboard')->with('success', 'Fitness Class added successfully');
+        return redirect()->route('admin.classmanage')->with('success', 'Fitness Class added successfully');
     }
 
     public function updateFitnessClass(Request $request, $id)
@@ -71,18 +91,20 @@ class UserController extends Controller
             'level' => 'required|string|max:255',
             'duration' => 'required|string|max:255',
             'trainer' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'key_benefits' => 'required|string|max:255',     
         ]);
 
         $fitnessClass = FitnessClass::findOrFail($id);
         $fitnessClass->update($request->all());
-        return redirect()->route('admin.dashboard')->with('success', 'Fitness Class updated successfully');
+        return redirect()->route('admin.classmanage')->with('success', 'Fitness Class updated successfully');
     }
 
     public function destroyFitnessClass($id)
     {
         $fitnessClass = FitnessClass::findOrFail($id);
         $fitnessClass->delete();
-        return redirect()->route('admin.dashboard')->with('success', 'Fitness Class deleted successfully');
+        return redirect()->route('admin.classmanage')->with('success', 'Fitness Class deleted successfully');
     }
 
     // CRUD for Schedule
@@ -119,4 +141,33 @@ class UserController extends Controller
         $schedule->delete();
         return redirect()->route('admin.dashboard')->with('success', 'Schedule deleted successfully');
     }
+    public function redirectToPage(Request $request)
+    {
+        $users = User::all();
+        $fitnessClasses = FitnessClass::all();
+        $schedules = Schedule::all();
+        $editUser = null;
+        $editClass = null;
+
+        if ($request->has('edit')) {
+            $editUser = User::find($request->input('edit'));
+        }
+
+        if ($request->has('edit_class')) {
+            $editClass = FitnessClass::find($request->input('edit_class'));
+        }
+
+        return view('admin.classmanage', compact('users', 'editUser', 'fitnessClasses', 'schedules', 'editClass'));
+    }
+    public function classManage(Request $request)
+    {
+        $editClass = null;
+        if ($request->has('edit_class')) {
+            $editClass = FitnessClass::find($request->input('edit_class'));
+        }
+
+        $fitnessClasses = FitnessClass::all();
+        return view('admin.classmanage', compact('fitnessClasses', 'editClass'));
+    }
+
 }

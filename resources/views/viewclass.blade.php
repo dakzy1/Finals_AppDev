@@ -68,25 +68,31 @@
         <!-- Class Details -->
         <section class="class-details">
             <h1>{{ $class->name }}</h1>
-            <p class="description">
-                Yoga is a physical, mental, and spiritual practice that originated in ancient India. It combines gentle physical postures (called asanas), breathing techniques (pranayama), and meditation to promote overall well-being.
+            <p class="description" style="white-space: normal; word-wrap: break-word; line-height: 1.6;">
+                {{ $class->description }}
             </p>
 
             <div class="book-box">
             <a href="{{ route('bookclass', $class->id) }}" class="btn-book">Book Now</a>
                 <p><strong>Level:</strong> {{ $class->level }}</p>
-                <p><strong>Duration:</strong> {{ $class->duration }}</p>
+                <p><strong>Duration:</strong> {{ $class->duration }} Minutes</p>
                 <p><strong>Trainer:</strong> {{ $class->trainer }}</p>
             </div>
 
-            <h3>Key Benefits of Yoga:</h3>
-            <ul class="benefits">
-                <li>Increases flexibility and strength</li>
-                <li>Improves posture and balance</li>
-                <li>Reduces stress and anxiety</li>
-                <li>Enhances focus, mindfulness, and relaxation</li>
-                <li>Supports respiratory and cardiovascular health</li>
+            <h3>Key Benefits of {{ $class->name }}:</h3>
+            @if(Str::contains($class->key_benefits, "\n"))
+                <ul class="benefits" style="white-space: normal; word-wrap: break-word; line-height: 1.6;">
+                    @foreach(explode("\n", $class->key_benefits) as $benefit)
+                        @if(trim($benefit) !== '')
+                            <li>{{ ltrim($benefit, '-• ') }}</li>
+                        @endif
+                    @endforeach
+                </ul>
+            @else
+            <ul class="benefits" style="white-space: normal; word-wrap: break-word; line-height: 1.6;">
+                <li>{{ ltrim($class->key_benefits, '-• ') }}</li>
             </ul>
+            @endif
         </section>
     </div>
 </div>
