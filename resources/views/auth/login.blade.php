@@ -123,25 +123,31 @@
 
         .register-popup {
             display: none;
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
+            position: fixed;
+            top: 50%;
+            right: 8rem; /* space from right edge */
+            transform: translateY(-50%); /* center vertically only */
             width: 80%;
-            max-width: 400px; /* smaller box */
+            max-width: 400px;
             background: #774c8b;
             color: #fbeec1;
-            padding: 1.5rem; /* slightly smaller padding */
-            border-radius: 15px; /* a little tighter */
-            animation: slideIn 0.5s forwards;
+            padding: 1.5rem 1.2rem;
+            border-radius: 15px;
+            animation: slideInRight 0.5s forwards;
             z-index: 10;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.25); /* a little softer shadow */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
-        @keyframes slideIn {
-            0% { transform: translate(-50%, -20%) scale(0.8); opacity: 0; }
-            100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+
+
+        @keyframes slideInRight {
+            0% { transform: translateY(-50%) translateX(30%); opacity: 0; }
+            100% { transform: translateY(-50%) translateX(0); opacity: 1; }
         }
+
+
         .register-popup form .mb-2, 
         .register-popup form .mb-3 {
             margin-bottom: 0.6rem; /* tighter space between fields */
