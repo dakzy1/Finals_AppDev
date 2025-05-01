@@ -107,9 +107,11 @@
 
     .main-content {
         display: flex;
+        align-items: flex-start; /* <--- prevents equal height */
         gap: 20px;
         padding: 40px;
     }
+    
 
     .sidebar {
         width: 25%;
