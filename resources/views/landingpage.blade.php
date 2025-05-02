@@ -125,7 +125,8 @@
 <body>
     <div class="landing-container">
         <div class="left">
-            <h1>Welcome to<br>FitZone</h1>
+            <h1>Welcome{{ Auth::check() ? ', ' . Auth::user()->first_name : '' }}<br>to FitZone
+            </h1>
             <p>Track your fitness journey<br>and book classes</p>
 
             <div class="class-box">
