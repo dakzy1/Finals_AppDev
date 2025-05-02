@@ -485,7 +485,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Last Name</label>
+                    <label for="email">Email</label>
                     <input type="text" id="email" name="email" maxlength="25" value="{{ $editUser->email }}" required>
                 </div>
 
