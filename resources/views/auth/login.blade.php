@@ -57,6 +57,7 @@
             font-size: 2.5rem;
             font-weight: bold;
             margin-bottom: 30px;
+            margin-left: 20%;
         }
 
         .login-box {
