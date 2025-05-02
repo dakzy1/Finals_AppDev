@@ -258,77 +258,14 @@
             border-color: #f2547d;
             box-shadow: 0 0 0 0.2rem rgba(242, 84, 125, 0.25);
         }
-        #carouselExample img {
-            width: 100%;
-            height: 500px;
-            max-height: 300px; /* prevent it from being too tall */
-            object-fit: contain;
-            border-radius: 10px;
-            margin-top: 20px;
-            max-width: 400px;
-        }
-        .fitness-heading {
-            font-family: 'Poppins', sans-serif;
-            font-size: 3rem;
-            color: #ff3d00; /* Bright orange-red */
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            margin-top: 40px;
-            font-weight: 600;
-            animation: fadeInUp 1s ease-in-out;
-        }
-
-        .fitness-heading i {
-            color: #424242; /* Grey tone for contrast */
-            margin: 0 10px;
-        }
-
-        @keyframes fadeInUp {
-            0% {
-            opacity: 0;
-            transform: translateY(30px);
-            }
-            100% {
-            opacity: 1;
-            transform: translateY(0);
-            }
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="left">
-        <h2 class="fitness-heading">
-            <i class="fas fa-bolt"></i> A Leap to Fitness <i class="fas fa-dumbbell"></i>
-        </h2>
-        <!--<img src="{{ asset('images/fitness-woman.jpg') }}" alt="Fitness Woman">-->
-        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                <img src="{{ asset('images/fitness-center.jpeg') }}" class="d-block w-100" alt="..." style="border-radius: 40px;">
-                </div>
-                <div class="carousel-item">
-                <img src="{{ asset('images/young-woman.avif') }}" class="d-block w-100" alt="..." style="border-radius: 40px;">
-                </div>
-                <div class="carousel-item">
-                <img src="{{ asset('images/push-up.jpg') }}" class="d-block w-100" alt="..." style="border-radius: 50px;">
-                </div>
-                <div class="carousel-item">
-                <img src="{{ asset('images/using-weight.webp') }}" class="d-block w-100" alt="..." style="border-radius: 40px;">
-                </div>
-            </div>
-
-            <!-- Controls -->
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            </button>
-        </div>
+<div class="left">
+        <h2>A Leap to Fitness</h2>
+        <img src="{{ asset('images/fitness-woman.jpg') }}" alt="Fitness Woman">
     </div>
 
     <div class="right">
