@@ -73,15 +73,37 @@
                 @if($classes->isEmpty())
                     <p>No classes available.</p>
                 @else
+                    @php
+                        $userBookedClassIds = \App\Models\Schedule::where('user_id', Auth::id())->pluck('class_id')->toArray();
+                    @endphp
+
                     @foreach($classes as $class)
+                        @php
+                            $bookedCount = $class->schedules->count();
+                            $limit = $class->user_limit;
+                        @endphp
+
                         <div class="class-card">
                             <div class="class-info">
                                 <h3>{{ $class->name }}</h3>
                                 <p><strong>Level:</strong> {{ $class->level }}</p>
                                 <p><strong>Duration:</strong> {{ $class->duration }} Minutes</p>
                                 <p><strong>Trainer:</strong> {{ $class->trainer }}</p>
+                                <p><strong>Bookings:</strong> {{ $bookedCount }} / {{ $limit }}</p>
+
+                                @if ($bookedCount >= $limit)
+                                    <p style="color: red;"><strong>This class is fully booked.</strong></p>
+                                @endif
                             </div>
-                            <a href="{{ route('viewclass', $class->id) }}" class="btn-book">View</a>
+
+                            @if ($bookedCount >= $limit)
+                                <button class="btn-book" disabled>Fully Booked</button>
+                            @elseif (in_array($class->id, $userBookedClassIds))
+                                <button class="btn-book" disabled>Already Booked</button>
+                            @else
+                                <a href="{{ route('viewclass', $class->id) }}" class="btn-book">View</a>
+                            @endif
+
                         </div>
                     @endforeach
                 @endif

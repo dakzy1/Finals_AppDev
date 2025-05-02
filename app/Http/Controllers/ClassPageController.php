@@ -63,6 +63,16 @@ class ClassPageController extends Controller
         $user = Auth::user();
         $class = FitnessClass::findOrFail($id);
     
+        // Check if user already booked THIS specific class
+        $alreadyBooked = Schedule::where('user_id', $user->id)
+                                ->where('class_id', $class->id)
+                                ->exists();
+    
+        if ($alreadyBooked) {
+            return redirect()->route('dashboard')
+                             ->with('error', 'You have already booked this class.');
+        }
+    
         Schedule::create([
             'user_id' => $user->id,
             'class_id' => $class->id,
@@ -73,6 +83,7 @@ class ClassPageController extends Controller
     
         return redirect()->route('dashboard')->with('success', 'Class booked successfully!');
     }
+    
 
     public function update(Request $request, $id)
     {

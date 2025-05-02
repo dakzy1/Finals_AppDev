@@ -50,4 +50,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function classes()
+    {
+        return $this->belongsToMany(FitnessClass::class, 'class_user');
+    }
+
 }

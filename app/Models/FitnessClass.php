@@ -27,4 +27,9 @@ class FitnessClass extends Model
     {
         return $this->hasMany(Schedule::class, 'class_id');
     }
+    public function bookedUsers()
+    {
+        return $this->hasMany(Schedule::class, 'class_id')->distinct('user_id');
+    }
+
 }
