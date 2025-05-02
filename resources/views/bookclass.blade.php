@@ -175,7 +175,7 @@
             @csrf
             <label for="trainer">Trainer:</label>
             <select id="trainer" name="trainer">
-                <option value="Tomanda">Tomanda</option>
+                <option value="Tomanda">{{ $class->trainer }}</option>
             </select>
 
             <label for="time">Select Time:</label>

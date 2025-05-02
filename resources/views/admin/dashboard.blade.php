@@ -526,11 +526,19 @@
             <tbody>
                 @foreach ($users as $user)
                 <tr>
-                    <td>{{ $user->first_name }}</td>
-                    <td>{{ $user->middle_name }}</td>
-                    <td>{{ $user->last_name }}</td>
+                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
+                        {{ Str::limit($user->first_name, 10, '...') }}
+                    </td>
+                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
+                        {{ Str::limit($user->middle_name, 10, '...') }}
+                    </td>
+                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
+                        {{ Str::limit($user->last_name, 10, '...') }}
+                    </td>
                     <td>{{ $user->gender }}</td>
-                    <td>{{ $user->email }}</td>
+                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
+                        {{ Str::limit($user->email, 10, '...') }}
+                    </td>
                     <td>
                         <a href="{{ route('admin.dashboard', ['edit' => $user->id]) }}" class="btn-edit">Edit</a>
                         <form action="{{ route('admin.destroy', $user->id) }}" method="POST" style="display:inline;">
