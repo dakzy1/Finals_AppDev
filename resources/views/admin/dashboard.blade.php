@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <link rel="shortcut icon" href="{{ asset('images/exercise-weight-icon-6.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('images/web_logo.png') }}" type="image/x-icon">
     <style>
     body {
             font-family: 'Segoe UI', sans-serif;
