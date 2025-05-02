@@ -1,26 +1,74 @@
 @extends('layouts.navbar') 
 
-@section('title', 'Book Class')
 
 @section('content')
+
+
+<div class="container">
+    <div class="left-panel">
+        <div class="class-details">
+            <h2>{{ $class->name }}</h2>
+            <p><strong>Duration:</strong> {{ $class->duration }} Minutes</p>
+            <p><strong>Difficulty:</strong> {{ $class->level }}</p>
+        </div>
+
+        <form class="booking-form" method="POST" action="{{ route('bookclass.store', $class->id) }}">
+            @csrf
+            <label for="trainer">Trainer:</label>
+            <select id="trainer" name="trainer" required>
+                <option value="{{ $class->trainer }}" selected>{{ $class->trainer }}</option>
+            </select>
+
+            <label for="time">Select Time:</label>
+            <select id="time" name="time" required>
+                <option value="08:00 AM" {{ old('time') == '08:00 AM' ? 'selected' : '' }}>08:00 AM</option>
+                <option value="10:00 AM" {{ old('time') == '10:00 AM' ? 'selected' : '' }}>10:00 AM</option>
+                <option value="01:00 PM" {{ old('time') == '01:00 PM' ? 'selected' : '' }}>01:00 PM</option>
+            </select>
+            @error('time')
+                <div class="error">{{ $message }}</div>
+            @enderror
+
+            <label for="date">Select Date:</label>
+            <input type="date" id="date" name="date" value="{{ old('date', now()->format('Y-m-d')) }}" required readonly style="pointer-events: none;">
+            @error('date')
+                <div class="error">{{ $message }}</div>
+            @enderror
+
+            <button type="submit" class="btn-book">Book Now</button>
+        </form>
+    </div>
+
+    <div class="right-panel">
+        <div class="calendar-header">
+            <button onclick="changeMonth(-1)">❮</button>
+            <h2 id="monthYear"></h2>
+            <button onclick="changeMonth(1)">❯</button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+    </div>
+</div>
+
+
 <style>
     html, body {
         height: 100%;
         margin: 0;
         padding: 0;
-        background-color: #fce4ec;
+        background-color: #f5eaf3;
         font-family: sans-serif;
         overflow: hidden;
     }
 
     .container {
         display: flex;
-        height: calc(100vh - 60px); /* Full height minus navbar */
+        max-width: 1200px;
         width: 100%;
-        bottom: 20px;
-        padding: 10px 15px;
-        box-sizing: border-box;
+        margin: 30px auto;
+        height: 550px;
+        padding: 20px;
         gap: 20px;
+        box-sizing: border-box;
     }
 
     .left-panel, .right-panel {
@@ -35,6 +83,7 @@
 
     .right-panel {
         background-color: #f8f8f8;
+        
     }
 
     .class-details h2 {
@@ -115,6 +164,9 @@
         background-color: #f5f5f5;
         border-radius: 0 0 10px 10px;
         flex-grow: 1;
+        height: 300px;  
+        flex-grow: 0;      
+
     }
 
     .calendar-grid div {
@@ -161,52 +213,6 @@
         cursor: default;
     }
 </style>
-
-<div class="container">
-    <div class="left-panel">
-        <div class="class-details">
-            <h2>{{ $class->name }}</h2>
-            <p><strong>Duration:</strong> {{ $class->duration }} Minutes</p>
-            <p><strong>Difficulty:</strong> {{ $class->level }}</p>
-            <p><strong>Location:</strong> {{ $class->location ?? 'Not specified' }}</p>
-        </div>
-
-        <form class="booking-form" method="POST" action="{{ route('bookclass.store', $class->id) }}">
-            @csrf
-            <label for="trainer">Trainer:</label>
-            <select id="trainer" name="trainer" required>
-                <option value="{{ $class->trainer }}" selected>{{ $class->trainer }}</option>
-            </select>
-
-            <label for="time">Select Time:</label>
-            <select id="time" name="time" required>
-                <option value="08:00 AM" {{ old('time') == '08:00 AM' ? 'selected' : '' }}>08:00 AM</option>
-                <option value="10:00 AM" {{ old('time') == '10:00 AM' ? 'selected' : '' }}>10:00 AM</option>
-                <option value="01:00 PM" {{ old('time') == '01:00 PM' ? 'selected' : '' }}>01:00 PM</option>
-            </select>
-            @error('time')
-                <div class="error">{{ $message }}</div>
-            @enderror
-
-            <label for="date">Select Date:</label>
-            <input type="date" id="date" name="date" value="{{ old('date', now()->format('Y-m-d')) }}" required readonly style="pointer-events: none;">
-            @error('date')
-                <div class="error">{{ $message }}</div>
-            @enderror
-
-            <button type="submit" class="btn-book">Book Now</button>
-        </form>
-    </div>
-
-    <div class="right-panel">
-        <div class="calendar-header">
-            <button onclick="changeMonth(-1)">❮</button>
-            <h2 id="monthYear"></h2>
-            <button onclick="changeMonth(1)">❯</button>
-        </div>
-        <div class="calendar-grid" id="calendarGrid"></div>
-    </div>
-</div>
 
 <script>
     let currentDate = new Date();

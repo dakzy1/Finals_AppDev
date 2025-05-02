@@ -48,15 +48,17 @@ class ClassPageController extends Controller
      */
     public function viewClass($id)
     {
+        $user = Auth::user();
         $class = FitnessClass::findOrFail($id);
-
-        $schedules = Schedule::where('class_id', $id)
-            ->where('user_id', Auth::id())
+    
+        // Fetch *all* schedules booked by the user, not just for this class
+        $schedules = Schedule::where('user_id', $user->id)
             ->with('fitnessClass')
             ->get();
-
+    
         return view('viewclass', compact('class', 'schedules'));
     }
+    
 
     /**
      * Book class form

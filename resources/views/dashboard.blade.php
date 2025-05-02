@@ -5,42 +5,40 @@
     <div class="main-content">
         <!-- Sidebar -->
         <aside class="sidebar">
-    <h2>Schedule</h2>
-    <div class="schedule-items">
-        @if (session('success'))
-            <div style="color: green; margin-bottom: 10px;">{{ session('success') }}</div>
-        @endif
+            <h2>Schedule</h2>
+            <div class="schedule-items">
+                @if (session('success'))
+                    <div style="color: green; margin-bottom: 10px;">{{ session('success') }}</div>
+                @endif
 
-        @if($schedules->isEmpty())
-            <p>No schedules booked yet.</p>
-        @else
-            @foreach($schedules as $schedule)
-                <div class="class-box" data-schedule-id="{{ $schedule->id }}">
-                    <div class="class-header" onclick="toggleDetails(this)">
-                        <h4>{{ $schedule->fitnessClass->name }}</h4>
-                    </div>
-                    <div class="class-details-content">
-                        <div class="view-mode visible-fade">
-                            <p><strong>Date:</strong> {{ \Carbon\Carbon::parse($schedule->date)->format('Y-m-d') }}</p>
-                            <p><strong>Time:</strong> {{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }}</p>
-                            <p><strong>Trainer:</strong> {{ $schedule->trainer }}</p>
+                @if($schedules->isEmpty())
+                    <p>No schedules booked yet.</p>
+                @else
+                    @foreach($schedules as $schedule)
+                        <div class="class-box" data-schedule-id="{{ $schedule->id }}">
+                            <div class="class-header" onclick="toggleDetails(this)">
+                                <h4>{{ $schedule->fitnessClass->name }}</h4>
+                            </div>
+                            <div class="class-details-content">
+                                <div class="view-mode visible-fade">
+                                    <p><strong>Date:</strong> {{ \Carbon\Carbon::parse($schedule->date)->format('Y-m-d') }}</p>
+                                    <p><strong>Time:</strong> {{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }}</p>
+                                    <p><strong>Trainer:</strong> {{ $schedule->trainer }}</p>
 
-                            <form action="{{ route('bookclass.destroy', $schedule->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this schedule?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="delete-btn" title="Delete">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red" viewBox="0 0 24 24">
-                                        <path d="M9 3v1H4v2h1v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5V3H9zm0 4h6v12H9V7z"/>
-                                    </svg>
-                                </button>
-                            </form>
+                                    <form action="{{ route('bookclass.destroy', $schedule->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this schedule?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="delete-btn" title="Delete">
+                                        <i class="fa-regular fa-trash-can" style="color: #b00020; font-size: 18px;"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            @endforeach
-        @endif
-    </div>
-</aside>
+                    @endforeach
+                @endif
+            </div>
+        </aside>
 
 
         <!-- Classes Section -->
