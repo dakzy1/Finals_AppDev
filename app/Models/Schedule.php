@@ -28,4 +28,8 @@ class Schedule extends Model
     {
         return $this->belongsTo(FitnessClass::class, 'class_id');
     }
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'class_id');
+    }
 }

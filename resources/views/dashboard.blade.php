@@ -5,66 +5,43 @@
     <div class="main-content">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <h2>Schedule</h2>
-            <div class="schedule-items">
-                @if (session('success'))
-                    <div style="color: green; margin-bottom: 10px;">{{ session('success') }}</div>
-                @endif
+    <h2>Schedule</h2>
+    <div class="schedule-items">
+        @if (session('success'))
+            <div style="color: green; margin-bottom: 10px;">{{ session('success') }}</div>
+        @endif
 
-                @if($schedules->isEmpty())
-                    <p>No schedules booked yet.</p>
-                @else
-                    @foreach($schedules as $schedule)
-                        <div class="class-box" data-schedule-id="{{ $schedule->id }}">
-                            <div class="class-header" onclick="toggleDetails(this)">
-                                <h4>{{ $schedule->fitnessClass->name }}</h4>
-                            </div>
-                            <div class="class-details-content">
-                            {{-- View mode --}}
-                                <div class="view-mode">
-                                    <p><strong>Date:</strong> <span class="view-date">{{ \Carbon\Carbon::parse($schedule->date)->format('Y-m-d') }}</span></p>
-                                    <p><strong>Time:</strong> <span class="view-time">{{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }}</span></p>
-                                    <p><strong>Trainer:</strong> <span class="view-trainer">{{ $schedule->trainer }}</span></p>
-                                    <button class="edit-btn" onclick="enableEdit(this)">Edit</button>
-                                </div>
+        @if($schedules->isEmpty())
+            <p>No schedules booked yet.</p>
+        @else
+            @foreach($schedules as $schedule)
+                <div class="class-box" data-schedule-id="{{ $schedule->id }}">
+                    <div class="class-header" onclick="toggleDetails(this)">
+                        <h4>{{ $schedule->fitnessClass->name }}</h4>
+                    </div>
+                    <div class="class-details-content">
+                        <div class="view-mode visible-fade">
+                            <p><strong>Date:</strong> {{ \Carbon\Carbon::parse($schedule->date)->format('Y-m-d') }}</p>
+                            <p><strong>Time:</strong> {{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }}</p>
+                            <p><strong>Trainer:</strong> {{ $schedule->trainer }}</p>
 
-                                {{-- Edit mode --}}
-                                <form class="edit-form" action="{{ route('bookclass.update', $schedule->id) }}" method="POST" style="display: none;">
-                                    @csrf
-                                    @method('PUT')
-                                    <label for="date-{{ $schedule->id }}">Date:</label>
-                                    <input type="date" name="date" id="date-{{ $schedule->id }}" value="{{ \Carbon\Carbon::parse($schedule->date)->format('Y-m-d') }}" required>
-
-                                    <label for="time-{{ $schedule->id }}">Time:</label>
-                                    <input type="time" name="time" id="time-{{ $schedule->id }}" value="{{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }}" required>
-
-                                    <label for="trainer-{{ $schedule->id }}">Trainer:</label>
-                                    <input type="text" name="trainer" id="trainer-{{ $schedule->id }}" value="{{ $schedule->trainer }}" required>
-                                 
-                                    <div class="edit-actions">
-                                    <div class="left-buttons">
-                                        <button type="submit" class="save-btn">Save</button>
-                                        <button type="button" class="cancel-btn" onclick="cancelEdit(this)">Cancel</button>
-                                    </div>
-
-                                    <form action="{{ route('bookclass.destroy', $schedule->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this schedule?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="delete-btn" title="Delete">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red" viewBox="0 0 24 24">
-                                                <path d="M9 3v1H4v2h1v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5V3H9zm0 4h6v12H9V7z"/>
-                                            </svg>
-                                        </button>
-                                    </form>
-                                </div>
-
-                                </form>
-                            </div>
+                            <form action="{{ route('bookclass.destroy', $schedule->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this schedule?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="delete-btn" title="Delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red" viewBox="0 0 24 24">
+                                        <path d="M9 3v1H4v2h1v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5V3H9zm0 4h6v12H9V7z"/>
+                                    </svg>
+                                </button>
+                            </form>
                         </div>
-                    @endforeach
-                @endif
-            </div>
-        </aside>
+                    </div>
+                </div>
+            @endforeach
+        @endif
+    </div>
+</aside>
+
 
         <!-- Classes Section -->
         <section class="class-details">
@@ -169,16 +146,6 @@
         overflow: visible;
     }
 
-    .edit-btn {
-        margin-top: 10px;
-        background-color: #a84f61;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 5px 10px;
-        cursor: pointer;
-    }
-
     .class-details {
         width: 75%;
         background-color: #f7d9eb;
@@ -227,92 +194,6 @@
         background-color: #f0f0f0;
     }
 
-    .edit-form {
-        margin-top: 15px;
-        display: grid;
-        grid-template-columns: 100px 1fr;
-        row-gap: 10px;
-        column-gap: 10px;
-        align-items: center;
-        
-    }
-
-    .edit-form label {
-        font-weight: bold;
-        color: #fff;        
-    }
-
-    .edit-form input[type="date"],
-    .edit-form input[type="time"],
-    .edit-form input[type="text"] {
-        padding: 8px;
-        border-radius: 6px;
-        border: none;
-        background-color: #f7d9eb;
-        color: #333;
-        font-family: 'Poppins', sans-serif;
-        font-size: 0.9rem;
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    .save-btn,
-    .cancel-btn {
-        padding: 5px 10px;
-        border: none;
-        border-radius: 6px;
-        font-weight: bold;
-        font-family: 'Poppins', sans-serif;
-        cursor: pointer;
-        margin-top: 5px;
-        margin-right: 1px;
-        width: 70px;
-    }
-
-    .save-btn {
-        background-color: #fff;
-        color: #a84f61;
-    }
-
-    .cancel-btn {
-        background-color: transparent;
-        color: #fff;
-        border: 2px solid #fff;
-    }
-
-    /* Smooth transition for edit/view forms */
-    .class-details-content .view-mode,
-    .class-details-content .edit-form {
-        transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-
-    /* Hide with animation */
-    .hidden-fade {
-        opacity: 0;
-        transform: translateY(-10px);
-        pointer-events: none;
-    }
-
-    /* Show with animation */
-    .visible-fade {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
-    }
-    .edit-actions {
-        display: flex;
-        align-items: center;
-        margin-top: 10px;
-    }
-    .left-buttons {
-        display: flex;
-        gap: 10px;
-        margin-right: 60px;
-    }
-
-    .edit-actions form {
-        margin-left: auto;
-    }
 
     .delete-btn {
         background: transparent;

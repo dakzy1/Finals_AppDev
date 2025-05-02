@@ -174,8 +174,8 @@
         <form class="booking-form" method="POST" action="{{ route('bookclass.store', $class->id) }}">
             @csrf
             <label for="trainer">Trainer:</label>
-            <select id="trainer" name="trainer">
-                <option value="Tomanda">Tomanda</option>
+            <select id="trainer" name="trainer" required>
+                <option value="{{ $class->trainer }}" selected>{{ $class->trainer }}</option>
             </select>
 
             <label for="time">Select Time:</label>
