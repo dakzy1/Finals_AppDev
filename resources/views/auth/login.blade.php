@@ -314,7 +314,7 @@
                 @csrf
                 <div class="mb-2">
                     <label>First Name</label>
-                    <input type="text" name="first_name" maxlength="25" class="form-control" required>
+                    <input type="text" name="first_name" maxlength="50" class="form-control" required>
                 </div>
                 <div class="mb-2">
                     <label>Middle Name</label>

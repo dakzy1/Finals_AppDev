@@ -471,7 +471,7 @@
 
                 <div class="form-group">
                     <label for="firstname">First Name</label>
-                    <input type="text" id="first_name" name="first_name" maxlength="25" value="{{ $editUser->first_name }}" required>
+                    <input type="text" id="first_name" name="first_name" maxlength="50" value="{{ $editUser->first_name }}" required>
                 </div>
 
                 <div class="form-group">

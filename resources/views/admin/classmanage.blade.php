@@ -508,7 +508,9 @@
                     <td>{{ $class->name }}</td>
                     <td>{{ $class->level }}</td>
                     <td>{{ $class->duration }} Minutes</td>
-                    <td>{{ $class->trainer }}</td>
+                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
+                        {{ Str::limit($class->trainer, 10, '...') }}
+                    </td>
                     <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
                         {{ Str::limit($class->description, 10, '...') }}
                     </td>
