@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <link rel="shortcut icon" href="{{ asset('images/exercise-weight-icon-6.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('images/web_logo.png') }}" type="image/x-icon">
     <style>
     body {
             font-family: 'Segoe UI', sans-serif;
@@ -471,7 +471,7 @@
 
                 <div class="form-group">
                     <label for="firstname">First Name</label>
-                    <input type="text" id="first_name" name="first_name" maxlength="25" value="{{ $editUser->first_name }}" required>
+                    <input type="text" id="first_name" name="first_name" maxlength="50" value="{{ $editUser->first_name }}" required>
                 </div>
 
                 <div class="form-group">
@@ -485,7 +485,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Last Name</label>
+                    <label for="email">Email</label>
                     <input type="text" id="email" name="email" maxlength="25" value="{{ $editUser->email }}" required>
                 </div>
 
@@ -526,11 +526,19 @@
             <tbody>
                 @foreach ($users as $user)
                 <tr>
-                    <td>{{ $user->first_name }}</td>
-                    <td>{{ $user->middle_name }}</td>
-                    <td>{{ $user->last_name }}</td>
+                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
+                        {{ Str::limit($user->first_name, 10, '...') }}
+                    </td>
+                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
+                        {{ Str::limit($user->middle_name, 10, '...') }}
+                    </td>
+                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
+                        {{ Str::limit($user->last_name, 10, '...') }}
+                    </td>
                     <td>{{ $user->gender }}</td>
-                    <td>{{ $user->email }}</td>
+                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
+                        {{ Str::limit($user->email, 10, '...') }}
+                    </td>
                     <td>
                         <a href="{{ route('admin.dashboard', ['edit' => $user->id]) }}" class="btn-edit">Edit</a>
                         <form action="{{ route('admin.destroy', $user->id) }}" method="POST" style="display:inline;">

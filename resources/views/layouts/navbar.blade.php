@@ -5,8 +5,7 @@
     <title>@yield('title', 'FitZone')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="shortcut icon" href="{{ asset('images/exercise-weight-icon-6.png') }}" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-X..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    
     <style>
         /* Global styles */
         html {

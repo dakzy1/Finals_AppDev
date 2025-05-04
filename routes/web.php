@@ -105,4 +105,4 @@ Route::get('/home', function () {
 })->name('home');
 
 // routes/web.php
-Route::get('/redirect-to-page', [UserController::class, 'redirectToPage'])->name('redirect.page');
+Route::get('/classmanagement', [UserController::class, 'redirectToPage'])->name('redirect.page');
