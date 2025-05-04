@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>FitZone - Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="shortcut icon" href="{{ asset('images/exercise-weight-icon-6.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('images/web_logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -57,15 +57,17 @@
             font-size: 2.5rem;
             font-weight: bold;
             margin-bottom: 30px;
+            margin-left: 20%;
         }
 
         .login-box {
             background-color: #5c2e68;
             padding: 40px;
-            border-radius: 15px;
+            border-radius: 7px;
             width: 100%;
             max-width: 400px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            margin-left: auto;
         }
 
         .login-box h3 {
