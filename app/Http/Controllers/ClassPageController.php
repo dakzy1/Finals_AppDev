@@ -66,7 +66,15 @@ class ClassPageController extends Controller
     public function bookClass($id)
     {
         $class = FitnessClass::findOrFail($id);
-        return view('bookclass', compact('class'));
+    
+        // Get the user's existing bookings for the given class
+        $user = Auth::user();
+        $existingBookings = Schedule::where('user_id', $user->id)
+                                    ->where('class_id', $class->id)
+                                    ->get(['date', 'time']);  // Only fetch relevant fields
+    
+        // Pass existing bookings and class to the view
+        return view('bookclass', compact('class', 'existingBookings'));
     }
 
     /**
@@ -79,28 +87,37 @@ class ClassPageController extends Controller
             'date' => 'required|date',
             'time' => 'required',
         ]);
-
+    
         $user = Auth::user();
         $class = FitnessClass::findOrFail($id);
+    
+        $selectedDate = $validated['date'];
+        $selectedTime = Carbon::parse($validated['time'])->format('H:i');
+    
+        // 🔥 FIX: Remove class_id from conflict check
+        $hasConflict = Schedule::where('user_id', $user->id)
+            ->where('date', $selectedDate)
+            ->where('time', $selectedTime)
+            ->first(); // changed from exists() to first() so we can access conflict details
 
-        // Check for existing booking
-        $alreadyBooked = Schedule::where('user_id', $user->id)
-            ->where('class_id', $class->id)
-            ->exists();
+        if ($hasConflict) {
+            $conflictDate = Carbon::parse($hasConflict->date)->format('F j, Y');
+            $conflictTime = Carbon::parse($hasConflict->time)->format('h:i A');
+            $warningMessage = "You already have a booking on {$conflictDate} at {$conflictTime}.";
 
-        if ($alreadyBooked) {
-            return redirect()->route('dashboard')
-                ->with('error', 'You have already booked this class.');
+            $existingBookings = Schedule::where('user_id', $user->id)->get(['date', 'time']);
+
+            return view('bookclass', compact('class', 'existingBookings', 'warningMessage'));
         }
-
+    
         Schedule::create([
             'user_id' => $user->id,
             'class_id' => $class->id,
-            'date' => $validated['date'],
-            'time' => Carbon::parse($validated['time'])->format('H:i'),
+            'date' => $selectedDate,
+            'time' => $selectedTime,
             'trainer' => $validated['trainer'],
         ]);
-
+    
         return redirect()->route('dashboard')->with('success', 'Class booked successfully!');
     }
 

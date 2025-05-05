@@ -30,10 +30,15 @@
             @enderror
 
             <label for="date">Select Date:</label>
-            <input type="date" id="date" name="date" value="{{ old('date', now()->format('Y-m-d')) }}" required readonly style="pointer-events: none;">
+            <input type="date" id="date" name="date" value="{{ old('date', now()->format('Y-m-d')) }}" required>
             @error('date')
                 <div class="error">{{ $message }}</div>
             @enderror
+
+            <!-- Debugging: Check if the warning message is being passed -->
+            @if (isset($warningMessage))
+                <p style="color: red;">{{ $warningMessage }}</p>
+            @endif
 
             <button type="submit" class="btn-book">Book Now</button>
         </form>
