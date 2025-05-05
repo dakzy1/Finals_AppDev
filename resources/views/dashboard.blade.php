@@ -21,9 +21,9 @@
                             </div>
                             <div class="class-details-content">
                                 <div class="view-mode visible-fade">
-                                    <p><strong>Date:</strong> {{ \Carbon\Carbon::parse($schedule->date)->format('Y-m-d') }}</p>
-                                    <p><strong>Time:</strong> {{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }}</p>
-                                    <p><strong>Trainer:</strong> {{ $schedule->trainer }}</p>
+                                    <p><strong>Date:</strong> {{ \Carbon\Carbon::parse($schedule->date)->format('F j, Y') }}</p>
+                                    <p><strong>Time:</strong> {{ \Carbon\Carbon::parse($schedule->time)->format('g:i A') }}</p>
+                                    <p><strong>Trainer:</strong> {{ Str::limit($schedule->trainer, 20, '...') }}</p>
 
                                     <form action="{{ route('bookclass.destroy', $schedule->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this schedule?')">
                                         @csrf

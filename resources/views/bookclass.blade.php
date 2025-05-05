@@ -21,16 +21,25 @@
 
             <label for="time">Select Time:</label>
             <select id="time" name="time" required>
-                <option value="08:00 AM" {{ old('time') == '08:00 AM' ? 'selected' : '' }}>08:00 AM</option>
-                <option value="10:00 AM" {{ old('time') == '10:00 AM' ? 'selected' : '' }}>10:00 AM</option>
-                <option value="01:00 PM" {{ old('time') == '01:00 PM' ? 'selected' : '' }}>01:00 PM</option>
+                <option value="08:00:00" {{ old('time') == '08:00:00' ? 'selected' : '' }}>08:00 AM</option>
+                <option value="10:00:00" {{ old('time') == '10:00:00' ? 'selected' : '' }}>10:00 AM</option>
+                <option value="13:00:00" {{ old('time') == '13:00:00' ? 'selected' : '' }}>01:00 PM</option>
             </select>
+
             @error('time')
                 <div class="error">{{ $message }}</div>
             @enderror
 
             <label for="date">Select Date:</label>
-            <input type="date" id="date" name="date" value="{{ old('date', now()->format('Y-m-d')) }}" required>
+            <div style="position: relative; display: flex; align-items: center;">
+                <input type="text" id="date" name="date" 
+                    value="{{ old('date', now()->format('Y-m-d')) }}" 
+                    readonly required 
+                    style="padding-right: 30px; background-color: #f9f9f9; font-weight: bold; font-size: 16px; border: none; cursor: pointer;" />
+                <span style="position: absolute; right: 10px; pointer-events: none;">
+                    📅
+                </span>
+            </div>
             @error('date')
                 <div class="error">{{ $message }}</div>
             @enderror
