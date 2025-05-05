@@ -277,9 +277,9 @@
             <h3>Login</h3>
             <form method="POST" action="{{ route('login') }}">
                 @csrf
-                <input type="email" name="email" placeholder="Email" required>
+                <input type="email" name="email" placeholder="Email" maxlength="50" required>
                 <div style="position: relative;">
-                    <input type="password" name="password" id="password" placeholder="Password" required>
+                    <input type="password" name="password" id="password" placeholder="Password" maxlength="50" required>
                     <span onclick="togglePassword()" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); border: none; cursor: pointer; outline: none;">
                         👁
                     </span>
