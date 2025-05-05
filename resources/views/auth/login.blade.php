@@ -78,7 +78,8 @@
         }
 
         input[type="email"],
-        input[type="password"] {
+        input[type="password"],
+        input[type="text"]#password {
             width: 100%;
             padding: 12px 10px;
             margin-bottom: 15px;
@@ -278,8 +279,8 @@
                 @csrf
                 <input type="email" name="email" placeholder="Email" required>
                 <div style="position: relative;">
-                    <input type="password" name="password" id="password" placeholder="Password" required style="width: 100%; padding-right: 40px;">
-                    <span onclick="togglePassword()" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+                    <input type="password" name="password" id="password" placeholder="Password" required>
+                    <span onclick="togglePassword()" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); border: none; cursor: pointer; outline: none;">
                         👁
                     </span>
                 </div>
