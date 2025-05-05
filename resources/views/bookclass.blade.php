@@ -244,18 +244,30 @@
         const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
         const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
 
-        for (let i = 0; i < firstDay; i++) {
-            const emptyCell = document.createElement('div');
-            emptyCell.classList.add('empty');
-            calendarGrid.appendChild(emptyCell);
-        }
-
         for (let day = 1; day <= daysInMonth; day++) {
             const dayCell = document.createElement('div');
             dayCell.classList.add('day');
             dayCell.textContent = day;
 
             const today = new Date();
+            const dateToCompare = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+
+            // Remove the time part for fair comparison
+            today.setHours(0, 0, 0, 0);
+            dateToCompare.setHours(0, 0, 0, 0);
+
+            if (dateToCompare < today) {
+                dayCell.classList.add('disabled');
+                // Do not add click event for past dates
+            } else {
+                dayCell.addEventListener('click', function () {
+                    selectDate(day);
+                    document.querySelectorAll('.day').forEach(d => d.classList.remove('selected'));
+                    dayCell.classList.add('selected');
+                });
+            }
+
+            // Highlight today
             if (
                 day === today.getDate() &&
                 currentDate.getMonth() === today.getMonth() &&
@@ -264,14 +276,9 @@
                 dayCell.classList.add('selected');
             }
 
-            dayCell.addEventListener('click', function () {
-                selectDate(day);
-                document.querySelectorAll('.day').forEach(d => d.classList.remove('selected'));
-                dayCell.classList.add('selected');
-            });
-
             calendarGrid.appendChild(dayCell);
         }
+
     }
 
     function selectDate(day) {

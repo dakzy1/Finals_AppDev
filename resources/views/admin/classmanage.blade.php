@@ -425,7 +425,7 @@
                 </div>
                 <div class="form-group">
                     <label for="trainer">Trainer Name</label>
-                    <input type="text" id="trainer" name="trainer" maxlength="25" value="{{ $editClass->trainer }}" required>
+                    <input type="text" id="trainer" name="trainer" maxlength="50" value="{{ $editClass->trainer }}" required>
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
@@ -473,7 +473,7 @@
                 </div>
                 <div class="form-group">
                     <label for="trainer">Trainer Name</label>
-                    <input type="text" id="trainer" name="trainer" maxlength="25" required>
+                    <input type="text" id="trainer" name="trainer" maxlength="50" required>
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
