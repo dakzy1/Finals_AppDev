@@ -373,12 +373,12 @@
 
                     <div class="mb-3">
                         <label for="admin-username" class="form-label">Username</label>
-                        <input type="text" name="username" class="form-control" id="admin-username" required>
+                        <input type="text" name="username" class="form-control" id="admin-username" maxlength="25" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="admin-password" class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" id="admin-password" required>
+                        <input type="password" name="password" class="form-control" id="admin-password" maxlength="25" required>
                     </div>
                 </div>
 
