@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>FitZone - Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="shortcut icon" href="{{ asset('images/web_logo.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('images/Appdev_logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -78,7 +78,8 @@
         }
 
         input[type="email"],
-        input[type="password"] {
+        input[type="password"],
+        input[type="text"]#password {
             width: 100%;
             padding: 12px 10px;
             margin-bottom: 15px;
@@ -285,10 +286,10 @@
             @endif
             <form method="POST" action="{{ route('login') }}">
                 @csrf
-                <input type="email" name="email" placeholder="Email" required>
+                <input type="email" name="email" placeholder="Email" maxlength="50" required>
                 <div style="position: relative;">
-                    <input type="password" name="password" id="password" placeholder="Password" required style="width: 100%; padding-right: 40px;">
-                    <span onclick="togglePassword()" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+                    <input type="password" name="password" id="password" placeholder="Password" maxlength="50" required>
+                    <span onclick="togglePassword()" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); border: none; cursor: pointer; outline: none;">
                         👁
                     </span>
                 </div>

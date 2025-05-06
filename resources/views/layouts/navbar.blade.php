@@ -4,7 +4,7 @@
 <head>
     <title>@yield('title', 'FitZone')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link rel="shortcut icon" href="{{ asset('images/web_logo.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('images/Appdev_logo.png') }}" type="image/x-icon">
     
     <style>
         /* Global styles */

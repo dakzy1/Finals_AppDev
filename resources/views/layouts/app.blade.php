@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>FitZone</title>
-    <link rel="shortcut icon" href="{{ asset('images/web_logo.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('images/Appdev_logo.png') }}" type="image/x-icon">
     <style>
         body {
             font-family: Arial, sans-serif;
