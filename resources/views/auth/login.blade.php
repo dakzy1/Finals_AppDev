@@ -274,6 +274,15 @@
         <h1>FitZone</h1>
         <div class="login-box">
             <h3>Login</h3>
+            @if ($errors->any())
+                <div class="alert-error">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <input type="email" name="email" placeholder="Email" required>
@@ -300,16 +309,7 @@
         <div class="register-popup shadow" id="register-popup">
             <h4>Create Your FitZone Account</h4>
 
-            @if ($errors->any())
-                <div class="alert-error">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
+            
             <form method="POST" action="/register">
                 @csrf
                 <div class="mb-2">
@@ -368,13 +368,7 @@
             <form method="POST" action="{{ route('admin.login.submit') }}">
                 @csrf
                 <div class="modal-body">
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            @foreach ($errors->all() as $error)
-                                <div>{{ $error }}</div>
-                            @endforeach
-                        </div>
-                    @endif
+                    
 
                     <div class="mb-3">
                         <label for="admin-username" class="form-label">Username</label>
