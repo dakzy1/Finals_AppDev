@@ -203,6 +203,9 @@
             padding: 20px 10px;
             box-sizing: border-box;
         }
+        .icon-left-margin {
+        margin-right: 5px;
+        }
     </style>
 </head>
 <body>
@@ -252,10 +255,10 @@
                 <i class="fas fa-home"></i> Home
             </a>
             <a href="{{ url('/dashboard') }}" class="{{ Request::is('dashboard') ? 'active' : '' }}">
-                <i class="fas fa-chalkboard-teacher"></i>Class
+                <i class="fas fa-chalkboard-teacher icon-left-margin"></i>Class
             </a>
             <a href="{{ url('/about') }}" class="{{ Request::is('about') ? 'active' : '' }}">
-                <i class="fas fa-info-circle"></i>About
+                <i class="fas fa-info-circle icon-left-margin"></i>About
             </a>
         </div>
     <!-- Logout Button -->
