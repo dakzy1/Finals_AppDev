@@ -11,7 +11,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
+            background-color: #f5eaf3;
         }
 
         .container {
@@ -90,6 +90,24 @@
         .btn-delete {
             background-color: #dc3545;
             color: white;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            }
+
+        .btn-edit,
+        .btn-delete {
+            width: 70px;
+            height: 40px;
+            padding: 0;
+            line-height: 40px;
+            text-align: center;
+            box-sizing: border-box;
+            display: inline-block;
         }
 
         .toggle-form-btn {
@@ -240,12 +258,12 @@
             margin-bottom: 20px;
         }
 
+/* Button container styling inside offcanvas */
         .button-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
             width: 100%;
-            align-items: center;
+            margin-top: 10px;
         }
 
         .button-container form,
@@ -314,6 +332,7 @@
             min-height: 150px;
             max-height: 300px;
         }
+
         .modal {
             display: none;
             position: fixed;
@@ -373,13 +392,19 @@
             <button type="submit">User Management</button>
         </form>
     </div>
+
+    <div class="button-container">
+        <form action="{{ route('redirect.page') }}" method="GET">
+            <button type="submit">Class Management</button>
+        </form>
+    </div>
+
     <div class="logout-container">
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit">Logout</button>
         </form>
     </div>
-
 </div>
 
 <!-- Navbar -->
@@ -585,12 +610,14 @@
                         {{ Str::limit(strip_tags($class->key_benefits), 10, '...') }}
                     </td>
                     <td>
-                        <a href="{{ route('admin.classmanage', ['edit_class' => $class->id]) }}" class="btn-edit">Edit</a>
-                        <form action="{{ route('class.destroy', $class->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn-delete" onclick="return confirm('Delete this class?')">Delete</button>
-                        </form>
+                        <div class="btn-group">
+                            <a href="{{ route('admin.classmanage', ['edit_class' => $class->id]) }}" class="btn-edit">Edit</a>
+                            <form action="{{ route('class.destroy', $class->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-delete" onclick="return confirm('Delete this class?')">Delete</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 @endforeach

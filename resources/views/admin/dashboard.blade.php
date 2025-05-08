@@ -9,7 +9,7 @@
     <style>
     body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: #f9f9f9;
+            background-color: #f5eaf3;
             margin: 0;
             padding: 0;
         }
@@ -42,8 +42,7 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            gap: 15px;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .button-container form {
@@ -114,30 +113,42 @@
         tr:nth-child(even) {
             background-color: #f4f4f4;
         }
-
+        .btn-delete, .btn-edit {
+            padding: 10px 20px;
+            font-size: 16px;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
         .btn-edit {
             background-color: #007bff;
             color: white;
-            padding: 6px 12px;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-
-        .btn-edit:hover {
-            background-color: #0056b3;
         }
 
         .btn-delete {
             background-color: #dc3545;
             color: white;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
         }
+        .btn-edit:hover { background-color: #0069d9; }
+        .btn-delete:hover { background-color: #c82333; }
+        
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            }
 
-        .btn-delete:hover {
-            background-color: #b02a37;
+        .btn-edit,
+        .btn-delete {
+            width: 70px;
+            height: 40px;
+            padding: 0;
+            line-height: 40px;
+            text-align: center;
+            box-sizing: border-box;
+            display: inline-block;
         }
 
         .btn-add {
@@ -370,7 +381,8 @@
         .nav-bar {
             padding: 10px;
         }
-
+        /* Offcanvas */        
+        
         .modal {
             display: none;
             position: fixed;
@@ -419,6 +431,12 @@
         <img src="{{ asset('images/admin-logo.jpg') }}" alt="Logo">
     </div>
     <div class="admin-label">ADMIN</div>
+
+    <div class="button-container">
+        <form action="{{ route('admin.dashboard') }}" method="GET">
+            <button type="submit">User Management</button>
+        </form>
+    </div>
 
     <div class="button-container">
         <form action="{{ route('redirect.page') }}" method="GET">
@@ -568,12 +586,14 @@
                         {{ Str::limit($user->email, 10, '...') }}
                     </td>
                     <td>
-                        <a href="{{ route('admin.dashboard', ['edit' => $user->id]) }}" class="btn-edit">Edit</a>
-                        <form action="{{ route('admin.destroy', $user->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn-delete" onclick="return confirm('Delete this user?')">Delete</button>
-                        </form>
+                        <div class="btn-group">
+                            <a href="{{ route('admin.dashboard', ['edit' => $user->id]) }}" class="btn-edit">Edit</a>
+                            <form action="{{ route('admin.destroy', $user->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-delete" onclick="return confirm('Delete this user?')">Delete</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 @endforeach
