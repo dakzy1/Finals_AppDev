@@ -440,7 +440,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('class.update', $editClass->id) }}" onsubmit="return confirm('Are you sure you want to update this class?')">
+                <form id="editClassForm" method="POST" action="{{ route('class.update', $editClass->id) }}" onsubmit="return confirm('Are you sure you want to update this class?')">
                     @csrf
                     @method('PUT')
 
@@ -504,7 +504,7 @@
                 <div class="edit-user-form active" id="add-class-form-modal">
                     <h3>Add New Class</h3>
                     <!-- Move your existing Add Class form content here -->
-                    <form method="POST" action="{{ route('class.store') }}">
+                    <form method="POST" action="{{ route('class.store') }}" onsubmit="disableSubmit(this)">
                         @csrf
                         <!-- Keep all form groups the same as before -->
                         <div class="form-group">
@@ -547,7 +547,7 @@
                             <small id="charCount_2">0 / 255 characters</small>
                         </div>
                         <div class="form-actions">
-                            <button type="submit" class="btn-submit">Add Class</button>
+                            <button type="submit" class="btn-submit" id="addClassBtn">Add Class</button>
                             <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
                         </div>
                     </form>
@@ -738,14 +738,24 @@
        
     }
 
-    // Close modal on outside click
-    window.onclick = function(event) {
-        document.querySelectorAll('.modal').forEach(modal => {
-            if (event.target == modal) {
-                closeModal();
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const forms = document.querySelectorAll('form');
+
+    forms.forEach(form => {
+        // Skip the edit class form
+        if (form.id === 'editClassForm') return;
+
+        form.addEventListener('submit', function () {
+            const submitButton = form.querySelector('.btn-submit');
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = 'Submitting...';
             }
         });
-    };
+    });
+});
 </script>
 </body>
 </html>
