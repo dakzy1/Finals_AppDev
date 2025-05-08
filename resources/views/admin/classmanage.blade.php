@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class Management</title>
     <link rel="shortcut icon" href="{{ asset('images/Appdev_logo.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -309,6 +310,10 @@
         .nav-bar button:hover {
             background-color: #23272b;
         }
+        .ck-editor__editable_inline {
+            min-height: 150px;
+            max-height: 300px;
+        }
     </style>
     <script>
         function toggleAddClassForm() {
@@ -429,12 +434,14 @@
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea id="description" name="description" maxlength="255" rows="4" required style="resize: both; max-width: 500px; max-height: 200px; overflow: auto;">{{ old('key_benefits', $editClass->description) }}</textarea>
+                    <textarea id="description" name="description">{{ old('description', $editClass->description ?? '') }}</textarea>
+                    <small id="charCount">0 / 255 characters</small>
                 </div>
                 <div class="form-group">
                     <label for="description_2">Key Benefits</label>
-                    <textarea id="description_2" name="key_benefits" maxlength="255" rows="4" required style="resize: both; max-width: 500px; max-height: 200px; overflow: auto;">{{ old('key_benefits', $editClass->key_benefits) }}</textarea>
-                </div>
+                    <textarea id="description_2" name="key_benefits">{{ old('key_benefits', $editClass->key_benefits ?? '') }}</textarea>
+                    <small id="charCount_2">0 / 255 characters</small>
+                </div> 
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">Update Class</button>
                     <a href="{{ route('admin.classmanage') }}" class="btn-cancel">Cancel</a>
@@ -444,6 +451,15 @@
         @else
         <div class="edit-user-form" id="add-class-form">
             <h3>Add New Class</h3>
+            @if ($errors->any())
+                <div style="color: red; margin-bottom: 10px;">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <form method="POST" action="{{ route('class.store') }}">
                 @csrf
                 <div class="form-group">
@@ -477,11 +493,13 @@
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea id="description" name="description" rows="4" required style="resize: both; max-width: 500px; max-height: 200px; overflow: auto;"></textarea>
+                    <textarea id="description" name="description">{{ old('description', $editClass->description ?? '') }}</textarea>
+                    <small id="charCount">0 / 255 characters</small>
                 </div>
                 <div class="form-group">
                     <label for="description_2">Key Benefits</label>
-                    <textarea id="description_2" name="key_benefits" rows="4" required style="resize: both; max-width: 500px; max-height: 200px; overflow: auto;"></textarea>
+                    <textarea id="description_2" name="key_benefits">{{ old('key_benefits', $editClass->key_benefits ?? '') }}</textarea>
+                    <small id="charCount_2">0 / 255 characters</small>
                 </div> 
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">Add Class</button>
@@ -490,7 +508,7 @@
         </div>
         @endif
 
-        <table>
+        <table id="userTable" class="display">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -509,13 +527,13 @@
                     <td>{{ $class->level }}</td>
                     <td>{{ $class->duration }} Minutes</td>
                     <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
-                        {{ Str::limit($class->trainer, 10, '...') }}
+                        {{ Str::limit($class->trainer, 10, '...') }} 
+                    </td>
+                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;"> 
+                        {{ Str::limit(strip_tags($class->description), 10, '...') }}
                     </td>
                     <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
-                        {{ Str::limit($class->description, 10, '...') }}
-                    </td>
-                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
-                        {{ Str::limit($class->key_benefits, 10, '...') }}
+                        {{ Str::limit(strip_tags($class->key_benefits), 10, '...') }}
                     </td>
                     <td>
                         <a href="{{ route('admin.classmanage', ['edit_class' => $class->id]) }}" class="btn-edit">Edit</a>
@@ -544,5 +562,116 @@
     });
     </script>
 </div>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#userTable').DataTable();
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        ClassicEditor
+        .create(document.querySelector('#description'))
+        .then(editor => {
+            const maxLength = 255;
+            const maxNewLines = 3;
+
+            editor.model.document.on('change:data', () => {
+                const htmlData = editor.getData();
+                const plainText = htmlData.replace(/<[^>]*>/g, ''); // remove HTML tags
+
+                // Count new lines based on paragraph tags or line breaks
+                const newLineCount = (htmlData.match(/<p>|<br\s*\/?>/g) || []).length;
+
+                // Limit characters
+                if (plainText.length > maxLength) {
+                    alert(`Description must not exceed ${maxLength} characters.`);
+                    editor.setData(plainText.substring(0, maxLength));
+                    return;
+                }
+
+                // Limit new lines
+                if (newLineCount > maxNewLines) {
+                    alert(`Maximum of ${maxNewLines} new lines allowed.`);
+                    
+                    // Optional: remove extra paragraphs (truncate by line count)
+                    const lines = htmlData.split(/(<p>.*?<\/p>|<br\s*\/?>)/i);
+                    let lineTotal = 0;
+                    let filtered = "";
+
+                    for (let i = 0; i < lines.length; i++) {
+                        if (/<p>|<br\s*\/?>/i.test(lines[i])) {
+                            lineTotal++;
+                        }
+
+                        filtered += lines[i];
+
+                        if (lineTotal >= maxNewLines) break;
+                    }
+
+                    editor.setData(filtered);
+                    return;
+                }
+
+                document.getElementById('charCount').innerText = `${plainText.length} / ${maxLength} characters`;
+            });
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+        ClassicEditor
+        .create(document.querySelector('#description_2'))
+        .then(editor => {
+            const maxLength = 255;
+            const maxNewLines = 5;
+
+            editor.model.document.on('change:data', () => {
+                const htmlData = editor.getData();
+                const plainText = htmlData.replace(/<[^>]*>/g, ''); // remove HTML tags
+
+                // Count new lines based on paragraph tags or line breaks
+                const newLineCount = (htmlData.match(/<p>|<br\s*\/?>/g) || []).length;
+
+                // Limit characters
+                if (plainText.length > maxLength) {
+                    alert(`Description must not exceed ${maxLength} characters.`);
+                    editor.setData(plainText.substring(0, maxLength));
+                    return;
+                }
+
+                // Limit new lines
+                if (newLineCount > maxNewLines) {
+                    alert(`Maximum of ${maxNewLines} new lines allowed.`);
+                    
+                    // Optional: remove extra paragraphs (truncate by line count)
+                    const lines = htmlData.split(/(<p>.*?<\/p>|<br\s*\/?>)/i);
+                    let lineTotal = 0;
+                    let filtered = "";
+
+                    for (let i = 0; i < lines.length; i++) {
+                        if (/<p>|<br\s*\/?>/i.test(lines[i])) {
+                            lineTotal++;
+                        }
+
+                        filtered += lines[i];
+
+                        if (lineTotal >= maxNewLines) break;
+                    }
+
+                    editor.setData(filtered);
+                    return;
+                }
+
+                document.getElementById('charCount_2').innerText = `${plainText.length} / ${maxLength} characters`;
+            });
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    });
+</script>
 </body>
 </html>

@@ -47,9 +47,9 @@
         <!-- Class Details -->
         <section class="class-details">
             <h1>{{ $class->name }}</h1>
-            <p class="description" style="white-space: normal; word-wrap: break-word; line-height: 1.6;">
-                {{ $class->description }}
-            </p>
+            <div class="description" style="white-space: normal; word-wrap: break-word; line-height: 1.6;">
+                {!! $class->description !!}
+            </div>
 
             <div class="book-box">
             <a href="{{ route('bookclass', $class->id) }}" class="btn-book">Book Now</a>
@@ -69,7 +69,7 @@
                 </ul>
             @else
             <ul class="benefits" style="white-space: normal; word-wrap: break-word; line-height: 1.6;">
-                <li>{{ ltrim($class->key_benefits, '-• ') }}</li>
+                {!! $class->key_benefits !!}
             </ul>
             @endif
         </section>
