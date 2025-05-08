@@ -30,14 +30,13 @@
                 <div class="error">{{ $message }}</div>
             @enderror
 
-            <label for="date">Select Date:</label>
             <div style="position: relative; display: flex; align-items: center;">
-                <input type="text" id="date" name="date" 
+                <input hidden="text" id="date" name="date" 
                     value="{{ old('date', now()->format('Y-m-d')) }}" 
                     readonly required 
                     style="padding-right: 30px; background-color: #f9f9f9; font-weight: bold; font-size: 16px; border: none; cursor: pointer;" />
                 <span style="position: absolute; right: 10px; pointer-events: none;">
-                    📅
+                    
                 </span>
             </div>
             @error('date')
