@@ -18,24 +18,23 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            background-color: #2e3338;
+            background-color: #834c71;
             color: white;
             padding: 10px 20px;
             height: 30px;
         }
         .nav-bar button {
-            background-color: #007bff;
-            color: white;
             padding: 8px 16px;
+            font-size: 16px;
+            background-color: white;
+            color: #834c71;
             border: none;
-            border-radius: 4px;
-            font-weight: bold;
+            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
 
         .nav-bar button:hover {
-            background-color: #0056b3;
+            background-color:rgba(212, 212, 212, 0.87);
         }
 
         /* Button container styling inside offcanvas */
@@ -102,7 +101,7 @@
         }
 
         thead {
-            background-color: #2e3338;
+            background-color: #834c71;
             color: white;
         }
 
@@ -372,19 +371,6 @@
             padding: 10px;
         }
 
-        .nav-bar button {
-            padding: 8px 16px;
-            font-size: 16px;
-            background-color: #343a40;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .nav-bar button:hover {
-            background-color: #23272b;
-        }
         .modal {
             display: none;
             position: fixed;

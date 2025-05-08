@@ -26,7 +26,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #2e3338;
+            background-color: #834c71;
             color: white;
             padding: 15px 30px;
         }
@@ -117,7 +117,7 @@
         }
 
         th {
-            background-color: #343a40;
+            background-color: #834c71;
             color: white;
         }
 
@@ -300,15 +300,15 @@
         .nav-bar button {
             padding: 8px 16px;
             font-size: 16px;
-            background-color: #343a40;
-            color: #fff;
+            background-color: white;
+            color: #834c71;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
 
         .nav-bar button:hover {
-            background-color: #23272b;
+            background-color:rgba(212, 212, 212, 0.87);
         }
         .ck-editor__editable_inline {
             min-height: 150px;
