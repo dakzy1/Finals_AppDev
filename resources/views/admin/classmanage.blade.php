@@ -314,6 +314,41 @@
             min-height: 150px;
             max-height: 300px;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 28px;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: black;
+        }
+
     </style>
     <script>
         function toggleAddClassForm() {
@@ -389,123 +424,137 @@
         @endif
 
         @if($editClass)
-        <div class="edit-user-form active">
-            <h3>Edit Class</h3>
-            @if ($errors->any())
-                <div style="color: red; margin-bottom: 10px;">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-            <form method="POST" action="{{ route('class.update', $editClass->id) }}" onsubmit="return confirm('Are you sure you want to update this class?')">
-                @csrf
-                @method('PUT')
-                <div class="form-group">
-                    <label for="name">Class Name</label>
-                    <select id="name" name="name" required>
-                        <option value="Yoga" {{ $editClass->name == 'Yoga' ? 'selected' : '' }}>Yoga</option>
-                        <option value="Zumba" {{ $editClass->name == 'Zumba' ? 'selected' : '' }}>Zumba</option>
-                        <option value="Cardio" {{ $editClass->name == 'Cardio' ? 'selected' : '' }}>Cardio</option>
-                        <option value="Pilates" {{ $editClass->name == 'Pilates' ? 'selected' : '' }}>Pilates</option>
-                        <option value="HIIT" {{ $editClass->name == 'HIIT' ? 'selected' : '' }}>HIIT</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="level">Difficulty Level</label>
-                    <select id="level" name="level" required>
-                        <option value="Beginner" {{ $editClass->level == 'Beginner' ? 'selected' : '' }}>Beginner</option>
-                        <option value="Intermediate" {{ $editClass->level == 'Intermediate' ? 'selected' : '' }}>Intermediate</option>
-                        <option value="Advanced" {{ $editClass->level == 'Advanced' ? 'selected' : '' }}>Advanced</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="duration">Duration</label>
-                    <div style="display: flex; align-items: center;">
-                        <input type="number" id="duration" name="duration" min="1" max="100" value="{{ $editClass->duration }}" required style="margin-right: 5px;">
-                        <span>minutes</span>
+        <!-- Edit Class Modal -->
+        <div id="editClassModal" class="modal" style="display: block;">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <h3>Edit Class</h3>
+
+                @if ($errors->any())
+                    <div style="color: red; margin-bottom: 10px;">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="trainer">Trainer Name</label>
-                    <input type="text" id="trainer" name="trainer" maxlength="50" value="{{ $editClass->trainer }}" required>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description">{{ old('description', $editClass->description ?? '') }}</textarea>
-                    <small id="charCount">0 / 255 characters</small>
-                </div>
-                <div class="form-group">
-                    <label for="description_2">Key Benefits</label>
-                    <textarea id="description_2" name="key_benefits">{{ old('key_benefits', $editClass->key_benefits ?? '') }}</textarea>
-                    <small id="charCount_2">0 / 255 characters</small>
-                </div> 
-                <div class="form-actions">
-                    <button type="submit" class="btn-submit">Update Class</button>
-                    <a href="{{ route('admin.classmanage') }}" class="btn-cancel">Cancel</a>
-                </div>
-            </form>
+                @endif
+
+                <form method="POST" action="{{ route('class.update', $editClass->id) }}" onsubmit="return confirm('Are you sure you want to update this class?')">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="form-group">
+                        <label for="name">Class Name</label>
+                        <select id="name" name="name" required>
+                            <option value="Yoga" {{ $editClass->name == 'Yoga' ? 'selected' : '' }}>Yoga</option>
+                            <option value="Zumba" {{ $editClass->name == 'Zumba' ? 'selected' : '' }}>Zumba</option>
+                            <option value="Cardio" {{ $editClass->name == 'Cardio' ? 'selected' : '' }}>Cardio</option>
+                            <option value="Pilates" {{ $editClass->name == 'Pilates' ? 'selected' : '' }}>Pilates</option>
+                            <option value="HIIT" {{ $editClass->name == 'HIIT' ? 'selected' : '' }}>HIIT</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="level">Difficulty Level</label>
+                        <select id="level" name="level" required>
+                            <option value="Beginner" {{ $editClass->level == 'Beginner' ? 'selected' : '' }}>Beginner</option>
+                            <option value="Intermediate" {{ $editClass->level == 'Intermediate' ? 'selected' : '' }}>Intermediate</option>
+                            <option value="Advanced" {{ $editClass->level == 'Advanced' ? 'selected' : '' }}>Advanced</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration">Duration</label>
+                        <div style="display: flex; align-items: center;">
+                            <input type="number" id="duration" name="duration" min="1" max="100" value="{{ $editClass->duration }}" required style="margin-right: 5px;">
+                            <span>minutes</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="trainer">Trainer Name</label>
+                        <input type="text" id="trainer" name="trainer" maxlength="50" value="{{ $editClass->trainer }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description">{{ old('description', $editClass->description ?? '') }}</textarea>
+                        <small id="charCount">0 / 255 characters</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description_2">Key Benefits</label>
+                        <textarea id="description_2" name="key_benefits">{{ old('key_benefits', $editClass->key_benefits ?? '') }}</textarea>
+                        <small id="charCount_2">0 / 255 characters</small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">Update Class</button>
+                        <a href="{{ route('admin.classmanage') }}" class="btn-cancel">Cancel</a>
+                    </div>
+                </form>
+            </div>
         </div>
         @else
-        <div class="edit-user-form" id="add-class-form">
-            <h3>Add New Class</h3>
-            @if ($errors->any())
-                <div style="color: red; margin-bottom: 10px;">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+        <!-- Modal for Add Class -->
+        <div id="addClassModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <div class="edit-user-form active" id="add-class-form-modal">
+                    <h3>Add New Class</h3>
+                    <!-- Move your existing Add Class form content here -->
+                    <form method="POST" action="{{ route('class.store') }}">
+                        @csrf
+                        <!-- Keep all form groups the same as before -->
+                        <div class="form-group">
+                            <label for="name">Class Name</label>
+                            <select id="name" name="name" required>
+                                <option value="Yoga">Yoga</option>
+                                <option value="Zumba">Zumba</option>
+                                <option value="Cardio">Cardio</option>
+                                <option value="Pilates">Pilates</option>
+                                <option value="HIIT">HIIT</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="level">Difficulty Level</label>
+                            <select id="level" name="level" required>
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="duration">Duration</label>
+                            <div style="display: flex; align-items: center;">
+                                <input type="number" id="duration" name="duration" min="1" max="100" required style="margin-right: 5px;">
+                                <span>minutes</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="trainer">Trainer Name</label>
+                            <input type="text" id="trainer" name="trainer" maxlength="50" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" maxlength="255"></textarea>
+                            <small id="charCount">0 / 255 characters</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="description_2">Key Benefits</label>
+                            <textarea id="description_2" name="key_benefits" maxlength="255"></textarea>
+                            <small id="charCount_2">0 / 255 characters</small>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-submit">Add Class</button>
+                            <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                        </div>
+                    </form>
                 </div>
-            @endif
-            <form method="POST" action="{{ route('class.store') }}">
-                @csrf
-                <div class="form-group">
-                    <label for="name">Class Name</label>
-                    <select id="name" name="name" required>
-                        <option value="Yoga" {{ isset($editClass) && $editClass->name == 'Yoga' ? 'selected' : '' }}>Yoga</option>
-                        <option value="Zumba" {{ isset($editClass) && $editClass->name == 'Zumba' ? 'selected' : '' }}>Zumba</option>
-                        <option value="Cardio" {{ isset($editClass) && $editClass->name == 'Cardio' ? 'selected' : '' }}>Cardio</option>
-                        <option value="Pilates" {{ isset($editClass) && $editClass->name == 'Pilates' ? 'selected' : '' }}>Pilates</option>
-                        <option value="HIIT" {{ isset($editClass) && $editClass->name == 'HIIT' ? 'selected' : '' }}>HIIT</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="level">Difficulty Level</label>
-                    <select id="level" name="level" required>
-                        <option value="Beginner" {{ isset($editClass) && $editClass->level == 'Beginner' ? 'selected' : '' }}>Beginner</option>
-                        <option value="Intermediate" {{ isset($editClass) && $editClass->level == 'Intermediate' ? 'selected' : '' }}>Intermediate</option>
-                        <option value="Advanced" {{ isset($editClass) && $editClass->level == 'Advanced' ? 'selected' : '' }}>Advanced</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="duration">Duration</label>
-                    <div style="display: flex; align-items: center;">
-                        <input type="number" id="duration" name="duration" min="1" max="100" required style="margin-right: 5px;">
-                        <span>minutes</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="trainer">Trainer Name</label>
-                    <input type="text" id="trainer" name="trainer" maxlength="50" required>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description">{{ old('description', $editClass->description ?? '') }}</textarea>
-                    <small id="charCount">0 / 255 characters</small>
-                </div>
-                <div class="form-group">
-                    <label for="description_2">Key Benefits</label>
-                    <textarea id="description_2" name="key_benefits">{{ old('key_benefits', $editClass->key_benefits ?? '') }}</textarea>
-                    <small id="charCount_2">0 / 255 characters</small>
-                </div> 
-                <div class="form-actions">
-                    <button type="submit" class="btn-submit">Add Class</button>
-                </div>
-            </form>
+            </div>
         </div>
+
         @endif
 
         <table id="userTable" class="display">
@@ -671,7 +720,32 @@
         .catch(error => {
             console.error(error);
         });
+        
     });
+    document.addEventListener("DOMContentLoaded", () => {
+        const modal = document.getElementById("addClassModal");
+        const toggleBtn = document.querySelector(".toggle-form-btn");
+
+        toggleBtn.addEventListener("click", () => {
+            modal.style.display = "block";
+        });
+    });
+
+    function closeModal() {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => modal.style.display = "none");
+        // Optional: Redirect only for edit modal
+       
+    }
+
+    // Close modal on outside click
+    window.onclick = function(event) {
+        document.querySelectorAll('.modal').forEach(modal => {
+            if (event.target == modal) {
+                closeModal();
+            }
+        });
+    };
 </script>
 </body>
 </html>

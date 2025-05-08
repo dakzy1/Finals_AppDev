@@ -385,6 +385,40 @@
         .nav-bar button:hover {
             background-color: #23272b;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 28px;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: black;
+        }
 </style>
   </style>
 
@@ -455,62 +489,69 @@
         @endif
 
         @isset($editUser)
-        <div class="edit-user-form active">
-            <h3>Edit User</h3>
-            @if ($errors->any())
-                <div style="color: red; margin-bottom: 10px;">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-            <form method="POST" action="{{ route('admin.update', $editUser->id) }}">
-                @csrf
-                @method('PUT')
+        <!-- Edit User Modal -->
+        <div id="editUserModal" class="modal" style="display: block;">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <h3>Edit User</h3>
 
-                <div class="form-group">
-                    <label for="firstname">First Name</label>
-                    <input type="text" id="first_name" name="first_name" maxlength="50" value="{{ $editUser->first_name }}" required>
-                </div>
+                @if ($errors->any())
+                    <div style="color: red; margin-bottom: 10px;">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
-                <div class="form-group">
-                    <label for="middlename">Middle Name</label>
-                    <input type="text" id="middle_name" name="middle_name" maxlength="25" value="{{ $editUser->middle_name }}" required>
-                </div>
+                <form method="POST" action="{{ route('admin.update', $editUser->id) }}">
+                    @csrf
+                    @method('PUT')
 
-                <div class="form-group">
-                    <label for="lastname">Last Name</label>
-                    <input type="text" id="last_name" name="last_name" maxlength="25" value="{{ $editUser->last_name }}" required>
-                </div>
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" id="first_name" name="first_name" maxlength="50" value="{{ $editUser->first_name }}" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="text" id="email" name="email" maxlength="25" value="{{ $editUser->email }}" required>
-                </div>
+                    <div class="form-group">
+                        <label for="middle_name">Middle Name</label>
+                        <input type="text" id="middle_name" name="middle_name" maxlength="25" value="{{ $editUser->middle_name }}" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="gender">Gender</label>
-                    <select id="gender" name="gender" required>
-                        <option value="male" {{ $editUser->gender == 'male' ? 'selected' : '' }}>Male</option>
-                        <option value="female" {{ $editUser->gender == 'female' ? 'selected' : '' }}>Female</option>
-                        <option value="other" {{ $editUser->gender == 'other' ? 'selected' : '' }}>Other</option>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" maxlength="25" value="{{ $editUser->last_name }}" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" maxlength="25" value="{{ old('password') }}" placeholder="Leave blank to keep the current password">
-                </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" id="email" name="email" maxlength="25" value="{{ $editUser->email }}" required>
+                    </div>
 
-                <div class="form-actions">
-                    <button type="submit" class="btn-submit">Update</button>
-                    <a href="{{ route('admin.dashboard') }}" class="btn-cancel">Cancel</a>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender" required>
+                            <option value="male" {{ $editUser->gender == 'male' ? 'selected' : '' }}>Male</option>
+                            <option value="female" {{ $editUser->gender == 'female' ? 'selected' : '' }}>Female</option>
+                            <option value="other" {{ $editUser->gender == 'other' ? 'selected' : '' }}>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" maxlength="25" placeholder="Leave blank to keep the current password">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">Update</button>
+                        <a href="{{ route('admin.dashboard') }}" class="btn-cancel">Cancel</a>
+                    </div>
+                </form>
+            </div>
         </div>
         @endisset
+
 
 
         <table id="userTable" class="display">
@@ -560,6 +601,21 @@
     $(document).ready(function () {
         $('#userTable').DataTable();
     });
+    function closeModal() {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => modal.style.display = "none");
+        // Optional: Redirect only for edit modal
+       
+    }
+
+    // Close modal on outside click
+    window.onclick = function(event) {
+        document.querySelectorAll('.modal').forEach(modal => {
+            if (event.target == modal) {
+                closeModal();
+            }
+        });
+    };
 </script>
 </body>
 </html>
