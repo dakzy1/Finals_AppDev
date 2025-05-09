@@ -169,5 +169,14 @@ class UserController extends Controller
         $fitnessClasses = FitnessClass::all();
         return view('admin.classmanage', compact('fitnessClasses', 'editClass'));
     }
+    public function toggleStatus($id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = $user->status === 'active' ? 'deactivated' : 'active';
+        $user->save();
+
+        return redirect()->route('admin.dashboard')->with('success', 'User status updated successfully.');
+    }
+
 
 }

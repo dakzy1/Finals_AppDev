@@ -116,26 +116,32 @@
             background-color: #f4f4f4;
         }
 
-        .btn-edit {
-            background-color: #007bff;
-            color: white;
-            padding: 6px 12px;
+        .btn-edit,
+        .btn-delete {
+            display: inline-block;  /* Normalizes <a> and <button> */
+            padding: 8px 16px;      /* Make sure both use the same padding */
+            font-size: 14px;        /* Normalize font size */
+            font-weight: bold;      /* Optional, for visual consistency */
+            line-height: 1.2;       /* Ensure consistent vertical spacing */
+            text-align: center;     /* Align text for <a> */
+            vertical-align: middle; /* Align with other inline-block elements */
             border-radius: 5px;
+            cursor: pointer;
             text-decoration: none;
+            border: none;
+        }
+        .btn-edit{
+            background-color: #007bff;
+        }
+        .btn-delete{
+            background-color: #dc3545;
         }
 
         .btn-edit:hover {
             background-color: #0056b3;
         }
 
-        .btn-delete {
-            background-color: #dc3545;
-            color: white;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+        
 
         .btn-delete:hover {
             background-color: #b02a37;
@@ -567,29 +573,25 @@
             </thead>
             <tbody>
                 @foreach ($users as $user)
-                <tr>
-                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
-                        {{ Str::limit($user->first_name, 10, '...') }}
-                    </td>
-                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
-                        {{ Str::limit($user->middle_name, 10, '...') }}
-                    </td>
-                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
-                        {{ Str::limit($user->last_name, 10, '...') }}
-                    </td>
+                <tr @if($user->status === 'deactivated') style="background-color: #e9ecef; color: #6c757d;" @endif>
+                    <td>{{ Str::limit($user->first_name, 10, '...') }}</td>
+                    <td>{{ Str::limit($user->middle_name, 10, '...') }}</td>
+                    <td>{{ Str::limit($user->last_name, 10, '...') }}</td>
                     <td>{{ $user->gender }}</td>
-                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
-                        {{ Str::limit($user->email, 10, '...') }}
-                    </td>
+                    <td>{{ Str::limit($user->email, 20, '...') }}</td>
                     <td>
                         <a href="{{ route('admin.dashboard', ['edit' => $user->id]) }}" class="btn-edit">Edit</a>
-                        <form action="{{ route('admin.destroy', $user->id) }}" method="POST" style="display:inline;">
+                        
+                        <form action="{{ route('admin.toggleStatus', $user->id) }}" method="POST" style="display:inline;">
                             @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn-delete" onclick="return confirm('Delete this user?')">Delete</button>
+                            @method('PUT')
+                            <button type="submit" class="btn-delete">
+                                {{ $user->status === 'active' ? 'Deactivate' : 'Activate' }}
+                            </button>
                         </form>
                     </td>
                 </tr>
+
                 @endforeach
             </tbody>
         </table>
