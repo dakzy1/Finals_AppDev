@@ -350,7 +350,7 @@
         .layer-1 {
             flex:1;
             width: 100%;
-            background-image:url('images/background.jpg');
+            background-image:url('images/bg-login.jpeg');
             background-size: cover;
             background-attachment: scroll;
             background-repeat: no-repeat;
@@ -380,7 +380,7 @@
             width: 80%;
             height: 50%;
             margin:10% auto;
-            { box-sizing: border-box; }
+            box-sizing: border-box;
             
         }
 
