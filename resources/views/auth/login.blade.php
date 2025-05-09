@@ -466,7 +466,6 @@
         .layer-4 {
             width: 100%;
             flex:1;
-            border:1px solid black;
         }
 
         .contentlayer-4 {
