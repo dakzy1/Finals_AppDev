@@ -550,7 +550,7 @@
             <div class="layer-4">
                 <div class="contentlayer-4">
                     <div class="card rounded-0">
-                        <img src="images/header.jpg" alt="Card image" />
+                        <img src="images/HIIT.avif" alt="Card image" />
                         <div class="card-body">
                             <h5 class="card-title">HIIT</h5>
                             <p class="card-text">
@@ -560,7 +560,7 @@
                     </div>
 
                     <div class="card rounded-0">
-                        <img src="images/header.jpg" alt="Card image" />
+                        <img src="images/Zumba.webp" alt="Card image" />
                         <div class="card-body">
                             <h5 class="card-title">ZUMBA</h5>
                             <p class="card-text">
@@ -570,7 +570,7 @@
                     </div>
 
                     <div class="card rounded-0">
-                        <img src="images/header.jpg" alt="Card image" />
+                        <img src="images/Cardio.avif" alt="Card image" />
                         <div class="card-body">
                             <h5 class="card-title">CARDIO</h5>
                             <p class="card-text">
