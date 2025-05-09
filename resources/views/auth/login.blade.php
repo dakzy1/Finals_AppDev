@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+
+        html {
+            scroll-behavior: smooth;
+        }
         * { box-sizing: border-box; }
 
         body {
@@ -308,7 +312,7 @@
             flex-direction:column;
             background-color: #fff;
             border-radius: 7px;
-            height: 300vh;
+            height: 400vh;
             overflow-x: hidden;
         }
 
@@ -379,43 +383,131 @@
             display: flex;
             width: 80%;
             height: 50%;
-            margin:10% auto;
+            margin:11% auto;
             box-sizing: border-box;
             
         }
 
-        .description {
+        .description-2 {
             flex:1;
             display: flex;
             justify-content: center;  
             align-items: center; 
             text-align: center;
+            padding: 20px;
+            background-color:rgb(252, 249, 246);
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
         }
 
         .description h6 {
             margin: 0;           
         }
 
-        .separator {
-            margin:0px 30px;
-        }
-
         .img-layer-2 {
             flex:1;
-            border:1px solid black;
             width: 100%;
             background-image:url('images/header.jpg');
             background-size: cover;
             background-attachment: scroll;
             background-repeat: no-repeat;
-            border-radius:7px;
             padding:20px;
         }
 
         .layer-3 {
             width: 100%;
             flex:1;
+        }
+
+        .layer-3 #offer {
+            display: inline-block;
+            background-color:rgb(75, 45, 145);
+            margin-left: 10%;
+            color: #fff;
+            border-radius:2px;
+            padding:15px;
+        }
+
+        .img-layer-3 {
+            flex:1;
+            width: 100%;
+            background-image:url('images/yoga_body.jpg');
+            background-size: cover;
+            background-attachment: scroll;
+            background-repeat: no-repeat;
+            padding:20px;
+        }
+
+        .description-3 {
+            flex:1;
+            flex-direction: column;
+            display: flex;
+            justify-content: center;  
+            align-items: center; 
+            text-align: center;
+            padding: 20px;
+            background-color:rgb(252, 249, 246);
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .description-3 h5 {
+            margin-bottom:60px;
+        }
+
+        .contentlayer-3 {
+            display: flex;
+            width: 80%;
+            height: 50%;
+            margin:10% auto;
+            box-sizing: border-box;
+        }
+
+        .layer-4 {
+            width: 100%;
+            flex:1;
             border:1px solid black;
+        }
+
+        .contentlayer-4 {
+            display: flex;
+            justify-content: space-between; 
+            gap: 20px;
+            flex-wrap: nowrap; 
+            width: 80%;         
+            margin: 10% auto;   
+            box-sizing: border-box;
+        }
+
+        .card {
+            width: 18rem;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .card-body {
+            padding: 16px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0 0 10px;
+            color: #333;
+        }
+
+        .card-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #555;
         }
     </style>
 </head>
@@ -427,7 +519,7 @@
             <nav class="about-navbar">
                 <div class="nav-buttons">
                     <a href="#" class="nav-btn">Home</a>
-                    <a href="#" class="nav-btn">About</a>
+                    <a href="#About" class="nav-btn">About</a>
                     <a href="#" class="nav-btn" id="login-btn">Login</a>
                     <a href="#" class="nav-btn" data-bs-toggle="modal" data-bs-target="#adminLoginModal"><i class="fa-solid fa-user-tie"></i></a>
                 </div>
@@ -439,15 +531,56 @@
                 </div>
             </div>
             <div class="layer-2">
-                <div class="contentlayer-2">
-                    <div class="description">
+                <div class="contentlayer-2" id="About">
+                    <div class="description-2">
                         <h6>Your journey to better health, more energy, and total confidence starts here.</h6>
                     </div>
-                    <div class="separator"></div>
                     <div class="img-layer-2"></div>
                 </div>
             </div>
-            <div class="layer-3"></div>
+            <div class="layer-3">
+                <h6 id="offer">What We Offer →</h6>
+                <div class="contentlayer-3" id="About">
+                    <div class="img-layer-3"></div>
+                    <div class="description-3">
+                        <h5>Yoga</h5>
+                        <h6>Your journey to better health, more energy, and total confidence starts here.</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="layer-4">
+                <div class="contentlayer-4">
+                    <div class="card rounded-0">
+                        <img src="images/header.jpg" alt="Card image" />
+                        <div class="card-body">
+                            <h5 class="card-title">HIIT</h5>
+                            <p class="card-text">
+                            Some quick example text to build on the card title and make up the bulk of the card’s content.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-0">
+                        <img src="images/header.jpg" alt="Card image" />
+                        <div class="card-body">
+                            <h5 class="card-title">ZUMBA</h5>
+                            <p class="card-text">
+                            More content goes here, describing features, benefits, or anything else.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-0">
+                        <img src="images/header.jpg" alt="Card image" />
+                        <div class="card-body">
+                            <h5 class="card-title">CARDIO</h5>
+                            <p class="card-text">
+                            More content goes here, describing features, benefits, or anything else.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
