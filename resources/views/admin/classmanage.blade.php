@@ -457,11 +457,20 @@
 
                     <div class="form-group">
                         <label for="level">Difficulty Level</label>
-                        <select id="level" name="level" required>
-                            <option value="Beginner" {{ $editClass->level == 'Beginner' ? 'selected' : '' }}>Beginner</option>
-                            <option value="Intermediate" {{ $editClass->level == 'Intermediate' ? 'selected' : '' }}>Intermediate</option>
-                            <option value="Advanced" {{ $editClass->level == 'Advanced' ? 'selected' : '' }}>Advanced</option>
-                        </select>
+                        <div style="display: flex; gap: 10px; font-size: 14px; margin-top: 5px;">
+                            <label style="display: flex; align-items: center; gap: 4px;">
+                                <input type="radio" name="level" value="Beginner" {{ $editClass->level == 'Beginner' ? 'checked' : '' }} required>
+                                Beginner
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 4px;">
+                                <input type="radio" name="level" value="Intermediate" {{ $editClass->level == 'Intermediate' ? 'checked' : '' }}>
+                                Intermediate
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 4px;">
+                                <input type="radio" name="level" value="Advanced" {{ $editClass->level == 'Advanced' ? 'checked' : '' }}>
+                                Advanced
+                            </label>
+                        </div>
                     </div>
 
                     <div class="form-group">

@@ -425,8 +425,23 @@
         .close-btn:hover {
             color: black;
         }
+        /* Style for smaller, aligned radio buttons */
+        .form-group input[type="radio"] {
+            transform: scale(0.8); /* Smaller size */
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .form-group label[for="male"],
+        .form-group label[for="female"],
+        .form-group label[for="other"] {
+            margin-right: 15px;
+            font-weight: normal;
+            vertical-align: middle;
+        }
+
 </style>
-  </style>
+  
 
 </head>
 <body>
@@ -536,13 +551,24 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="gender">Gender</label>
-                        <select id="gender" name="gender" required>
-                            <option value="male" {{ $editUser->gender == 'male' ? 'selected' : '' }}>Male</option>
-                            <option value="female" {{ $editUser->gender == 'female' ? 'selected' : '' }}>Female</option>
-                            <option value="other" {{ $editUser->gender == 'other' ? 'selected' : '' }}>Other</option>
-                        </select>
+                        <label for="gender">Gender</label><br>
+
+                        <div style="display: inline-block;">
+                            <input type="radio" id="male" name="gender" value="male" {{ $editUser->gender == 'male' ? 'checked' : '' }}>
+                            <label for="male">Male</label>
+                        </div>
+
+                        <div style="display: inline-block;">
+                            <input type="radio" id="female" name="gender" value="female" {{ $editUser->gender == 'female' ? 'checked' : '' }}>
+                            <label for="female">Female</label>
+                        </div>
+
+                        <div style="display: inline-block;">
+                            <input type="radio" id="other" name="gender" value="other" {{ $editUser->gender == 'other' ? 'checked' : '' }}>
+                            <label for="other">Other</label>
+                        </div>
                     </div>
+
 
                     <div class="form-group">
                         <label for="password">Password</label>
@@ -550,8 +576,8 @@
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" class="btn-submit">Update</button>
-                        <a href="{{ route('admin.dashboard') }}" class="btn-cancel">Cancel</a>
+                        <button type="submit" class="btn-delete">Update</button>
+                        <a href="{{ route('admin.dashboard') }}" class="btn-edit">Cancel</a>
                     </div>
                 </form>
             </div>
@@ -577,7 +603,7 @@
                     <td>{{ Str::limit($user->first_name, 10, '...') }}</td>
                     <td>{{ Str::limit($user->middle_name, 10, '...') }}</td>
                     <td>{{ Str::limit($user->last_name, 10, '...') }}</td>
-                    <td>{{ $user->gender }}</td>
+                    <td>{{ ucfirst($user->gender) }}</td>
                     <td>{{ Str::limit($user->email, 20, '...') }}</td>
                     <td>
                         <a href="{{ route('admin.dashboard', ['edit' => $user->id]) }}" class="btn-edit">Edit</a>
@@ -610,14 +636,16 @@
        
     }
 
-    // Close modal on outside click
-    window.onclick = function(event) {
-        document.querySelectorAll('.modal').forEach(modal => {
-            if (event.target == modal) {
-                closeModal();
-            }
+    document.addEventListener('DOMContentLoaded', function () {
+        const nameFields = ['first_name', 'middle_name', 'last_name'];
+
+        nameFields.forEach(function(id) {
+            const input = document.getElementById(id);
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/[^a-zA-Z\s\-]/g, '');
+            });
         });
-    };
+    });
 </script>
 </body>
 </html>
