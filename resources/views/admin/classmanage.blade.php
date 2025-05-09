@@ -26,7 +26,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #2e3338;
+            background-color: #834c71;
             color: white;
             padding: 15px 30px;
         }
@@ -117,7 +117,7 @@
         }
 
         th {
-            background-color: #343a40;
+            background-color: #e44b8d;
             color: white;
         }
 

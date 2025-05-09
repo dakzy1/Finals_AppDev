@@ -18,7 +18,7 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            background-color: #2e3338;
+            background-color: #834c71;
             color: white;
             padding: 10px 20px;
             height: 30px;
@@ -109,7 +109,10 @@
         th, td {
             padding: 14px;
             text-align: center;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;   
+        }
+        th{
+            background-color: #e44b8d;
         }
 
         tr:nth-child(even) {
