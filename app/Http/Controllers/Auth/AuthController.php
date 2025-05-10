@@ -47,16 +47,25 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate(); // Regenerate session to prevent fixation
-            return redirect()->route('landingpage');
-        }
-
-        return back()->withErrors([
-            'email' => 'Invalid credentials.',
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
+    
+        $user = User::where('email', $request->email)->first();
+    
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return back()->withErrors(['email' => 'Invalid credentials.']);
+        }
+    
+        if ($user->status !== 'active') {
+            return back()->withErrors(['email' => 'Your account has been deactivated.']);
+        }
+    
+        Auth::login($user);
+        $request->session()->regenerate();
+    
+        return redirect()->route('landingpage');
     }
 
     public function landingpage()

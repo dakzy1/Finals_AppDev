@@ -26,7 +26,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #834c71;
+            background-color: #4b2953;
             color: white;
             padding: 15px 30px;
         }

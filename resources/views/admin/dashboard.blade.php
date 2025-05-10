@@ -18,7 +18,7 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            background-color: #834c71;
+            background-color: #4b2953;
             color: white;
             padding: 10px 20px;
             height: 30px;
