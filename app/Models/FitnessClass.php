@@ -21,6 +21,7 @@ class FitnessClass extends Model
         'category',
         'description',
         'key_benefits',
+        'user_limit'
     ];
 
     public function schedules()

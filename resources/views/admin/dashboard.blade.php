@@ -132,6 +132,7 @@
             cursor: pointer;
             text-decoration: none;
             border: none;
+            color: white;
         }
         .btn-edit{
             background-color: #007bff;

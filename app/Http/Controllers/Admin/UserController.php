@@ -78,6 +78,7 @@ class UserController extends Controller
             'trainer' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'key_benefits' => 'required|string|max:255',
+            'user_limit' => 'required|integer|min:1',
         ]);
 
         FitnessClass::create($request->all());
@@ -92,7 +93,8 @@ class UserController extends Controller
             'duration' => 'required|string|max:255',
             'trainer' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'key_benefits' => 'required|string|max:255',     
+            'key_benefits' => 'required|string|max:255',
+            'user_limit' => 'required|integer|min:1',     
         ]);
 
         $fitnessClass = FitnessClass::findOrFail($id);

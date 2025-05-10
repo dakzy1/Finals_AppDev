@@ -445,7 +445,7 @@
                     @method('PUT')
 
                     <div class="form-group">
-                        <label for="name">Class Name</label>
+                        <label for="name">Fitness Classes</label>
                         <select id="name" name="name" required>
                             <option value="Yoga" {{ $editClass->name == 'Yoga' ? 'selected' : '' }}>Yoga</option>
                             <option value="Zumba" {{ $editClass->name == 'Zumba' ? 'selected' : '' }}>Zumba</option>
@@ -476,7 +476,7 @@
                     <div class="form-group">
                         <label for="duration">Duration</label>
                         <div style="display: flex; align-items: center;">
-                            <input type="number" id="duration" name="duration" min="1" max="100" value="{{ $editClass->duration }}" required style="margin-right: 5px;">
+                            <input type="number" id="duration" name="duration" min="1" max="120" value="{{ $editClass->duration }}" required style="margin-right: 5px; width: 80px;">
                             <span>minutes</span>
                         </div>
                     </div>
@@ -484,6 +484,12 @@
                     <div class="form-group">
                         <label for="trainer">Trainer Name</label>
                         <input type="text" id="trainer" name="trainer" maxlength="50" value="{{ $editClass->trainer }}" required>
+                    </div>
+
+                    <div class="form-group">
+                            <label for="user_limit">Booking Limit</label>
+                            <input type="number" id="user_limit" name="user_limit" min="1" max="20" value="{{ $editClass->user_limit }}" required style="margin-right: 5px; width: 80px;" 
+                                onkeydown="return false;">
                     </div>
 
                     <div class="form-group">
@@ -517,7 +523,7 @@
                         @csrf
                         <!-- Keep all form groups the same as before -->
                         <div class="form-group">
-                            <label for="name">Class Name</label>
+                            <label for="name">Fitness Classes</label>
                             <select id="name" name="name" required>
                                 <option value="Yoga">Yoga</option>
                                 <option value="Zumba">Zumba</option>
@@ -537,13 +543,20 @@
                         <div class="form-group">
                             <label for="duration">Duration</label>
                             <div style="display: flex; align-items: center;">
-                                <input type="number" id="duration" name="duration" min="1" max="100" required style="margin-right: 5px;">
-                                <span>minutes</span>
+                            <input type="number" id="duration" name="duration"
+                                    min="1" max="120" step="1" required
+                                    style="margin-right: 5px; width: 80px;" 
+                                    onkeydown="return false;">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="trainer">Trainer Name</label>
                             <input type="text" id="trainer" name="trainer" maxlength="50" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user_limit">Booking Limit</label>
+                            <input type="number" id="user_limit" name="user_limit" min="1" max="20" required style="margin-right: 5px; width: 80px;" 
+                                onkeydown="return false;">
                         </div>
                         <div class="form-group">
                             <label for="description">Description</label>
@@ -610,15 +623,7 @@
         <button class="toggle-form-btn" onclick="toggleAddClassForm()">Add Class</button>
         @endif
     </div>
-    <script>
-    document.getElementById('duration').addEventListener('input', function () {
-        let value = this.value;
-
-        // Remove non-digit characters and limit to 3 digits
-        value = value.replace(/\D/g, '').slice(0, 2);
-        this.value = value;
-    });
-    </script>
+    
 </div>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
