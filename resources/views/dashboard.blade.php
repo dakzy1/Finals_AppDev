@@ -44,6 +44,13 @@
         <!-- Classes Section -->
         <section class="class-details">
             <h2>Classes</h2>
+            <label for="classFilter"><strong>Filter by Class:</strong></label>
+            <select id="classFilter" style="width: 100%; margin-bottom: 15px; padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                <option value="all">All Classes</option>
+                @foreach($classes->unique('name') as $class)
+                    <option value="{{ $class->name }}">{{ $class->name }}</option>
+                @endforeach
+            </select>
             <div class="class-cards">
                 @if($classes->isEmpty())
                     <p>No classes available.</p>
@@ -60,7 +67,7 @@
 
                         <div class="class-card">
                             <div class="class-info">
-                                <h3>{{ $class->name }}</h3>
+                                <h3 class="class-name">{{ $class->name }}</h3>
                                 <p><strong>Level:</strong> {{ $class->level }}</p>
                                 <p><strong>Duration:</strong> {{ $class->duration }} Minutes</p>
                                 <p><strong>Trainer:</strong> {{ $class->trainer }}</p>
@@ -252,5 +259,18 @@
                 viewMode.classList.add('visible-fade');
             }, 300);
         }
-        </script>
+        document.getElementById('classFilter').addEventListener('change', function () {
+        const selected = this.value.toLowerCase();
+        const cards = document.querySelectorAll('.class-card');
+
+        cards.forEach(card => {
+            const name = card.querySelector('.class-name').textContent.toLowerCase();
+            if (selected === 'all' || name === selected) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+    </script>
 @endsection

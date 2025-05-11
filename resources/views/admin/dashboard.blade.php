@@ -6,6 +6,7 @@
     <title>Dashboard</title>
     <link rel="shortcut icon" href="{{ asset('images/Appdev_logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
     body {
             font-family: 'Segoe UI', sans-serif;
@@ -460,8 +461,14 @@
     <div class="admin-label">ADMIN</div>
 
     <div class="button-container">
+        <form action="{{ route('admin.dashboard') }}" method="GET">
+            <button type="submit"> <i class="fa fa-users" style="margin-right: 8px;"></i>User Management</button>
+        </form>
+    </div>
+
+    <div class="button-container">
         <form action="{{ route('redirect.page') }}" method="GET">
-            <button type="submit">Class Management</button>
+            <button type="submit"><i class="fa fa-cogs" style="margin-right: 8px;"></i>Class Management</button>
         </form>
     </div>
 

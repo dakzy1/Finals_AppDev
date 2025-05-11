@@ -6,6 +6,7 @@
     <title>Class Management</title>
     <link rel="shortcut icon" href="{{ asset('images/Appdev_logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -348,6 +349,13 @@
         .close-btn:hover {
             color: black;
         }
+        .button-container {
+        margin-bottom: 15px; /* Adjust this value to control the space */
+        }
+
+        .button-container:last-child {
+            margin-bottom: 0; /* Removes margin from last button (logout button) */
+        }
 
     </style>
     <script>
@@ -370,9 +378,17 @@
 
     <div class="button-container">
         <form action="{{ route('admin.dashboard') }}" method="GET">
-            <button type="submit">User Management</button>
+            <button type="submit"> <i class="fa fa-users" style="margin-right: 8px;"></i>User Management</button>
         </form>
     </div>
+    <diV></diV>
+
+    <div class="button-container">
+        <form action="{{ route('redirect.page') }}" method="GET">
+            <button type="submit"> <i class="fa fa-cogs" style="margin-right: 8px;"></i>Class Management</button>
+        </form>
+    </div>
+
     <div class="logout-container">
         <form method="POST" action="{{ route('logout') }}">
             @csrf
@@ -493,6 +509,46 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="time">Select Instructor Available Time:</label>
+                            <select id="time" name="time" required style="margin-right: 5px; width: 120px;">
+                                <option value="06:00:00" {{ old('time') == '06:00:00' ? 'selected' : '' }}>06:00 AM</option>
+                                <option value="07:00:00" {{ old('time') == '07:00:00' ? 'selected' : '' }}>07:00 AM</option>
+                                <option value="08:00:00" {{ old('time') == '08:00:00' ? 'selected' : '' }}>08:00 AM</option>
+                                <option value="09:00:00" {{ old('time') == '09:00:00' ? 'selected' : '' }}>09:00 AM</option>
+                                <option value="10:00:00" {{ old('time') == '10:00:00' ? 'selected' : '' }}>10:00 AM</option>
+                                <option value="11:00:00" {{ old('time') == '11:00:00' ? 'selected' : '' }}>11:00 AM</option>
+                                <option value="12:00:00" {{ old('time') == '11:00:00' ? 'selected' : '' }}>12:00 PM</option>
+
+                                <option value="13:00:00" {{ old('time') == '13:00:00' ? 'selected' : '' }}>01:00 PM</option>
+                                <option value="14:00:00" {{ old('time') == '14:00:00' ? 'selected' : '' }}>02:00 PM</option>
+                                <option value="15:00:00" {{ old('time') == '15:00:00' ? 'selected' : '' }}>03:00 PM</option>
+                                <option value="16:00:00" {{ old('time') == '16:00:00' ? 'selected' : '' }}>04:00 PM</option>
+                                <option value="17:00:00" {{ old('time') == '17:00:00' ? 'selected' : '' }}>05:00 PM</option>
+                                <option value="18:00:00" {{ old('time') == '18:00:00' ? 'selected' : '' }}>06:00 PM</option>
+                            </select>
+                            <span>Start Time</span>
+                    </div>
+                    <div class="form-group">
+                            <select id="end_time" name="end_time" required style="margin-right: 5px; width: 120px;">
+                                <option value="06:00:00" {{ old('end_time') == '06:00:00' ? 'selected' : '' }}>06:00 AM</option>
+                                <option value="07:00:00" {{ old('end_time') == '07:00:00' ? 'selected' : '' }}>07:00 AM</option>
+                                <option value="08:00:00" {{ old('end_time') == '08:00:00' ? 'selected' : '' }}>08:00 AM</option>
+                                <option value="09:00:00" {{ old('end_time') == '09:00:00' ? 'selected' : '' }}>09:00 AM</option>
+                                <option value="10:00:00" {{ old('end_time') == '10:00:00' ? 'selected' : '' }}>10:00 AM</option>
+                                <option value="11:00:00" {{ old('end_time') == '11:00:00' ? 'selected' : '' }}>11:00 AM</option>
+                                <option value="12:00:00" {{ old('end_time') == '11:00:00' ? 'selected' : '' }}>12:00 PM</option>
+
+                                <option value="13:00:00" {{ old('end_time') == '13:00:00' ? 'selected' : '' }}>01:00 PM</option>
+                                <option value="14:00:00" {{ old('end_time') == '14:00:00' ? 'selected' : '' }}>02:00 PM</option>
+                                <option value="15:00:00" {{ old('end_time') == '15:00:00' ? 'selected' : '' }}>03:00 PM</option>
+                                <option value="16:00:00" {{ old('end_time') == '16:00:00' ? 'selected' : '' }}>04:00 PM</option>
+                                <option value="17:00:00" {{ old('end_time') == '17:00:00' ? 'selected' : '' }}>05:00 PM</option>
+                                <option value="18:00:00" {{ old('end_time') == '18:00:00' ? 'selected' : '' }}>06:00 PM</option>
+                            </select>
+                            <span>End Time</span> 
+                    </div>
+
+                    <div class="form-group">
                         <label for="description">Description</label>
                         <textarea id="description" name="description">{{ old('description', $editClass->description ?? '') }}</textarea>
                         <small id="charCount">0 / 255 characters</small>
@@ -557,6 +613,45 @@
                             <label for="user_limit">Booking Limit</label>
                             <input type="number" id="user_limit" name="user_limit" min="1" max="20" required style="margin-right: 5px; width: 80px;" 
                                 onkeydown="return false;">
+                        </div>
+                        <div class="form-group">
+                        <label for="time">Select Instructor Available Time:</label>
+                            <select id="time" name="time" required style="margin-right: 5px; width: 120px;">
+                                <option value="06:00:00" {{ old('time') == '06:00:00' ? 'selected' : '' }}>06:00 AM</option>
+                                <option value="07:00:00" {{ old('time') == '07:00:00' ? 'selected' : '' }}>07:00 AM</option>
+                                <option value="08:00:00" {{ old('time') == '08:00:00' ? 'selected' : '' }}>08:00 AM</option>
+                                <option value="09:00:00" {{ old('time') == '09:00:00' ? 'selected' : '' }}>09:00 AM</option>
+                                <option value="10:00:00" {{ old('time') == '10:00:00' ? 'selected' : '' }}>10:00 AM</option>
+                                <option value="11:00:00" {{ old('time') == '11:00:00' ? 'selected' : '' }}>11:00 AM</option>
+                                <option value="12:00:00" {{ old('time') == '11:00:00' ? 'selected' : '' }}>12:00 PM</option>
+
+                                <option value="13:00:00" {{ old('time') == '13:00:00' ? 'selected' : '' }}>01:00 PM</option>
+                                <option value="14:00:00" {{ old('time') == '14:00:00' ? 'selected' : '' }}>02:00 PM</option>
+                                <option value="15:00:00" {{ old('time') == '15:00:00' ? 'selected' : '' }}>03:00 PM</option>
+                                <option value="16:00:00" {{ old('time') == '16:00:00' ? 'selected' : '' }}>04:00 PM</option>
+                                <option value="17:00:00" {{ old('time') == '17:00:00' ? 'selected' : '' }}>05:00 PM</option>
+                                <option value="18:00:00" {{ old('time') == '18:00:00' ? 'selected' : '' }}>06:00 PM</option>
+                            </select>
+                            <span>Start Time</span>
+                        </div>
+                        <div class="form-group">
+                            <select id="end_time" name="end_time" required style="margin-right: 5px; width: 120px;">
+                                <option value="06:00:00" {{ old('end_time') == '06:00:00' ? 'selected' : '' }}>06:00 AM</option>
+                                <option value="07:00:00" {{ old('end_time') == '07:00:00' ? 'selected' : '' }}>07:00 AM</option>
+                                <option value="08:00:00" {{ old('end_time') == '08:00:00' ? 'selected' : '' }}>08:00 AM</option>
+                                <option value="09:00:00" {{ old('end_time') == '09:00:00' ? 'selected' : '' }}>09:00 AM</option>
+                                <option value="10:00:00" {{ old('end_time') == '10:00:00' ? 'selected' : '' }}>10:00 AM</option>
+                                <option value="11:00:00" {{ old('end_time') == '11:00:00' ? 'selected' : '' }}>11:00 AM</option>
+                                <option value="12:00:00" {{ old('end_time') == '11:00:00' ? 'selected' : '' }}>12:00 PM</option>
+                                
+                                <option value="13:00:00" {{ old('end_time') == '13:00:00' ? 'selected' : '' }}>01:00 PM</option>
+                                <option value="14:00:00" {{ old('end_time') == '14:00:00' ? 'selected' : '' }}>02:00 PM</option>
+                                <option value="15:00:00" {{ old('end_time') == '15:00:00' ? 'selected' : '' }}>03:00 PM</option>
+                                <option value="16:00:00" {{ old('end_time') == '16:00:00' ? 'selected' : '' }}>04:00 PM</option>
+                                <option value="17:00:00" {{ old('end_time') == '17:00:00' ? 'selected' : '' }}>05:00 PM</option>
+                                <option value="18:00:00" {{ old('end_time') == '18:00:00' ? 'selected' : '' }}>06:00 PM</option>
+                            </select>
+                            <span>End Time</span> 
                         </div>
                         <div class="form-group">
                             <label for="description">Description</label>
@@ -749,6 +844,7 @@
         const modals = document.querySelectorAll('.modal');
         modals.forEach(modal => modal.style.display = "none");
         // Optional: Redirect only for edit modal
+        window.location.href = "{{ route('admin.classmanage') }}";
        
     }
 

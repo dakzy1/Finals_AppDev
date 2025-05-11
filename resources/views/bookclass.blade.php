@@ -10,46 +10,66 @@
             <h2>{{ $class->name }}</h2>
             <p><strong>Duration:</strong> {{ $class->duration }} Minutes</p>
             <p><strong>Difficulty:</strong> {{ $class->level }}</p>
+            <p><strong>Instructor Available Time:</strong> {{ \Carbon\Carbon::parse($class->time)->format('g:i A') }} to {{ \Carbon\Carbon::parse($class->end_time)->format('g:i A') }}</p>
         </div>
+        
 
-        <form class="booking-form" method="POST" action="{{ route('bookclass.store', $class->id) }}">
+        <form class="booking-form" method="POST" action="{{ route('bookclass.store', $class->id) }}"  style="display: flex; flex-direction: column; height: 100%;">
             @csrf
             <label for="trainer">Trainer:</label>
             <select id="trainer" name="trainer" required>
                 <option value="{{ $class->trainer }}" selected>{{ $class->trainer }}</option>
             </select>
 
+            @php
+                $availableStart = \Carbon\Carbon::parse($class->time);
+                $availableEnd = \Carbon\Carbon::parse($class->end_time);
+
+                $timeOptions = [
+                    '06:00:00' => '06:00 AM',
+                    '07:00:00' => '07:00 AM',
+                    '08:00:00' => '08:00 AM',
+                    '09:00:00' => '09:00 AM',
+                    '10:00:00' => '10:00 AM',
+                    '11:00:00' => '11:00 AM',
+                    '13:00:00' => '01:00 PM',
+                    '14:00:00' => '02:00 PM',
+                    '15:00:00' => '03:00 PM',
+                    '16:00:00' => '04:00 PM',
+                    '17:00:00' => '05:00 PM',
+                    '18:00:00' => '06:00 PM',
+                ];
+            @endphp
+
             <label for="time">Select Time:</label>
             <select id="time" name="time" required>
-                <option value="08:00:00" {{ old('time') == '08:00:00' ? 'selected' : '' }}>08:00 AM</option>
-                <option value="10:00:00" {{ old('time') == '10:00:00' ? 'selected' : '' }}>10:00 AM</option>
-                <option value="13:00:00" {{ old('time') == '13:00:00' ? 'selected' : '' }}>01:00 PM</option>
+                @foreach ($timeOptions as $value => $label)
+                    @php
+                        $optionTime = \Carbon\Carbon::createFromTimeString($value);
+                        $isAvailable = $optionTime->between($availableStart, $availableEnd);
+                    @endphp
+                    <option value="{{ $value }}"
+                        {{ $class->time == $value ? 'selected' : '' }}
+                        {{ !$isAvailable ? 'disabled' : '' }}>
+                        {{ $label }}
+                    </option>
+                @endforeach
             </select>
+
 
             @error('time')
                 <div class="error">{{ $message }}</div>
             @enderror
 
-            <label for="date">Select Date:</label>
-            <div style="position: relative; display: flex; align-items: center;">
-                <input type="text" id="date" name="date" 
-                    value="{{ old('date', now()->format('Y-m-d')) }}" 
-                    readonly required 
-                    style="padding-right: 30px; background-color: #f9f9f9; font-weight: bold; font-size: 16px; border: none; cursor: pointer;" />
-                <span style="position: absolute; right: 10px; pointer-events: none;">
-                    📅
-                </span>
-            </div>
-            @error('date')
-                <div class="error">{{ $message }}</div>
-            @enderror
-
+       
             <!-- Debugging: Check if the warning message is being passed -->
             @if (isset($warningMessage))
                 <p style="color: red;">{{ $warningMessage }}</p>
             @endif
 
-            <button type="submit" class="btn-book">Book Now</button>
+            <div style="margin-top: auto;">
+                <button type="submit" class="btn-book">Book Now</button>
+            </div>
         </form>
     </div>
 
