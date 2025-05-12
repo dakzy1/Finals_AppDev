@@ -106,3 +106,5 @@ Route::get('/home', function () {
 
 // routes/web.php
 Route::get('/classmanagement', [UserController::class, 'redirectToPage'])->name('redirect.page');
+Route::put('/admin/user/status/{id}', [UserController::class, 'toggleStatus'])->name('admin.toggleStatus');
+

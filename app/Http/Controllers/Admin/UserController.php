@@ -78,6 +78,9 @@ class UserController extends Controller
             'trainer' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'key_benefits' => 'required|string|max:255',
+            'user_limit' => 'required|integer|min:1',
+            'time' => 'required',
+            'end_time' => 'required',
         ]);
 
         FitnessClass::create($request->all());
@@ -92,7 +95,10 @@ class UserController extends Controller
             'duration' => 'required|string|max:255',
             'trainer' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'key_benefits' => 'required|string|max:255',     
+            'key_benefits' => 'required|string|max:255',
+            'user_limit' => 'required|integer|min:1',
+            'time' => 'required',
+            'end_time' => 'required',
         ]);
 
         $fitnessClass = FitnessClass::findOrFail($id);
@@ -169,5 +175,14 @@ class UserController extends Controller
         $fitnessClasses = FitnessClass::all();
         return view('admin.classmanage', compact('fitnessClasses', 'editClass'));
     }
+    public function toggleStatus($id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = $user->status === 'active' ? 'deactivated' : 'active';
+        $user->save();
+
+        return redirect()->route('admin.dashboard')->with('success', 'User status updated successfully.');
+    }
+
 
 }

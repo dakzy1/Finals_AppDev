@@ -6,6 +6,7 @@
     <title>Dashboard</title>
     <link rel="shortcut icon" href="{{ asset('images/Appdev_logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
     body {
             font-family: 'Segoe UI', sans-serif;
@@ -18,7 +19,7 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            background-color: #834c71;
+            background-color: #4b2953;
             color: white;
             padding: 10px 20px;
             height: 30px;
@@ -107,48 +108,46 @@
         th, td {
             padding: 14px;
             text-align: center;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;   
+        }
+        th{
+            background-color: #e44b8d;
         }
 
         tr:nth-child(even) {
             background-color: #f4f4f4;
         }
-        .btn-delete, .btn-edit {
-            padding: 10px 20px;
-            font-size: 16px;
-            text-decoration: none;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .btn-edit {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .btn-delete {
-            background-color: #dc3545;
-            color: white;
-        }
-        .btn-edit:hover { background-color: #0069d9; }
-        .btn-delete:hover { background-color: #c82333; }
-        
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            align-items: center;
-            }
 
         .btn-edit,
         .btn-delete {
-            width: 70px;
-            height: 40px;
-            padding: 0;
-            line-height: 40px;
-            text-align: center;
-            box-sizing: border-box;
-            display: inline-block;
+            display: inline-block;  /* Normalizes <a> and <button> */
+            padding: 8px 16px;      /* Make sure both use the same padding */
+            font-size: 14px;        /* Normalize font size */
+            font-weight: bold;      /* Optional, for visual consistency */
+            line-height: 1.2;       /* Ensure consistent vertical spacing */
+            text-align: center;     /* Align text for <a> */
+            vertical-align: middle; /* Align with other inline-block elements */
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            color: white;
+        }
+        .btn-edit{
+            background-color: #007bff;
+        }
+        .btn-delete{
+            background-color: #dc3545;
+        }
+
+        .btn-edit:hover {
+            background-color: #0056b3;
+        }
+
+        
+
+        .btn-delete:hover {
+            background-color: #b02a37;
         }
 
         .btn-add {
@@ -417,8 +416,23 @@
         .close-btn:hover {
             color: black;
         }
+        /* Style for smaller, aligned radio buttons */
+        .form-group input[type="radio"] {
+            transform: scale(0.8); /* Smaller size */
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .form-group label[for="male"],
+        .form-group label[for="female"],
+        .form-group label[for="other"] {
+            margin-right: 15px;
+            font-weight: normal;
+            vertical-align: middle;
+        }
+
 </style>
-  </style>
+  
 
 </head>
 <body>
@@ -434,13 +448,13 @@
 
     <div class="button-container">
         <form action="{{ route('admin.dashboard') }}" method="GET">
-            <button type="submit">User Management</button>
+            <button type="submit"> <i class="fa fa-users" style="margin-right: 8px;"></i>User Management</button>
         </form>
     </div>
 
     <div class="button-container">
         <form action="{{ route('redirect.page') }}" method="GET">
-            <button type="submit">Class Management</button>
+            <button type="submit"><i class="fa fa-cogs" style="margin-right: 8px;"></i>Class Management</button>
         </form>
     </div>
 
@@ -534,13 +548,24 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="gender">Gender</label>
-                        <select id="gender" name="gender" required>
-                            <option value="male" {{ $editUser->gender == 'male' ? 'selected' : '' }}>Male</option>
-                            <option value="female" {{ $editUser->gender == 'female' ? 'selected' : '' }}>Female</option>
-                            <option value="other" {{ $editUser->gender == 'other' ? 'selected' : '' }}>Other</option>
-                        </select>
+                        <label for="gender">Gender</label><br>
+
+                        <div style="display: inline-block;">
+                            <input type="radio" id="male" name="gender" value="male" {{ $editUser->gender == 'male' ? 'checked' : '' }}>
+                            <label for="male">Male</label>
+                        </div>
+
+                        <div style="display: inline-block;">
+                            <input type="radio" id="female" name="gender" value="female" {{ $editUser->gender == 'female' ? 'checked' : '' }}>
+                            <label for="female">Female</label>
+                        </div>
+
+                        <div style="display: inline-block;">
+                            <input type="radio" id="other" name="gender" value="other" {{ $editUser->gender == 'other' ? 'checked' : '' }}>
+                            <label for="other">Other</label>
+                        </div>
                     </div>
+
 
                     <div class="form-group">
                         <label for="password">Password</label>
@@ -548,8 +573,8 @@
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" class="btn-submit">Update</button>
-                        <a href="{{ route('admin.dashboard') }}" class="btn-cancel">Cancel</a>
+                        <button type="submit" class="btn-delete">Update</button>
+                        <a href="{{ route('admin.dashboard') }}" class="btn-edit">Cancel</a>
                     </div>
                 </form>
             </div>
@@ -571,31 +596,25 @@
             </thead>
             <tbody>
                 @foreach ($users as $user)
-                <tr>
-                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
-                        {{ Str::limit($user->first_name, 10, '...') }}
-                    </td>
-                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
-                        {{ Str::limit($user->middle_name, 10, '...') }}
-                    </td>
-                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
-                        {{ Str::limit($user->last_name, 10, '...') }}
-                    </td>
-                    <td>{{ $user->gender }}</td>
-                    <td style="max-width: 300px; white-space: normal; word-wrap: break-word;">
-                        {{ Str::limit($user->email, 10, '...') }}
-                    </td>
+                <tr @if($user->status === 'deactivated') style="background-color: #e9ecef; color: #6c757d;" @endif>
+                    <td>{{ Str::limit($user->first_name, 10, '...') }}</td>
+                    <td>{{ Str::limit($user->middle_name, 10, '...') }}</td>
+                    <td>{{ Str::limit($user->last_name, 10, '...') }}</td>
+                    <td>{{ ucfirst($user->gender) }}</td>
+                    <td>{{ Str::limit($user->email, 20, '...') }}</td>
                     <td>
-                        <div class="btn-group">
-                            <a href="{{ route('admin.dashboard', ['edit' => $user->id]) }}" class="btn-edit">Edit</a>
-                            <form action="{{ route('admin.destroy', $user->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn-delete" onclick="return confirm('Delete this user?')">Delete</button>
-                            </form>
-                        </div>
+                        <a href="{{ route('admin.dashboard', ['edit' => $user->id]) }}" class="btn-edit">Edit</a>
+                        
+                        <form action="{{ route('admin.toggleStatus', $user->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="btn-delete">
+                                {{ $user->status === 'active' ? 'Deactivate' : 'Activate' }}
+                            </button>
+                        </form>
                     </td>
                 </tr>
+
                 @endforeach
             </tbody>
         </table>
@@ -614,14 +633,16 @@
        
     }
 
-    // Close modal on outside click
-    window.onclick = function(event) {
-        document.querySelectorAll('.modal').forEach(modal => {
-            if (event.target == modal) {
-                closeModal();
-            }
+    document.addEventListener('DOMContentLoaded', function () {
+        const nameFields = ['first_name', 'middle_name', 'last_name'];
+
+        nameFields.forEach(function(id) {
+            const input = document.getElementById(id);
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/[^a-zA-Z\s\-]/g, '');
+            });
         });
-    };
+    });
 </script>
 </body>
 </html>
