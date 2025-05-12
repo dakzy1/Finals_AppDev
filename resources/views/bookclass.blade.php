@@ -13,7 +13,6 @@
             <p><strong>Instructor Available Time:</strong> {{ \Carbon\Carbon::parse($class->time)->format('g:i A') }} to {{ \Carbon\Carbon::parse($class->end_time)->format('g:i A') }}</p>
         </div>
         
-
         <form class="booking-form" method="POST" action="{{ route('bookclass.store', $class->id) }}"  style="display: flex; flex-direction: column; height: 100%;">
             @csrf
             <label for="trainer">Trainer:</label>
@@ -56,8 +55,19 @@
                 @endforeach
             </select>
 
+            <div style="position: relative; display: flex; align-items: center;">
+                <input type="hidden" id="date" name="date" 
+                    value="{{ old('date', now()->format('Y-m-d')) }}" 
+                    readonly required 
+                    style="padding-right: 30px; background-color: #f9f9f9; font-weight: bold; font-size: 16px; border: none; cursor: pointer;" />
+                <span style="position: absolute; right: 10px; pointer-events: none;">
+                </span>
+            </div>
 
             @error('time')
+                <div class="error">{{ $message }}</div>
+            @enderror
+            @error('date')
                 <div class="error">{{ $message }}</div>
             @enderror
 

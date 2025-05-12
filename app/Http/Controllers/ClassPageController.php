@@ -85,6 +85,7 @@ class ClassPageController extends Controller
         $validated = $request->validate([
             'trainer' => 'required|string|max:255',
             'time' => 'required',
+            'date' => 'required|date'
         ]);
     
         $user = Auth::user();
@@ -111,7 +112,7 @@ class ClassPageController extends Controller
         Schedule::create([
             'user_id' => $user->id,
             'class_id' => $class->id,
-            'date' => now()->toDateString(),
+            'date' => $validated['date'], // Use the selected date
             'time' => $selectedTime,
             'trainer' => $validated['trainer'],
         ]);
