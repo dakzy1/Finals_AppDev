@@ -311,8 +311,7 @@
             display:flex;
             flex-direction:column;
             background-color: #fff;
-            border-radius: 7px;
-            height: 400vh;
+            height: 510vh;
             overflow-x: hidden;
         }
 
@@ -484,6 +483,13 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             font-family: 'Segoe UI', sans-serif;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
         }
 
         .card img {
@@ -508,6 +514,107 @@
             line-height: 1.5;
             color: #555;
         }
+
+        .layer-5 {
+            width: 100%;
+            flex:1;
+            border: 1px solid black;
+        }
+
+        .mission-section {
+            padding: 60px 10%;
+            border-top: 1px solid #ddd;
+            background-color: #fefefe;
+        }
+
+        .container {
+            display: flex;
+            gap: 60px;
+            align-items: flex-start;
+            border-left: 1px solid #ddd;
+            padding-left: 40px;
+        }
+
+        .left-mission, .right-mission {
+            flex: 1;
+        }
+
+        .left-mission h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 30px;
+        }
+
+        .left-mission p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #444;
+            max-width: 500px;
+        }
+
+        .left-mission .highlight {
+            color: #e39c4a;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .right-mission h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .years-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .years-box {
+            background-color:rgb(75, 45, 145);
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            padding: 10px 20px;
+        }
+
+        .years-label {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .right-mission .quote {
+            font-style: italic;
+            color: #e39c4a;
+            margin-bottom: 15px;
+            max-width: 400px;
+        }
+
+        .right-mission p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #444;
+            max-width: 500px;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                border-left: none;
+                padding-left: 0;
+            }
+
+            .left-mission h1 {
+                font-size: 2.4rem;
+            }
+
+            .years-box {
+                font-size: 1.5rem;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -579,6 +686,44 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="layer-5">
+                <section class="mission-section">
+                    <div class="container">
+                        <div class="left-mission">
+                            <h1>Our<br>Mission<br>& Vision</h1>
+                            <p>
+                                To create a welcoming space for people of all levels to improve their health through fun, effective, and personalized fitness experiences.
+                            </p>
+                            <p class="highlight">
+                                Fitness and wellness for everyone — at an affordable price.
+                            </p>
+                        </div>
+
+                        <div class="right-mission">
+                            <h3>About us</h3>
+                            <p>
+                                To become your go-to fitness destination – known for inclusivity, community vibes, and results-driven programs.
+                            </p>
+
+                            <div class="years-container">
+                                <div class="years-box">50</div>
+                                <div class="years-label">years</div>
+                            </div>
+
+                            <p class="quote">
+                                The only thing that is better than to work with us is to work for us.
+                            </p>
+
+                            <p>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, asperiores expedita? Impedit totam minima tempora labore expedita placeat aliquam recusandae!
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="footer-layer">
+
             </div>
         </div>
     </div>
