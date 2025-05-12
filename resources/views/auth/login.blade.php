@@ -315,15 +315,15 @@
                 @csrf
                 <div class="mb-2">
                     <label>First Name</label>
-                    <input type="text" name="first_name" maxlength="50" class="form-control" required>
+                    <input type="text" name="first_name" maxlength="50" class="form-control only-letters" required>
                 </div>
                 <div class="mb-2">
                     <label>Middle Name</label>
-                    <input type="text" name="middle_name" maxlength="25" class="form-control">
+                    <input type="text" name="middle_name" maxlength="25" class="form-control only-letters">
                 </div>
                 <div class="mb-2">
                     <label>Last Name</label>
-                    <input type="text" name="last_name" maxlength="25" class="form-control" required>
+                    <input type="text" name="last_name" maxlength="25" class="form-control only-letters" required>
                 </div>
                 <div class="mb-2">
                     <label>Gender</label>
@@ -408,6 +408,11 @@
         const input = document.getElementById('password');
         input.type = input.type === 'password' ? 'text' : 'password';
     }
+    document.querySelectorAll('.only-letters').forEach(input => {
+        input.addEventListener('input', function () {
+            this.value = this.value.replace(/[^a-zA-Z\s\-]/g, '');
+        });
+    });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
