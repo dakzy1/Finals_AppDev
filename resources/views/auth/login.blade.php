@@ -8,66 +8,110 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+
+        html {
+            scroll-behavior: smooth;
+        }
         * { box-sizing: border-box; }
 
         body {
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
             background-color: #4b2953;
+            height: 100vh;
+            overflow: hidden;
         }
 
-        .container {
+        .main-container {
             display: flex;
+            width: 100%;
             height: 100vh;
         }
 
         .left {
-            width: 50%;
+            width: 100%;
             background-color: #fff;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .left h2 {
-            color: #c74856;
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-
-        .left img {
-            width: 70%;
-            max-width: 400px;
+            overflow-y: auto;
+            transition: width 0.4s ease;
+            height: 100vh;
         }
 
         .right {
-            flex: 1;
+            width: 0;
+            overflow: hidden;
             background-color: #4b2953;
             color: #f9eebd;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            position: relative;
+            transition: width 0.4s ease, padding 0.4s ease;
+        }
+
+        .main-container.show-login .left {
+            width: 60%;
+        }
+
+        .main-container.show-login .right {
+            width: 40%;
             padding: 1rem;
         }
+
+        .close-btn {
+            position: absolute;
+            top: 30px;
+            right: 20px;
+            background: transparent;
+            color: #f9eebd;
+            font-size: 1.5rem;
+            border: none;
+            cursor: pointer;
+            z-index: 20;
+
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .main-container.show-login .close-btn {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .left::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .left::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .left::-webkit-scrollbar-thumb {
+            background-color: #cccccc;
+            border-radius: 10px;
+            border: 2px solid #f0f0f0;
+        }
+
+        .left::-webkit-scrollbar-thumb:hover {
+            background-color: #999999;
+        }
+
 
         .right h1 {
             font-size: 2.5rem;
             font-weight: bold;
-            margin-bottom: 30px;
-            margin-left: 20%;
+            margin: 0 auto 30px auto;
         }
 
         .login-box {
             background-color: #5c2e68;
             padding: 40px;
-            border-radius: 15px;
+            border-radius: 7px;
             width: 100%;
             max-width: 400px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            margin-left: auto;
+            margin: 0 auto !important;
         }
 
         .login-box h3 {
@@ -261,17 +305,286 @@
             border-color: #f2547d;
             box-shadow: 0 0 0 0.2rem rgba(242, 84, 125, 0.25);
         }
+
+        .left-content {
+            position: relative;
+            display:flex;
+            flex-direction:column;
+            background-color: #fff;
+            border-radius: 7px;
+            height: 400vh;
+            overflow-x: hidden;
+        }
+
+        .about-navbar {
+            position: absolute; 
+            top: 30px;           
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 10;         
+            background: transparent; 
+            max-width:100% !important;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-btn {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            padding: 0.5rem 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            backdrop-filter: blur(4px);
+        }
+
+        #login-btn{
+            border: 1px solid #f9eebd;
+        }
+
+
+        .layer-1 {
+            flex:1;
+            width: 100%;
+            background-image:url('images/bg-login.jpeg');
+            background-size: cover;
+            background-attachment: scroll;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center; 
+            align-items: center;     
+            text-align: center;      
+            height: 100vh;
+            min-height:100vh;  
+        }
+
+        .overlay h1 {
+            color: #fff;
+            font-size: 50px;
+            margin: 0;
+        }
+        .layer-2 {
+            width: 100%;
+            flex:1;
+            max-width:100%;
+            box-sizing: border-box;
+            min-height:100vh;
+        }
+
+        .contentlayer-2 {
+            display: flex;
+            width: 80%;
+            height: 50%;
+            margin:11% auto;
+            box-sizing: border-box;
+            
+        }
+
+        .description-2 {
+            flex:1;
+            display: flex;
+            justify-content: center;  
+            align-items: center; 
+            text-align: center;
+            padding: 20px;
+            background-color:rgb(252, 249, 246);
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+
+        .description h6 {
+            margin: 0;           
+        }
+
+        .img-layer-2 {
+            flex:1;
+            width: 100%;
+            background-image:url('images/header.jpg');
+            background-size: cover;
+            background-attachment: scroll;
+            background-repeat: no-repeat;
+            padding:20px;
+        }
+
+        .layer-3 {
+            width: 100%;
+            flex:1;
+        }
+
+        .layer-3 #offer {
+            display: inline-block;
+            background-color:rgb(75, 45, 145);
+            margin-left: 10%;
+            color: #fff;
+            border-radius:2px;
+            padding:15px;
+        }
+
+        .img-layer-3 {
+            flex:1;
+            width: 100%;
+            background-image:url('images/yoga_body.jpg');
+            background-size: cover;
+            background-attachment: scroll;
+            background-repeat: no-repeat;
+            padding:20px;
+        }
+
+        .description-3 {
+            flex:1;
+            flex-direction: column;
+            display: flex;
+            justify-content: center;  
+            align-items: center; 
+            text-align: center;
+            padding: 20px;
+            background-color:rgb(252, 249, 246);
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .description-3 h5 {
+            margin-bottom:60px;
+        }
+
+        .contentlayer-3 {
+            display: flex;
+            width: 80%;
+            height: 50%;
+            margin:10% auto;
+            box-sizing: border-box;
+        }
+
+        .layer-4 {
+            width: 100%;
+            flex:1;
+        }
+
+        .contentlayer-4 {
+            display: flex;
+            justify-content: space-between; 
+            gap: 20px;
+            flex-wrap: nowrap; 
+            width: 80%;         
+            margin: 10% auto;   
+            box-sizing: border-box;
+        }
+
+        .card {
+            width: 18rem;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .card-body {
+            padding: 16px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0 0 10px;
+            color: #333;
+        }
+
+        .card-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #555;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-<div class="left">
-        <h2>A Leap to Fitness</h2>
-        <img src="{{ asset('images/fitness-woman.jpg') }}" alt="Fitness Woman">
+<div class="main-container">
+    <div class="left" id="left-panel">
+        <div class="left-content">
+            <nav class="about-navbar">
+                <div class="nav-buttons">
+                    <a href="#" class="nav-btn">Home</a>
+                    <a href="#About" class="nav-btn">About</a>
+                    <a href="#" class="nav-btn" id="login-btn">Login</a>
+                    <a href="#" class="nav-btn" data-bs-toggle="modal" data-bs-target="#adminLoginModal"><i class="fa-solid fa-user-tie"></i></a>
+                </div>
+            </nav>
+            <div class="layer-1">
+                <div class="overlay">
+                    <h1>WELCUM to FitZone</h1>
+                    <p style="color:white;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, modi?</p>
+                </div>
+            </div>
+            <div class="layer-2">
+                <div class="contentlayer-2" id="About">
+                    <div class="description-2">
+                        <h6>Your journey to better health, more energy, and total confidence starts here.</h6>
+                    </div>
+                    <div class="img-layer-2"></div>
+                </div>
+            </div>
+            <div class="layer-3">
+                <h6 id="offer">What We Offer →</h6>
+                <div class="contentlayer-3" id="About">
+                    <div class="img-layer-3"></div>
+                    <div class="description-3">
+                        <h5>Yoga</h5>
+                        <h6>Your journey to better health, more energy, and total confidence starts here.</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="layer-4">
+                <div class="contentlayer-4">
+                    <div class="card rounded-0">
+                        <img src="images/HIIT.avif" alt="Card image" />
+                        <div class="card-body">
+                            <h5 class="card-title">HIIT</h5>
+                            <p class="card-text">
+                            Some quick example text to build on the card title and make up the bulk of the card’s content.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-0">
+                        <img src="images/Zumba.webp" alt="Card image" />
+                        <div class="card-body">
+                            <h5 class="card-title">ZUMBA</h5>
+                            <p class="card-text">
+                            More content goes here, describing features, benefits, or anything else.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-0">
+                        <img src="images/Cardio.avif" alt="Card image" />
+                        <div class="card-body">
+                            <h5 class="card-title">CARDIO</h5>
+                            <p class="card-text">
+                            More content goes here, describing features, benefits, or anything else.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="right">
+    <div class="right" id="login-panel">
+        <button id="close-login" class="close-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
         <h1>FitZone</h1>
         <div class="login-box">
             <h3>Login</h3>
@@ -353,10 +666,9 @@
             </form>
         </div>
 
-<!-- Admin Login Button (Bottom Right Corner) -->
-<button class="btn position-fixed admin-login-btn" data-bs-toggle="modal" data-bs-target="#adminLoginModal">
+<!--<button class="btn position-fixed admin-login-btn" data-bs-toggle="modal" data-bs-target="#adminLoginModal">
     Admin
-</button>
+</button>-->
 
 <!-- Admin Login Modal -->
 <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-labelledby="adminLoginModalLabel" aria-hidden="true">
@@ -413,6 +725,25 @@
             this.value = this.value.replace(/[^a-zA-Z\s\-]/g, '');
         });
     });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const loginBtn = document.getElementById('login-btn');
+    const closeBtn = document.getElementById('close-login');
+    const mainContainer = document.querySelector('.main-container');
+
+    // Show the login panel
+    loginBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      mainContainer.classList.add('show-login');
+    });
+
+    // Hide the login panel
+    closeBtn.addEventListener('click', function () {
+      mainContainer.classList.remove('show-login');
+    });
+  });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
