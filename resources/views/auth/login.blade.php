@@ -8,10 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-
-        html {
-            scroll-behavior: smooth;
-        }
         * { box-sizing: border-box; }
 
         body {
@@ -34,6 +30,7 @@
             overflow-y: auto;
             transition: width 0.4s ease;
             height: 100vh;
+            scroll-behavior: smooth;
         }
 
         .right {
@@ -67,7 +64,6 @@
             border: none;
             cursor: pointer;
             z-index: 20;
-
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
@@ -272,11 +268,12 @@
         }
         
         .admin-login-btn {
+            display:none;
             bottom: 20px;
-            right: 20px;
+            margin-left: 3%;
             z-index: 1050;
             position: fixed;
-            background-color: #fbeec1;
+            background-color: none;
             color: #4b2953;
             font-family: 'Segoe UI', sans-serif;
             font-size: 0.85rem;
@@ -317,13 +314,14 @@
 
         .about-navbar {
             position: absolute; 
-            top: 30px;           
+            top: 20px;           
             width: 100%;
             display: flex;
             justify-content: center;
             z-index: 10;         
             background: transparent; 
             max-width:100% !important;
+            background-attachment: scroll;
         }
 
         .nav-buttons {
@@ -730,17 +728,16 @@
             color: #fff;
             font-size: 0.95rem;
         }
-
     </style>
 </head>
 <body>
 
 <div class="main-container">
     <div class="left" id="left-panel">
-        <div class="left-content">
+        <div class="left-content" id="home">
             <nav class="about-navbar">
                 <div class="nav-buttons">
-                    <a href="#" class="nav-btn">Home</a>
+                    <a href="#home" class="nav-btn">Home</a>
                     <a href="#About" class="nav-btn">About</a>
                     <a href="#" class="nav-btn" id="login-btn">Login</a>
                     <a href="#" class="nav-btn" data-bs-toggle="modal" data-bs-target="#adminLoginModal"><i class="fa-solid fa-user-tie"></i></a>
@@ -753,14 +750,14 @@
                 </div>
             </div>
             <div class="layer-2">
-                <div class="contentlayer-2" id="About">
+                <div class="contentlayer-2">
                     <div class="description-2">
                         <h6>Your journey to better health, more energy, and total confidence starts here.</h6>
                     </div>
                     <div class="img-layer-2"></div>
                 </div>
             </div>
-            <div class="layer-3">
+            <div class="layer-3" id="about">
                 <h6 id="offer">What We Offer →</h6>
                 <div class="contentlayer-3" id="About">
                     <div class="img-layer-3"></div>
@@ -841,7 +838,7 @@
             <div class="footer-layer">
                 <div class="footer-container">
                     <div class="footer-content">
-                        <div class="footer-left">
+                        <div class="footer-left block">
                             <h2>Get in Touch</h2>
                             <p>
                                 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptate, iste!
@@ -853,7 +850,7 @@
                                 <i class="fab fa-twitter"></i>
                             </div>
                         </div>
-                        <div class="footer-right">
+                        <div class="footer-right block">
                             <div class="contact-card">
                                 <i class="fa-solid fa-phone"></i>
                                 <span>123456789</span>
@@ -866,6 +863,9 @@
                     </div>
                 </div>
             </div>
+            <button class="btn admin-login-btn" id="scrollTopBtn">
+                <i class="fas fa-arrow-up"></i>
+            </button>
         </div>
     </div>
 
@@ -1031,6 +1031,28 @@
       mainContainer.classList.remove('show-login');
     });
   });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const scrollContainer = document.getElementById("left-panel");
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+        scrollContainer.addEventListener("scroll", function () {
+            if (scrollContainer.scrollTop > 100) {
+                scrollTopBtn.style.display = "block";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        });
+
+        scrollTopBtn.addEventListener("click", function () {
+            scrollContainer.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+    });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
