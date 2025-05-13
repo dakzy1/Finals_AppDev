@@ -11,11 +11,12 @@
         * { box-sizing: border-box; }
 
         body {
+            overflow: hidden;
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
             background-color: #4b2953;
             height: 100vh;
-            overflow: hidden;
+            padding: 0;
         }
 
         .main-container {
@@ -309,6 +310,7 @@
             flex-direction:column;
             background-color: #fff;
             height: 570vh;
+            overflow: hidden;
             overflow-x: hidden;
         }
 
@@ -728,6 +730,18 @@
             color: #fff;
             font-size: 0.95rem;
         }
+
+        .show-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.6s ease-out;
+        }
+
+        /* When the element becomes visible */
+        .show-on-scroll.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
@@ -743,13 +757,13 @@
                     <a href="#" class="nav-btn" data-bs-toggle="modal" data-bs-target="#adminLoginModal"><i class="fa-solid fa-user-tie"></i></a>
                 </div>
             </nav>
-            <div class="layer-1">
+            <div class="layer-1 show-on-scroll">
                 <div class="overlay">
                     <h1>WELCUM to FitZone</h1>
                     <p style="color:white;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, modi?</p>
                 </div>
             </div>
-            <div class="layer-2">
+            <div class="layer-2 show-on-scroll">
                 <div class="contentlayer-2">
                     <div class="description-2">
                         <h6>Your journey to better health, more energy, and total confidence starts here.</h6>
@@ -757,7 +771,7 @@
                     <div class="img-layer-2"></div>
                 </div>
             </div>
-            <div class="layer-3" id="about">
+            <div class="layer-3 show-on-scroll" id="about">
                 <h6 id="offer">What We Offer →</h6>
                 <div class="contentlayer-3" id="About">
                     <div class="img-layer-3"></div>
@@ -767,7 +781,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layer-4">
+            <div class="layer-4 show-on-scroll">
                 <div class="contentlayer-4">
                     <div class="card rounded-0">
                         <img src="images/HIIT.avif" alt="Card image" />
@@ -800,7 +814,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layer-5">
+            <div class="layer-5 show-on-scroll">
                 <section class="mission-section">
                     <div class="container">
                         <div class="left-mission">
@@ -835,7 +849,7 @@
                     </div>
                 </section>
             </div>
-            <div class="footer-layer">
+            <div class="footer-layer show-on-scroll">
                 <div class="footer-container">
                     <div class="footer-content">
                         <div class="footer-left block">
@@ -1054,6 +1068,29 @@
         });
     });
 </script>
+
+<!-- ADD HERE -->
+
+<script>
+  const scrollContainer = document.querySelector('.left');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+      } else {
+        entry.target.classList.remove('show'); // optional: remove class when out of view
+      }
+    });
+  }, {
+    root: scrollContainer, // 👈 tells it to track scroll within .left
+    rootMargin: '0px',
+    threshold: 0.1 // element is visible when 10% of it enters view
+  });
+
+  document.querySelectorAll('.show-on-scroll').forEach(el => observer.observe(el));
+</script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
