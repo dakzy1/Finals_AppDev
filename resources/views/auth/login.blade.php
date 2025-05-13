@@ -311,7 +311,7 @@
             display:flex;
             flex-direction:column;
             background-color: #fff;
-            height: 510vh;
+            height: 570vh;
             overflow-x: hidden;
         }
 
@@ -348,7 +348,6 @@
         #login-btn{
             border: 1px solid #f9eebd;
         }
-
 
         .layer-1 {
             flex:1;
@@ -518,21 +517,37 @@
         .layer-5 {
             width: 100%;
             flex:1;
-            border: 1px solid black;
         }
 
         .mission-section {
             padding: 60px 10%;
             border-top: 1px solid #ddd;
             background-color: #fefefe;
+            display: flex;
+            padding-top: 60px;
+            padding-bottom: 60px;
+            position: relative;
+        }
+
+        .mission-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 1px;
+            background-color: #ddd;
+            transform: translateX(-50%);
         }
 
         .container {
             display: flex;
             gap: 60px;
-            align-items: flex-start;
-            border-left: 1px solid #ddd;
-            padding-left: 40px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+            box-sizing: border-box;
         }
 
         .left-mission, .right-mission {
@@ -581,7 +596,7 @@
         }
 
         .years-label {
-            font-size: 0.9rem;
+            font-size: 1.3rem;
             color: #555;
         }
 
@@ -613,6 +628,107 @@
             .years-box {
                 font-size: 1.5rem;
             }
+        }
+
+        .footer-layer {
+            width: 100%;
+            height:70vh;
+             background-color: #0f1b1d;
+            border-top: 1px solid #ddd; 
+            box-sizing: border-box;
+        }
+        .footer-container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #0f1b1d;
+            padding: 60px 40px;
+            color: #f1f1f1;
+            font-family: 'Segoe UI', sans-serif;       
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .footer-left {
+            max-width: 400px;
+        }
+
+        .footer-left h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .footer-left p {
+            font-size: 0.95rem;
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .social-icons i {
+            font-size: 1rem;
+            background-color: #c5aa7b;
+            color: #0f1b1d;
+            padding: 8px;
+            margin-right: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .social-icons i:hover {
+            background-color: #e4cfa1;
+        }
+
+        .footer-right {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .contact-card {
+            background-color: #132024;
+            padding: 30px;
+            color: #fff;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative; /* for pseudo-element */
+            font-size: 0.95rem;
+            font-weight: 400;
+            gap: 10px;
+            z-index: 1;
+        }
+
+        .contact-card::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 100%;
+            height: 100%;
+            background-color:rgb(27, 41, 44); /* Shadow/offset color */
+            border-radius: 4px;
+            z-index: -1;
+        }
+
+        .contact-card i {
+            font-size: 1.5rem;
+            color: #e4cfa1;
+        }
+
+        .contact-card span {
+            color: #fff;
+            font-size: 0.95rem;
         }
 
     </style>
@@ -723,7 +839,32 @@
                 </section>
             </div>
             <div class="footer-layer">
-
+                <div class="footer-container">
+                    <div class="footer-content">
+                        <div class="footer-left">
+                            <h2>Get in Touch</h2>
+                            <p>
+                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptate, iste!
+                            </p>
+                            <div class="social-icons">
+                                <i class="fab fa-instagram"></i>
+                                <i class="fab fa-linkedin"></i>
+                                <i class="fab fa-pinterest"></i>
+                                <i class="fab fa-twitter"></i>
+                            </div>
+                        </div>
+                        <div class="footer-right">
+                            <div class="contact-card">
+                                <i class="fa-solid fa-phone"></i>
+                                <span>123456789</span>
+                            </div>
+                            <div class="contact-card">
+                                <i class="fas fa-envelope"></i>
+                                <span>contact@example.com</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
