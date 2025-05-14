@@ -762,7 +762,7 @@
                     <a href="#" class="nav-btn" data-bs-toggle="modal" data-bs-target="#adminLoginModal"><i class="fa-solid fa-user-tie"></i></a>
                 </div>
             </nav>
-            <div class="layer-1">
+            <div class="layer-1 show-on-scroll">
                 <div class="overlay">
                     <h1>WELCUM to FitZone</h1>
                     <p style="color:white;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, modi?</p>
