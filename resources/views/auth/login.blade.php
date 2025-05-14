@@ -632,11 +632,16 @@
 
         .footer-layer {
             width: 100%;
-            height:70vh;
+            height:45vh;
              background-color: #0f1b1d;
             border-top: 1px solid #ddd; 
             box-sizing: border-box;
         }
+
+        .main-container.show-login .footer-layer {
+            height: 70vh;
+        }
+
         .footer-container {
             width: 80%;
             margin: 0 auto;
@@ -757,7 +762,7 @@
                     <a href="#" class="nav-btn" data-bs-toggle="modal" data-bs-target="#adminLoginModal"><i class="fa-solid fa-user-tie"></i></a>
                 </div>
             </nav>
-            <div class="layer-1 show-on-scroll">
+            <div class="layer-1">
                 <div class="overlay">
                     <h1>WELCUM to FitZone</h1>
                     <p style="color:white;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, modi?</p>
@@ -1083,14 +1088,13 @@
       }
     });
   }, {
-    root: scrollContainer, // 👈 tells it to track scroll within .left
+    root: scrollContainer, // track scroll within .left
     rootMargin: '0px',
     threshold: 0.1 // element is visible when 10% of it enters view
   });
 
   document.querySelectorAll('.show-on-scroll').forEach(el => observer.observe(el));
 </script>
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
