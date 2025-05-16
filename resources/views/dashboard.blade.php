@@ -10,8 +10,7 @@
                 <div class="welcome-card">
                     <div class="welcome-header">
                         <i class="fa-solid fa-dumbbell"></i>
-                        <h1>Welcome{{ Auth::check() ? ', ' . Str::limit(Auth::user()->first_name, 10) : '' }}</h1>
-                        <p>to <strong>FitZone</strong></p>
+                        <h1>Welcome to FitZone{{ Auth::check() ? ', ' . Str::limit(Auth::user()->first_name, 10) : '' }} </h1>
                     </div>
 
                     <div class="class-box upcoming-class-box">
@@ -141,14 +140,16 @@
     }
 
     .left-column {
+        margin-left: 50px;
         display: flex;
         flex-direction: column;
         width: 100%;
-        max-width: 200px;
+        max-width: 259px;
         flex-shrink: 0;
     }
 
    .welcome-section {
+        text-align: center;
         width: 1000px;
         max-width: 300px;
         margin-bottom: 20px;
@@ -168,18 +169,12 @@
 
     .welcome-header i {
         font-size: 30px;
-        margin-bottom: 10px;
+        margin-bottom: 0px;
     }
 
     .welcome-header h1 {
         font-size: 1.8rem;
-        margin: 0;
-    }
-
-    .welcome-header p {
-        margin-top: 5px;
-        font-size: 1.1rem;
-        font-weight: 500;
+        margin-bottom: 30px;
     }
 
     .upcoming-class-box {
@@ -220,7 +215,7 @@
         box-shadow: 0 8px 16px rgba(0,0,0,0.06);
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 0px;
         max-width: 300px;
     }
 
