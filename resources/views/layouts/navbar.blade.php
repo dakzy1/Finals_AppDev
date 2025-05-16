@@ -11,9 +11,16 @@
         html {
         overflow-y: scroll; /* Prevents layout shift when pages have no scroll */
         }
+        
         body {
             font-family: Arial, sans-serif;
-            padding: 30px;
+            margin: 0; /* Clean reset */
+        }
+
+        .container {
+            margin-top: 80px;  /* enough spacing below the fixed navbar */
+            padding: 0;        /* ensure no extra spacing */
+            box-sizing: border-box;
         }
         
         table {
@@ -148,18 +155,19 @@
         }
 
         .nav-links {
+            color: #fbeec1;
             display: flex;
             gap: 30px;
             position: relative;
         }
-
+/*
         .nav-links a {
             color: #fff;
             font-size: 16px;
             font-weight: 600;
             text-decoration: none;
             padding: 6px 14px;
-            border-radius: 6px; /* Minimized from 20px */
+            border-radius: 6px; 
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s;
             background-color: transparent;
         }
@@ -178,7 +186,7 @@
         .nav-links a.active:hover {
             background-color: #f4f4f4;
         }
-
+*/
         .logout-form {
             position: absolute;
             right: 50px;
@@ -198,11 +206,6 @@
             color: #ddd;
         }
 
-        .container {
-            margin-top: 30px; /* Adjust as needed depending on your header height */
-            padding: 20px 10px;
-            box-sizing: border-box;
-        }
         .icon-left-margin {
         margin-right: 5px;
         }
@@ -251,15 +254,7 @@
 
 
         <div class="nav-links">
-            <a href="{{ url('/landingpage') }}" class="{{ Request::is('/landingpage') ? 'active' : '' }}">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <a href="{{ url('/dashboard') }}" class="{{ Request::is('dashboard') ? 'active' : '' }}">
-                <i class="fas fa-chalkboard-teacher icon-left-margin"></i>Class
-            </a>
-            <a href="{{ url('/about') }}" class="{{ Request::is('about') ? 'active' : '' }}">
-                <i class="fas fa-info-circle icon-left-margin"></i>About
-            </a>
+            <h2>FitZone</h2>
         </div>
     <!-- Logout Button -->
         @auth

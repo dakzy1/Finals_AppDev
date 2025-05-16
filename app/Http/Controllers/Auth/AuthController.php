@@ -65,12 +65,7 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
     
-        return redirect()->route('landingpage');
-    }
-
-    public function landingpage()
-    {
-        return view('landingpage');
+        return redirect()->route('dashboard');
     }
 
     public function logout(Request $request)

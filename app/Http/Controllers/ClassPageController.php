@@ -29,19 +29,28 @@ class ClassPageController extends Controller
     /**
      * Landing Page: show upcoming class for the logged-in user
      */
-    public function landingpage()
+    public function upcomSchedule()
     {
-        $upcomingSchedule = Schedule::where('user_id', Auth::id())
-        ->with('fitnessClass')
-        ->orderBy('created_at') // gets the first booked class
-        ->first();
+        $userId = Auth::id();
+
+        $upcomingSchedule = Schedule::where('user_id', $userId)
+            ->with('fitnessClass')
+            ->orderBy('created_at')
+            ->first();
+
         if ($upcomingSchedule) {
             $upcomingSchedule->date = Carbon::parse($upcomingSchedule->date)->format('Y-m-d');
             $upcomingSchedule->time = Carbon::parse($upcomingSchedule->time)->format('H:i');
         }
-        // Check if the user has any upcoming schedules
-        return view('landingpage', compact('upcomingSchedule'));
+
+        // Add these:
+        $schedules = Schedule::where('user_id', $userId)->with('fitnessClass')->get();
+        $classes = FitnessClass::with('schedules')->get(); // Assuming you have a FitnessClass model
+
+        return view('dashboard', compact('upcomingSchedule', 'schedules', 'classes'));
     }
+
+
 
     /**
      * View a specific class and the user's schedules for that class

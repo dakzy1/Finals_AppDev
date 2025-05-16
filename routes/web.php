@@ -7,7 +7,8 @@ use App\Http\Controllers\ClassPageController;
 use App\Http\Controllers\ProfileController;
 
 
-use Illuminate\Http\Request;   
+use Illuminate\Http\Request;
+use PhpParser\Builder\Class_;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -26,6 +27,8 @@ Route::get('/landingpage', [ClassPageController::class, 'landingpage'])->name('l
 
 // Dashboard Route (handled by ClassPageController)
 Route::get('/dashboard', [ClassPageController::class, 'index'])->name('dashboard')->middleware('auth');
+Route::get('/dashboard', [ClassPageController::class, 'upcomSchedule'])->name('dashboard');
+
 
 //Profile
 Route::middleware('auth')->group(function () {
