@@ -311,15 +311,5 @@
         // Toggle the clicked details
         details.classList.toggle('open');
     }
-
-    document.getElementById('classFilter').addEventListener('change', function () {
-        const selected = this.value.toLowerCase();
-        const cards = document.querySelectorAll('.class-card');
-
-        cards.forEach(card => {
-            const name = card.querySelector('.class-name').textContent.toLowerCase();
-            card.style.display = (selected === 'all' || name.includes(selected)) ? '' : 'none';
-        });
-    });
 </script>
 @endsection
