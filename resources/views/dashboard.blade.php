@@ -37,7 +37,7 @@
                 <h2>Schedule</h2>
                 <div class="schedule-items">
                     @if (session('success'))
-                        <div style="color: green; margin-bottom: 10px;">{{ session('success') }}</div>
+                        <div class="success-message">{{ session('success') }}</div>
                     @endif
 
                     @if($schedules->isEmpty())
@@ -436,7 +436,20 @@
     .btn-book:hover {
         background-color: #f0f0f0;
     }
-
+    .success-message {
+        background-color: #e6f4ea; /* Light green background */
+        color: #2e7d32; /* Dark green text */
+        padding: 8px 12px;
+        border-radius: 8px;
+        border-left: 4px solid #4caf50; /* Green border for emphasis */
+        margin-bottom: 10px;
+        font-size: 0.9rem;
+        opacity: 1;
+        transition: opacity 1s ease;
+    }
+    .success-message.fade-out {
+        opacity: 0;
+    }
     #classFilter {
         width: 100%;
         margin-bottom: 15px;
@@ -486,7 +499,17 @@
         // Toggle the clicked details
         details.classList.toggle('open');
     }
-
+    document.addEventListener('DOMContentLoaded', function () {
+    const successMessage = document.querySelector('.success-message');
+    if (successMessage) {
+        setTimeout(() => {
+            successMessage.classList.add('fade-out');
+            setTimeout(() => {
+                successMessage.remove();
+            }, 1000);
+        }, 5000);
+    }
+});
     document.getElementById('classFilter').addEventListener('change', function () {
         const selected = this.value.toLowerCase();
         const cards = document.querySelectorAll('.class-card');
