@@ -13,7 +13,7 @@
                         <h1>Welcome to FitZone{{ Auth::check() ? ', ' . Str::limit(Auth::user()->first_name, 10) : '' }} </h1>
                     </div>
 
-                    <div class="class-box upcoming-class-box">
+                    <div class="schedule-box upcoming-schedule-box">
                         <div>
                             <small class="label">Upcoming Class</small>
                             @if ($upcomingSchedule)
@@ -44,11 +44,11 @@
                         <p>No schedules booked yet.</p>
                     @else
                         @foreach($schedules as $schedule)
-                            <div class="class-box" data-schedule-id="{{ $schedule->id }}">
-                                <div class="class-header" onclick="toggleDetails(this)">
+                            <div class="schedule-box" data-schedule-id="{{ $schedule->id }}">
+                                <div class="schedule-header" onclick="toggleDetails(this)">
                                     <h4>{{ e($schedule->fitnessClass->name) }}</h4>
                                 </div>
-                                <div class="class-details-content">
+                                <div class="schedule-details-content">
                                     <div class="view-mode visible-fade">
                                         <p><strong>Date:</strong> {{ \Carbon\Carbon::parse($schedule->date)->format('F j, Y') }}</p>
                                         <p><strong>Time:</strong> {{ \Carbon\Carbon::parse($schedule->time)->format('g:i A') }}</p>
@@ -104,16 +104,12 @@
                                 <p><strong>Duration:</strong> {{ e($class->duration) }} Minutes</p>
                                 <p><strong>Trainer:</strong> {{ e($class->trainer) }}</p>
                                 <p><strong>Bookings:</strong> {{ $bookedCount }} / {{ $limit }}</p>
-
-                                @if ($isFull)
-                                    <p style="color: red;"><strong>This class is fully booked.</strong></p>
-                                @endif
                             </div>
 
                             @if ($isFull)
-                                <button class="btn-book" disabled>Fully Booked</button>
+                                <button class="btn-full" disabled>Fully Booked</button>
                             @elseif ($isBooked)
-                                <button class="btn-book" disabled>Already Booked</button>
+                                <button class="btn-booked" disabled>Already Booked</button>
                             @else
                                 <a href="{{ route('viewclass', $class->id) }}" class="btn-book">View</a>
                             @endif
@@ -177,7 +173,7 @@
         margin-bottom: 30px;
     }
 
-    .upcoming-class-box {
+    .upcoming-schedule-box {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -249,30 +245,6 @@
         color: #555;
     }
 
-    .upcoming-box {
-        background-color: #fef1f4;
-        padding: 15px;
-        border-left: 6px solid #d87384;
-        border-radius: 10px;
-    }
-
-    .upcoming-box h4 {
-        font-size: 1rem;
-        color: #d87384;
-        margin-bottom: 5px;
-    }
-
-    .upcoming-box .class-title {
-        font-weight: bold;
-        font-size: 1rem;
-        color: #333;
-    }
-
-    .upcoming-box .class-info {
-        font-size: 0.9rem;
-        color: #555;
-    }
-
     .sidebar {
         width: 100%;
         background-color: #ffffff;
@@ -285,7 +257,13 @@
         font-size: 1.5rem;
         margin-bottom: 15px;
         color: #d87384;
+        position: sticky;
+        top: 0;
+        background-color: #ffffff;
+        z-index: 1;
+        padding-bottom: 5px;
     }
+
     .sidebar h4 {
         font-size: 1.0rem;
         margin-bottom: 15px;
@@ -296,10 +274,29 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
-        max-width: 10px 12px;
+        max-height: 240px; /* Approx height for 3 schedule boxes */
+        overflow-y: auto;
+        padding-right: 5px;
+    }
+    .schedule-items::-webkit-scrollbar {
+        width: 6px;
     }
 
-    .class-box {
+    .schedule-items::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .schedule-items::-webkit-scrollbar-thumb {
+        background: #d87384;
+        border-radius: 10px;
+    }
+
+    .schedule-items::-webkit-scrollbar-thumb:hover {
+        background: #c05c6e;
+    }
+
+    .schedule-box {
         background-color: #fef1f4;
         color: #333;
         padding: 3px 10px;
@@ -311,21 +308,20 @@
         margin-bottom: 5px;
     }
 
-    .class-box:hover {
+    .schedule-box:hover {
         transform: translateY(-3px);
     }
 
-    .class-details-content {
+    .schedule-details-content {
         max-height: 0;
         overflow: hidden;
         opacity: 0;
         transition: max-height 0.4s ease, opacity 0.4s ease;
-        padding: 0;        /* Ensure no space is taken */
+        padding: 0;
         margin: 0;
     }
 
-
-    .class-details-content.open {
+    .schedule-details-content.open {
         max-height: 300px;
         opacity: 1;
     }
@@ -346,7 +342,7 @@
         border: none;
         cursor: pointer;
         margin-top: 5px;
-        margin-left: 140px;
+        margin-left: 200px;
         padding: 0;
         transition: transform 0.3s, color 0.3s;
     }
@@ -366,7 +362,6 @@
         border-radius: 20px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         flex-grow: 1;
-
     }
     
     .class-details h2 {
@@ -417,6 +412,26 @@
         font-weight: bold;
         transition: background-color 0.3s;
     }
+    .btn-booked {
+        background-color: #fff;
+        color: #d87384;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s;
+        cursor: not-allowed;
+    }
+    
+    .btn-full {
+        background-color: #e74c3c;
+        color: white;
+        cursor: not-allowed;
+        padding: 10px 20px;
+        font-weight: bold;
+        border-radius: 8px;  
+        transition: background-color 0.3s;
+    }
 
     .btn-book:hover {
         background-color: #f0f0f0;
@@ -459,6 +474,16 @@
 <script>
     function toggleDetails(header) {
         const details = header.nextElementSibling;
+        const allDetails = document.querySelectorAll('.schedule-details-content');
+        
+        // Close all other open details
+        allDetails.forEach(item => {
+            if (item !== details && item.classList.contains('open')) {
+                item.classList.remove('open');
+            }
+        });
+        
+        // Toggle the clicked details
         details.classList.toggle('open');
     }
 
