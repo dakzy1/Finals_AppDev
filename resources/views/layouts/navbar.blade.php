@@ -5,6 +5,7 @@
     <title>@yield('title', 'FitZone')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="shortcut icon" href="{{ asset('images/Appdev_logo.png') }}" type="image/x-icon">
+
     
     <style>
         /* Global styles */
@@ -160,33 +161,7 @@
             gap: 30px;
             position: relative;
         }
-/*
-        .nav-links a {
-            color: #fff;
-            font-size: 16px;
-            font-weight: 600;
-            text-decoration: none;
-            padding: 6px 14px;
-            border-radius: 6px; 
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s;
-            background-color: transparent;
-        }
 
-        .nav-links a:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-1px);
-        }
-
-        .nav-links a.active {
-            background-color: #fff;
-            color: #834c71;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-        }
-
-        .nav-links a.active:hover {
-            background-color: #f4f4f4;
-        }
-*/
         .logout-form {
             position: absolute;
             right: 50px;
@@ -216,7 +191,7 @@
     <!-- Fixed Header -->
     <div class="header">
         <button onclick="openProfile()" class="avatar" title="Profile">
-        <img src= "{{ asset('images/profile-user.png') }}" alt="Profile" style="width: 40px; height: 40px; border-radius: 30%;">
+        <i class="fas fa-user-circle" style="font-size: 50px; color:rgb(160, 100, 140);"></i>
         </button>
 
         <!-- Profile Overlay -->
