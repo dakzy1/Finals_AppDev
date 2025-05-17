@@ -1,10 +1,10 @@
 @extends('layouts.navbar') 
 
-
 @section('content')
-
-
 <div class="container">
+    <a href="{{ route('viewclass', $class->id) }}" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Go Back
+    </a>
     <div class="left-panel">
         <div class="class-details">
             <h2>{{ $class->name }}</h2>
@@ -114,7 +114,25 @@
         gap: 20px;
         box-sizing: border-box;
     }
+    .back-btn {
+        position: fixed;
+        top: 62px;
+        left: 35px;
+        background-color: #d87384;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 1000;
+    }
 
+    .back-btn:hover {
+        background-color: #c05c6e;
+    }
     .left-panel, .right-panel {
         background-color: white;
         border-radius: 10px;
