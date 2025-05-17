@@ -13,7 +13,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+        @font-face {
+            font-family: 'MyFont';
+            src: url('/fonts/SportNewsRegular.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
         * { box-sizing: border-box; }
 
         body {
@@ -390,21 +395,59 @@
         .overlay h1 {
             font-size: 5rem;
             font-style: italic;
-            font-family: "Fugaz One", sans-serif;
+            font-family: 'MyFont', sans-serif;
             text-transform: uppercase;
-            background: linear-gradient(90deg,rgb(238, 231, 232),rgb(255, 255, 255));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: white; /* Or any color */
             letter-spacing: 3px;
             cursor: pointer;
             opacity: 0;
             animation: fadeIn 1s ease-out forwards;
+            user-select: none;             /* Disable text selection */
+            -webkit-user-select: none;     /* For Safari */
+            -ms-user-select: none;         /* For IE/Edge */
+            pointer-events: auto;
         }
 
-        .overlay h1:hover {
-            transform: scale(1.05);
-            text-shadow: 0 0 20px rgba(255, 75, 43, 0.8);
+        h1.animated-title span {
+            display: inline-block;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            font-size: 5rem;
+            text-transform: uppercase;
+            position: relative;
         }
+
+        h1.animated-title span:hover {
+            transform: translateY(-10px);
+        }
+
+        @keyframes riseUp {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+
+        /* Dot effect */
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            position: absolute;
+            pointer-events: none;
+            animation: pop 0.6s ease-out forwards;
+            z-index: 999;
+        }
+
+        @keyframes pop {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(2) translateY(-20px);
+            }
+        }
+
 
          @keyframes fadeIn {
             to {
@@ -878,7 +921,8 @@
             </nav>
             <div class="layer-1 show-on-scroll observe">
                 <div class="overlay">
-                    <h1>SHAPE YOURSELF</h1>
+                    <h1 class="animated-title">SHAPE YOURSELF</h1>
+                    <div class="click-effect-container"></div>
                     <p style="color:white;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, modi?</p>
                 </div>
             </div>
@@ -1237,7 +1281,7 @@
 <!-- ADD HERE -->
 
 <script>
-  // Select all elements you want to animate when they enter view
+  // animate when they enter view
   const observedElements = document.querySelectorAll('.observe');
 
   const observer = new IntersectionObserver((entries) => {
@@ -1257,6 +1301,44 @@
   // Observe each target element
   observedElements.forEach(el => observer.observe(el));
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const title = document.querySelector('.animated-title');
+    const text = title.innerText;
+    title.innerHTML = ''; // Clear original text
+
+    // Split letters into spans
+    [...text].forEach((letter, index) => {
+        const span = document.createElement('span');
+        span.innerText = letter;
+        span.style.setProperty('--i', index);
+        span.addEventListener('click', (e) => createDotEffect(e));
+        title.appendChild(span);
+    });
+
+    function createDotEffect(e) {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+
+        // Random color
+        dot.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+
+        // Position the dot at the click location
+        const rect = e.target.getBoundingClientRect();
+        dot.style.left = `${rect.left + rect.width / 2}px`;
+        dot.style.top = `${rect.top + rect.height / 2}px`;
+
+        document.body.appendChild(dot);
+
+        // Remove dot after animation
+        setTimeout(() => {
+            dot.remove();
+        }, 600);
+    }
+});
+</script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
