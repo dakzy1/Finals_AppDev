@@ -484,7 +484,7 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 120px; /* Adjust for how tall the fade should be */
+            height: 200px; /* Adjust for how tall the fade should be */
             background: linear-gradient(to top, white, transparent);
             pointer-events: none;
             z-index: 2;
@@ -888,16 +888,27 @@
             font-size: 0.95rem;
         }
 
+        /* Scoll animation */
+
         .observe {
             opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.6s ease-out;
         }
 
         .observe.show {
-            opacity: 1;
-            transform: translateY(0);
+            animation: fadeInUp 0.6s ease forwards;
         }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
 
     </style>
 </head>
@@ -932,7 +943,7 @@
                         <div class="container-slide">
                             <div class="heading-container">
                                 <h2 class="heading">
-                                Lorem, ipsum dolor. <span class="highlight">300,000</span> of <br />Lorem, ipsum dolor.
+                                    Discipline beats <span class="highlight">motivation</span>
                                 </h2>
                             </div>
 
@@ -1063,7 +1074,7 @@
                     </div>
                 </section>
             </div>
-            <div class="footer-layer show-on-scroll">
+            <div class="footer-layer show-on-scroll observe">
                 <div class="footer-container">
                     <div class="footer-content">
                         <div class="footer-left block">
@@ -1282,24 +1293,28 @@
 
 <script>
   // animate when they enter view
-  const observedElements = document.querySelectorAll('.observe');
+    const observedElements = document.querySelectorAll('.observe');
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('show');
-      } else {
-        entry.target.classList.remove('show'); // Optional
-      }
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const el = entry.target;
+
+            if (entry.isIntersecting) {
+            // Remove and force reflow to restart animation
+                el.classList.remove('show');
+            void el.offsetWidth; // This forces a reflow
+                el.classList.add('show');
+            } else {
+                el.classList.remove('show');
+            }
+        });
+    }, {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
     });
-  }, {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.2 // Trigger when 20% is visible
-  });
 
-  // Observe each target element
-  observedElements.forEach(el => observer.observe(el));
+    observedElements.forEach(el => observer.observe(el));
 </script>
 
 <script>
