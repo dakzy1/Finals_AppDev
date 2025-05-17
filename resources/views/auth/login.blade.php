@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>FitZone - Login</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="shortcut icon" href="{{ asset('images/Appdev_logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -26,6 +31,13 @@
             width: 100%;
             height: 100vh;
         }
+
+        .fugaz-one-regular {
+            font-family: "Fugaz One", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
 
         .left {
             background: red;
@@ -370,6 +382,7 @@
         .overlay h1 {
             font-size: 5rem;
             font-style: italic;
+            font-family: "Fugaz One", sans-serif;
             text-transform: uppercase;
             background: linear-gradient(90deg,rgb(238, 231, 232),rgb(255, 255, 255));
             -webkit-background-clip: text;
