@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
-
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="shortcut icon" href="{{ asset('images/Appdev_logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -413,38 +413,104 @@
         }
 
         .contentlayer-2 {
-            display: flex;
             width: 80%;
-            height: 50%;
             margin:10% auto;
             box-sizing: border-box;
-            
         }
 
-        .description-2 {
-            flex:1;
+        .brands-section {
+            height: 100vh;
             display: flex;
-            justify-content: center;  
-            align-items: center; 
-            text-align: center;
-            padding: 20px;
-            background-color:rgb(252, 249, 246);
-            border-top-left-radius: 5px;
-            border-bottom-left-radius: 5px;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px 0;
+            position: relative;
         }
 
-        .description h6 {
-            margin: 0;           
-        }
-
-        .img-layer-2 {
-            flex:1;
+        .brands-section::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
             width: 100%;
-            background-image:url('images/header.jpg');
-            background-size: cover;
-            background-attachment: scroll;
-            background-repeat: no-repeat;
-            padding:20px;
+            height: 120px; /* Adjust for how tall the fade should be */
+            background: linear-gradient(to top, white, transparent);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .container-slide {
+            max-width: 100%;
+            overflow: hidden;
+            position: relative;
+            padding: 0 0px;
+        }
+
+        .heading-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .heading {
+            font-size: 36px;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+
+        .highlight {
+            color: #8884ff;
+        }
+
+        .slider-wrapper {
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .brands-slider {
+            display: flex;
+            gap: 24px;
+            animation: scroll 30s linear infinite;
+            width: max-content;
+        }
+
+            @keyframes scroll {
+            0% {
+                transform: translateX(0%);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .brand-card {
+            background-color: #1a1a1a;
+            min-width: 500px;
+            max-width: 500px;
+            border-radius: 3px;
+            padding: 0;
+            flex: 0 0 auto;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+        }
+
+        .brand-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 3px;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .heading {
+                font-size: 24px;
+            }
+        
+            .brand-card {
+                min-width: 300px;
+            }
         }
 
         .layer-3 {
@@ -805,10 +871,61 @@
             </div>
             <div class="layer-2 observe">
                 <div class="contentlayer-2">
-                    <div class="description-2">
-                        <h6>Your journey to better health, more energy, and total confidence starts here.</h6>
-                    </div>
-                    <div class="img-layer-2"></div>
+                    <section class="brands-section">
+                        <div class="container-slide">
+                            <div class="heading-container">
+                                <h2 class="heading">
+                                Trusted by over <span class="highlight">300,000</span> of <br />the world’s leading brands
+                                </h2>
+                            </div>
+
+                            <div class="slider-wrapper">
+                                <div class="brands-slider">
+                                <!-- Image-only cards -->
+                                <div class="brand-card">
+                                    <img src="images/using-weight.webp" alt="Dropbox" class="brand-image" />
+                                </div>
+
+                                <div class="brand-card">
+                                    <img src="images/young-woman.avif" alt="Fivetran" class="brand-image" />
+                                </div>
+
+                                <div class="brand-card">
+                                    <img src="images/push-up.jpg" alt="Jasper" class="brand-image" />
+                                </div>
+
+                                <div class="brand-card">
+                                    <img src="images/fitness-center.jpeg" alt="Lattice" class="brand-image" />
+                                </div>
+
+                                <div class="brand-card">
+                                    <img src="images/background.jpg" alt="NCR" class="brand-image" />
+                                </div>
+
+                                <!-- Duplicate for seamless loop -->
+                                <div class="brand-card">
+                                    <img src="images/using-weight.webp" alt="Dropbox" class="brand-image" />
+                                </div>
+
+                                <div class="brand-card">
+                                    <img src="images/young-woman.avif" alt="Fivetran" class="brand-image" />
+                                </div>
+
+                                <div class="brand-card">
+                                    <img src="images/push-up.jpg" alt="Jasper" class="brand-image" />
+                                </div>
+
+                                <div class="brand-card">
+                                    <img src="images/fitness-center.jpeg" alt="Lattice" class="brand-image" />
+                                </div>
+
+                                <div class="brand-card">
+                                    <img src="images/background.jpg" alt="NCR" class="brand-image" />
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
             <div class="layer-3 show-on-scroll observe" id="about" style="margin-top: 80px; padding-top: 1px;">
