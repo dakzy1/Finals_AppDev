@@ -7,6 +7,8 @@
     <link rel="shortcut icon" href="{{ asset('images/Appdev_logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -27,7 +29,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #4b2953;
+            background-color: #834c71;
             color: white;
             padding: 15px 30px;
         }
@@ -136,7 +138,7 @@
         }
 
         th {
-            background-color: #e44b8d;
+            background-color: #834c71;
             color: white;
         }
 
@@ -192,10 +194,25 @@
             display: none;
         }
 
-        .alert-success {
-            color: green;
+        .success-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e6f4ea; /* Light green background */
+            color: #2e7d32; /* Dark green text */
+            padding: 8px 12px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50; /* Green border for emphasis */
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            opacity: 1;
+            transition: opacity 1s ease;
+            max-width: 300px;
             text-align: center;
-            margin-bottom: 15px;
+            margin: 20px auto; 
+        }
+        .success-message.fade-out {
+            opacity: 0;
         }
         #backdrop {
         position: fixed;
@@ -263,8 +280,9 @@
         .button-container {
             display: flex;
             flex-direction: column;
+            gap: 10px;
             width: 100%;
-            margin-top: 10px;
+            align-items: center;
         }
 
         .button-container form,
@@ -454,7 +472,7 @@
         <h2>Class Management</h2>
 
         @if(session('success'))
-            <div class="alert-success">{{ session('success') }}</div>
+            <div class="success-message">{{ session('success') }}</div>
         @endif
 
         @if($editClass)
@@ -908,8 +926,6 @@
        
     }
 
-
-
     document.addEventListener('DOMContentLoaded', function () {
     const forms = document.querySelectorAll('form');
 
@@ -925,6 +941,17 @@
             }
         });
     });
+});
+    document.addEventListener('DOMContentLoaded', function () {
+    const successMessage = document.querySelector('.success-message');
+    if (successMessage) {
+        setTimeout(() => {
+            successMessage.classList.add('fade-out');
+            setTimeout(() => {
+                successMessage.remove();
+            }, 1000);
+        }, 3000);
+    }
 });
 </script>
 </body>
