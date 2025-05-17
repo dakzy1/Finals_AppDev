@@ -597,7 +597,7 @@
                     </ul>
                 </div>
             @endif
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('login.post') }}">
                 @csrf
                 <input type="email" name="email" placeholder="Email" maxlength="50" required>
                 <div style="position: relative;">
@@ -624,7 +624,7 @@
             <h4>Create Your FitZone Account</h4>
 
             
-            <form method="POST" action="/register">
+            <form method="POST" action="{{ route('register.post') }}">
                 @csrf
                 <div class="mb-2">
                     <label>First Name</label>

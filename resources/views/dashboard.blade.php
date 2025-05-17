@@ -333,6 +333,8 @@
         margin: 10px 0 20px;
         border-radius: 5px;
         border: 1px solid #ccc;
+        max-width: 100px;
+
     }
 
     .class-cards {
