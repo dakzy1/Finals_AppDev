@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
         * { box-sizing: border-box; }
 
         body {
@@ -17,6 +18,7 @@
             background-color: #4b2953;
             height: 100vh;
             padding: 0;
+            box-sizing: border-box;
         }
 
         .main-container {
@@ -26,12 +28,15 @@
         }
 
         .left {
+            background: red;
+            position: relative;
             width: 100%;
             background-color: #fff;
             overflow-y: auto;
             transition: width 0.4s ease;
-            height: 100vh;
+            min-height: 100vh;
             scroll-behavior: smooth;
+            box-sizing: border-box;
         }
 
         .right {
@@ -305,13 +310,12 @@
         }
 
         .left-content {
-            position: relative;
             display:flex;
             flex-direction:column;
             background-color: #fff;
             height: 570vh;
-            overflow: hidden;
             overflow-x: hidden;
+            overflow: hidden;
         }
 
         .about-navbar {
@@ -354,7 +358,6 @@
             width: 100%;
             background-image:url('images/bg-login.jpeg');
             background-size: cover;
-            background-attachment: scroll;
             background-repeat: no-repeat;
             display: flex;
             justify-content: center; 
@@ -365,10 +368,29 @@
         }
 
         .overlay h1 {
-            color: #fff;
-            font-size: 50px;
-            margin: 0;
+            font-size: 5rem;
+            font-style: italic;
+            text-transform: uppercase;
+            background: linear-gradient(90deg,rgb(238, 231, 232),rgb(255, 255, 255));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 3px;
+            cursor: pointer;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
         }
+
+        .overlay h1:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 20px rgba(255, 75, 43, 0.8);
+        }
+
+         @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
         .layer-2 {
             width: 100%;
             flex:1;
@@ -381,7 +403,7 @@
             display: flex;
             width: 80%;
             height: 50%;
-            margin:11% auto;
+            margin:10% auto;
             box-sizing: border-box;
             
         }
@@ -736,17 +758,17 @@
             font-size: 0.95rem;
         }
 
-        .show-on-scroll {
+        .observe {
             opacity: 0;
-            transform: translateY(40px);
+            transform: translateY(50px);
             transition: all 0.6s ease-out;
         }
 
-        /* When the element becomes visible */
-        .show-on-scroll.show {
+        .observe.show {
             opacity: 1;
             transform: translateY(0);
         }
+
     </style>
 </head>
 <body>
@@ -757,18 +779,18 @@
             <nav class="about-navbar">
                 <div class="nav-buttons">
                     <a href="#home" class="nav-btn">Home</a>
-                    <a href="#About" class="nav-btn">About</a>
+                    <a href="#about" class="nav-btn">About</a>
                     <a href="#" class="nav-btn" id="login-btn">Login</a>
                     <a href="#" class="nav-btn" data-bs-toggle="modal" data-bs-target="#adminLoginModal"><i class="fa-solid fa-user-tie"></i></a>
                 </div>
             </nav>
             <div class="layer-1 show-on-scroll">
                 <div class="overlay">
-                    <h1>WELCUM to FitZone</h1>
+                    <h1>SHAPE YOURSELF</h1>
                     <p style="color:white;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, modi?</p>
                 </div>
             </div>
-            <div class="layer-2 show-on-scroll">
+            <div class="layer-2 observe">
                 <div class="contentlayer-2">
                     <div class="description-2">
                         <h6>Your journey to better health, more energy, and total confidence starts here.</h6>
@@ -776,7 +798,7 @@
                     <div class="img-layer-2"></div>
                 </div>
             </div>
-            <div class="layer-3 show-on-scroll" id="about">
+            <div class="layer-3 show-on-scroll observe" id="about" style="margin-top: 80px; padding-top: 1px;">
                 <h6 id="offer">What We Offer →</h6>
                 <div class="contentlayer-3" id="About">
                     <div class="img-layer-3"></div>
@@ -786,7 +808,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layer-4 show-on-scroll">
+            <div class="layer-4 observe">
                 <div class="contentlayer-4">
                     <div class="card rounded-0">
                         <img src="images/HIIT.avif" alt="Card image" />
@@ -819,7 +841,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layer-5 show-on-scroll">
+            <div class="layer-5 observe">
                 <section class="mission-section">
                     <div class="container">
                         <div class="left-mission">
@@ -971,10 +993,6 @@
             </form>
         </div>
 
-<!--<button class="btn position-fixed admin-login-btn" data-bs-toggle="modal" data-bs-target="#adminLoginModal">
-    Admin
-</button>-->
-
 <!-- Admin Login Modal -->
 <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-labelledby="adminLoginModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -1077,23 +1095,25 @@
 <!-- ADD HERE -->
 
 <script>
-  const scrollContainer = document.querySelector('.left');
+  // Select all elements you want to animate when they enter view
+  const observedElements = document.querySelectorAll('.observe');
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('show');
       } else {
-        entry.target.classList.remove('show'); // optional: remove class when out of view
+        entry.target.classList.remove('show'); // Optional
       }
     });
   }, {
-    root: scrollContainer, // track scroll within .left
+    root: null,
     rootMargin: '0px',
-    threshold: 0.1 // element is visible when 10% of it enters view
+    threshold: 0.1 // Trigger when 20% is visible
   });
 
-  document.querySelectorAll('.show-on-scroll').forEach(el => observer.observe(el));
+  // Observe each target element
+  observedElements.forEach(el => observer.observe(el));
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
