@@ -37,7 +37,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('landingpage');
+        return redirect()->route('dashboard');
     }
 
     public function showLogin()

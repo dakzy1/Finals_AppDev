@@ -635,6 +635,7 @@
                         <div class="form-group">
                         <label for="time">Select Instructor Available Time:</label>
                             <select id="time" name="time" required style="margin-right: 5px; width: 120px;">
+                                <option value="" selected disabled {{ old('time') ? '' : 'selected' }}>Select time</option>
                                 <option value="06:00:00" {{ old('time') == '06:00:00' ? 'selected' : '' }}>06:00 AM</option>
                                 <option value="07:00:00" {{ old('time') == '07:00:00' ? 'selected' : '' }}>07:00 AM</option>
                                 <option value="08:00:00" {{ old('time') == '08:00:00' ? 'selected' : '' }}>08:00 AM</option>
@@ -654,13 +655,14 @@
                         </div>
                         <div class="form-group">
                             <select id="end_time" name="end_time" required style="margin-right: 5px; width: 120px;">
+                                <option value="" selected disabled {{ old('time') ? '' : 'selected' }}>Select time</option>
                                 <option value="06:00:00" {{ old('end_time') == '06:00:00' ? 'selected' : '' }}>06:00 AM</option>
                                 <option value="07:00:00" {{ old('end_time') == '07:00:00' ? 'selected' : '' }}>07:00 AM</option>
                                 <option value="08:00:00" {{ old('end_time') == '08:00:00' ? 'selected' : '' }}>08:00 AM</option>
                                 <option value="09:00:00" {{ old('end_time') == '09:00:00' ? 'selected' : '' }}>09:00 AM</option>
                                 <option value="10:00:00" {{ old('end_time') == '10:00:00' ? 'selected' : '' }}>10:00 AM</option>
                                 <option value="11:00:00" {{ old('end_time') == '11:00:00' ? 'selected' : '' }}>11:00 AM</option>
-                                <option value="12:00:00" {{ old('end_time') == '11:00:00' ? 'selected' : '' }}>12:00 PM</option>
+                                
                                 
                                 <option value="13:00:00" {{ old('end_time') == '13:00:00' ? 'selected' : '' }}>01:00 PM</option>
                                 <option value="14:00:00" {{ old('end_time') == '14:00:00' ? 'selected' : '' }}>02:00 PM</option>
@@ -747,6 +749,44 @@
     $(document).ready(function () {
         $('#userTable').DataTable();
     });
+    document.addEventListener("DOMContentLoaded", function () {
+    const startSelect = document.getElementById("time");
+    const endSelect = document.getElementById("end_time");
+
+    
+    function validateTimeSelection() {
+        const startTime = startSelect.value;
+        const endTime = endSelect.value;
+
+        if (!startTime || !endTime) return;
+
+        const startHour = parseInt(startTime.split(':')[0]);
+        const endHour = parseInt(endTime.split(':')[0]);
+
+        // Start must be between 6 and 11 (6 AM to 11 AM)
+        if (startHour < 6 || startHour > 11) {
+            alert("Start time must be between 6:00 AM and 11:00 AM.");
+            startSelect.value = "";
+            return;
+        }
+
+        // End must be between 13 and 18 (1 PM to 6 PM), skip 12
+        if (endHour < 13 || endHour > 18) {
+            alert("End time must be between 1:00 PM and 6:00 PM .");
+            endSelect.value = "";
+            return;
+        }
+
+        // Ensure start is before end
+        if (startHour >= endHour) {
+            alert("End time must be later than start time.");
+            endSelect.value = "";
+        }
+    }
+
+    startSelect.addEventListener("change", validateTimeSelection);
+    endSelect.addEventListener("change", validateTimeSelection);
+});
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
