@@ -331,15 +331,23 @@
         }
 
         .about-navbar {
-            position: absolute; 
-            top: 20px;           
+            position: absolute;
+            top: 5px;
             width: 100%;
             display: flex;
-            justify-content: center;
-            z-index: 10;         
-            background: transparent; 
-            max-width:100% !important;
+            align-items: center;
+            justify-content: space-between; /* space between logo and buttons */
+            padding: 0 40px; /* adjust spacing from left/right */
+            z-index: 10;
+            background: transparent;
+            max-width: 100% !important;
             background-attachment: scroll;
+        }
+
+        .nav-logo .logo-img {
+            height: 100px; /* adjust size as needed */
+            cursor: pointer;
+            width: auto;
         }
 
         .nav-buttons {
@@ -856,10 +864,15 @@
     <div class="left" id="left-panel">
         <div class="left-content" id="home">
             <nav class="about-navbar">
+                <div class="nav-logo">
+                    <img src="images/LogoMaster.png" alt="Logo" class="logo-img" />
+                </div>
                 <div class="nav-buttons">
                     <a href="#home" class="nav-btn">Home</a>
                     <a href="#about" class="nav-btn">About</a>
                     <a href="#" class="nav-btn" id="login-btn">Login</a>
+                </div>
+                <div class="nav-buttons">
                     <a href="#" class="nav-btn" data-bs-toggle="modal" data-bs-target="#adminLoginModal"><i class="fa-solid fa-user-tie"></i></a>
                 </div>
             </nav>
@@ -875,7 +888,7 @@
                         <div class="container-slide">
                             <div class="heading-container">
                                 <h2 class="heading">
-                                Trusted by over <span class="highlight">300,000</span> of <br />the world’s leading brands
+                                Lorem, ipsum dolor. <span class="highlight">300,000</span> of <br />Lorem, ipsum dolor.
                                 </h2>
                             </div>
 
