@@ -9,7 +9,6 @@
             <div class="welcome-section">
                 <div class="welcome-card">
                     <div class="welcome-header">
-                        <i class="fa-solid fa-dumbbell"></i>
                         <h1>Welcome to FitZone{{ Auth::check() ? ', ' . Str::limit(Auth::user()->first_name, 10) : '' }} </h1>
                     </div>
 
