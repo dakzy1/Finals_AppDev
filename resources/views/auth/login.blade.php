@@ -1295,7 +1295,7 @@
   }, {
     root: null,
     rootMargin: '0px',
-    threshold: 0.1 // Trigger when 20% is visible
+    threshold: 0.2 // Trigger when 20% is visible
   });
 
   // Observe each target element
