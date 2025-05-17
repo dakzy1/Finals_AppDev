@@ -204,47 +204,6 @@
         justify-content: flex-start;
     }
 
-    .welcome-card {
-        background-color: #fff0f6;
-        border-radius: 16px;
-        padding: 20px;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.06);
-        display: flex;
-        flex-direction: column;
-        gap: 0px;
-        max-width: 300px;
-    }
-
-    .welcome-header {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .welcome-avatar {
-        background-color: #d87384;
-        color: white;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.4rem;
-    }
-
-    .welcome-card h1 {
-        font-size: 1.2rem;
-        margin: 0;
-        color: #834c71;
-    }
-
-    .welcome-card p {
-        margin: 0;
-        font-size: 0.95rem;
-        color: #555;
-    }
-
     .sidebar {
         width: 100%;
         background-color: #ffffff;
@@ -366,76 +325,76 @@
     
     .class-details h2 {
         font-size: 1.5rem;
-        margin-bottom: 15px;
-        color: #834c71;
+        margin-bottom: 10px;
+        color: #7a3558;
+    }
+
+    #classFilter {
+        padding: 5px 10px;
+        margin: 10px 0 20px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
     }
 
     .class-cards {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
         gap: 20px;
     }
-
     .class-card {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #d87384;
-        padding: 15px 18px;
+        background-color: #fff;
         border-radius: 12px;
-        color: white;
-        flex-wrap: wrap;
+        padding: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+        transition: transform 0.2s;
+    }
+    .class-card:hover {
+        transform: translateY(-5px);
     }
 
     .class-info {
-        flex: 1;
-        min-width: 200px;
+        margin-bottom: 10px;
     }
 
     .class-info h3 {
-        margin-top: 0; 
-        margin-bottom: 10px;
-        font-size: 1.25rem;
+        color: #d87384;
+        margin: 0 0 10px;
     }
 
     .class-info p {
+        font-size: 0.9rem;
         margin: 3px 0;
-        font-size: 0.95rem;
     }
-
-    .btn-book {
-        background-color: #fff;
-        color: #d87384;
-        padding: 10px 20px;
+    .btn-book,
+    .btn-booked,
+    .btn-full {
+        display: inline-block;
+        padding: 8px 16px;
+        font-size: 0.9rem;
         border-radius: 8px;
         text-decoration: none;
-        font-weight: bold;
-        transition: background-color 0.3s;
+        text-align: center;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+    .btn-book {
+        background-color: #d87384;
+        color: white;
+    }
+    .btn-book:hover {
+        background-color: #c05c6f;
+        transform: scale(1.03);
     }
     .btn-booked {
-        background-color: #fff;
+        background-color: #ffe5ec;
         color: #d87384;
-        padding: 10px 20px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: bold;
-        transition: background-color 0.3s;
         cursor: not-allowed;
     }
-    
     .btn-full {
-        background-color: #e74c3c;
-        color: white;
+        background-color: #f5c6cb;
+        color: #721c24;
         cursor: not-allowed;
-        padding: 10px 20px;
-        font-weight: bold;
-        border-radius: 8px;  
-        transition: background-color 0.3s;
     }
 
-    .btn-book:hover {
-        background-color: #f0f0f0;
-    }
     .success-message {
         background-color: #e6f4ea; /* Light green background */
         color: #2e7d32; /* Dark green text */
@@ -485,6 +444,10 @@
 </style>
 
 <script>
+    function toggleDetails(headerElement) {
+        const content = headerElement.nextElementSibling;
+        content.classList.toggle('open');
+    }
     function toggleDetails(header) {
         const details = header.nextElementSibling;
         const allDetails = document.querySelectorAll('.schedule-details-content');
