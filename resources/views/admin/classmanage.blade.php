@@ -197,23 +197,43 @@
 
         .success-message {
             display: flex;
-            justify-content: center;
+            justify-content: center; /* Centers the text inside the message */
             align-items: center;
-            background-color: #e6f4ea; /* Light green background */
-            color: #2e7d32; /* Dark green text */
-            padding: 8px 12px;
+            padding: 10px 15px;
             border-radius: 8px;
-            border-left: 4px solid #4caf50; /* Green border for emphasis */
-            margin-bottom: 10px;
-            font-size: 0.9rem;
+            margin: 10px auto 20px; /* Centers the box horizontally and adds spacing */
+            font-weight: bold;
+            width: fit-content; /* Keeps the width based on content */
+            animation: fadeIn 0.5s ease-in-out;
+            position: relative;
             opacity: 1;
-            transition: opacity 1s ease;
-            max-width: 300px;
-            text-align: center;
-            margin: 20px auto; 
+            transition: opacity 1s ease-in-out;
+            max-width: 100%; /* Prevents overflow on small screens */
         }
+
+        .success-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .success-message.danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-5px); }
+        }
+
         .success-message.fade-out {
-            opacity: 0;
+            animation: fadeOut 0.5s ease-in-out forwards;
         }
         #backdrop {
         position: fixed;
@@ -474,11 +494,11 @@
 <div id="class" class="tab-content">
     <div class="container">
         <h2>Class Management</h2>
-
-        @if(session('success'))
-            <div class="success-message">{{ session('success') }}</div>
+        @if (session('success'))
+            <div class="success-message {{ session('message_type') === 'danger' ? 'danger' : 'success' }}">
+                {{ session('success') }}
+            </div>
         @endif
-
         @if($editClass)
         <!-- Edit Class Modal -->
         <div id="editClassModal" class="modal" style="display: block;">
@@ -1005,17 +1025,7 @@
         });
     });
 });
-    document.addEventListener('DOMContentLoaded', function () {
-    const successMessage = document.querySelector('.success-message');
-    if (successMessage) {
-        setTimeout(() => {
-            successMessage.classList.add('fade-out');
-            setTimeout(() => {
-                successMessage.remove();
-            }, 1000);
-        }, 3000);
-    }
-});
+
 </script>
 <script>
     let targetFormId = null;
@@ -1033,6 +1043,17 @@
             document.getElementById(targetFormId).submit();
         }
     });
+    document.addEventListener('DOMContentLoaded', function () {
+    const successMessage = document.querySelector('.success-message');
+    if (successMessage) {
+        setTimeout(() => {
+            successMessage.classList.add('fade-out');
+            setTimeout(() => {
+                successMessage.remove();
+            }, 1000);
+        }, 3000);
+    }
+});
 </script>
 
 </body>

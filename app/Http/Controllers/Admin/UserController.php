@@ -101,17 +101,20 @@ class UserController extends Controller
             'end_time' => 'required',
         ]);
 
-        $fitnessClass = FitnessClass::findOrFail($id);
-        $fitnessClass->update($request->all());
-        return redirect()->route('admin.classmanage')->with('success', 'Fitness Class updated successfully');
-    }
+    $fitnessClass = FitnessClass::findOrFail($id);
+    $fitnessClass->update($request->all());
+    return redirect()->route('admin.classmanage')
+        ->with('success', 'Fitness Class updated successfully')
+        ->with('message_type', 'success');    }
 
     public function destroyFitnessClass($id)
     {
-        $fitnessClass = FitnessClass::findOrFail($id);
-        $fitnessClass->delete();
-        return redirect()->route('admin.classmanage')->with('success', 'Fitness Class deleted successfully');
-    }
+    $fitnessClass = FitnessClass::findOrFail($id);
+    $fitnessClass->delete();
+    return redirect()->route('admin.classmanage')
+        ->with('success', 'Fitness Class deleted successfully')
+        ->with('message_type', 'danger');
+        }
 
     // CRUD for Schedule
     public function storeSchedule(Request $request)

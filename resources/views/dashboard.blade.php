@@ -456,6 +456,9 @@
         font-weight: bold;
         width: fit-content;
         animation: fadeIn 0.5s ease-in-out;
+        position: relative;
+        opacity: 1;
+        transition: opacity 1s ease-in-out;
     }
 
     .success-message.success {
@@ -645,7 +648,19 @@
         form.setAttribute('action', action);
     }
 </script>
-
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const successMessage = document.querySelector('.success-message');
+    if (successMessage) {
+        setTimeout(() => {
+            successMessage.classList.add('fade-out');
+            setTimeout(() => {
+                successMessage.remove();
+            }, 1000);
+        }, 3000);
+    }
+});
+</script>
 <script>
     function toggleDetails(headerElement) {
         const content = headerElement.nextElementSibling;
@@ -679,18 +694,7 @@
             }, 3000); // re-enable after 3 seconds if needed
         }
     }
-
     document.addEventListener('DOMContentLoaded', function () {
-        const successMessage = document.querySelector('.success-message');
-        if (successMessage) {
-            setTimeout(() => {
-                successMessage.classList.add('fade-out');
-                setTimeout(() => {
-                    successMessage.remove();
-                }, 1000);
-            }, 5000);
-        }
-
         let currentPage = 1;
         const perPage = 10;
 
