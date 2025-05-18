@@ -56,9 +56,15 @@
                                         <form action="{{ route('bookclass.destroy', $schedule->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#deleteModal" data-schedule-id="{{ $schedule->id }}" title="Delete">
+                                            <button type="button"
+                                                    class="delete-btn"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal"
+                                                    data-action="{{ route('bookclass.destroy', $schedule->id) }}"
+                                                    title="Delete">
                                                 <i class="fa-regular fa-trash-can" style="color: #b00020; font-size: 18px;"></i>
                                             </button>
+
                                         </form>
                                     </div>
                                 </div>
@@ -700,5 +706,18 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var deleteModal = document.getElementById('deleteModal');
+        var deleteForm = document.getElementById('deleteForm');
+
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var action = button.getAttribute('data-action');
+            deleteForm.setAttribute('action', action);
+        });
+    });
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 @endsection
