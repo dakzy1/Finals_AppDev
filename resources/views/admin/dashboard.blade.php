@@ -544,6 +544,10 @@
             align-items: center;
             min-height: calc(100% - 1rem);
         }
+        #confirmStatusBtn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
 </style>
   
 
@@ -736,7 +740,7 @@
                 Are you sure you want to <span id="statusAction">deactivate</span> this user?
             </div>
             <div class="modal-footer">
-                <button type="button" id="confirmStatusBtn" class="btn btn-danger">Yes, <span id="statusButtonText">Deactivate</span></button>
+                <button type="button" id="confirmStatusBtn" class="btn btn-danger" onclick="disableThis(this); document.getElementById(targetStatusFormId).submit();">Yes, <span id="statusButtonText">Deactivate</span></button>
                 <button type="button" class="btn btn-secondary" onclick="closeConfirmStatusModal()">Cancel</button>
             </div>
         </div>
@@ -748,11 +752,11 @@
     $(document).ready(function () {
         $('#userTable').DataTable();
     });
+
     function closeModal() {
         const modals = document.querySelectorAll('.modal');
         modals.forEach(modal => modal.style.display = "none");
         // Optional: Redirect only for edit modal
-       
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -765,19 +769,39 @@
             });
         });
     });
-        document.addEventListener('DOMContentLoaded', function () {
-    const successMessage = document.querySelector('.success-message');
-    if (successMessage) {
-        setTimeout(() => {
-            successMessage.classList.add('fade-out');
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const successMessage = document.querySelector('.success-message');
+        if (successMessage) {
             setTimeout(() => {
-                successMessage.remove();
-            }, 1000);
-        }, 3000);
-    }
-});
+                successMessage.classList.add('fade-out');
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 1000);
+            }, 5000); // Updated to 5000ms to match other pages
+        }
+    });
+
     // Confirmation modal for status change
     let targetStatusFormId = null;
+
+    function disableThis(button) {
+        if (button.tagName === 'A') {
+            // For anchor tags: disable and navigate
+            button.classList.add('disabled');
+            button.style.pointerEvents = 'none';
+            button.style.opacity = '0.6';
+        } else {
+            // For buttons: check if it's the confirm button in the modal
+            if (button.id === 'confirmStatusBtn') {
+                button.disabled = true;
+                button.textContent = 'Processing...'; // Update text for feedback
+            } else {
+                // For other buttons: disable immediately
+                button.disabled = true;
+            }
+        }
+    }
 
     function setStatusAction(button) {
         targetStatusFormId = button.getAttribute('data-form-id');
@@ -785,15 +809,19 @@
         const confirmStatusModal = document.getElementById('confirmStatusModal');
         const statusActionSpan = document.getElementById('statusAction');
         const statusButtonTextSpan = document.getElementById('statusButtonText');
+        const confirmStatusBtn = document.getElementById('confirmStatusBtn');
 
+        // Reset the confirm button state
+        confirmStatusBtn.disabled = false;
+        confirmStatusBtn.textContent = `Yes, ${action.charAt(0).toUpperCase() + action.slice(1)}`;
         statusActionSpan.textContent = action;
         statusButtonTextSpan.textContent = action.charAt(0).toUpperCase() + action.slice(1);
         confirmStatusModal.style.display = 'block';
 
-        // Add event listener to the confirm button
-        const confirmStatusBtn = document.getElementById('confirmStatusBtn');
+        // Add event listener to the confirm button with one-click disable
         confirmStatusBtn.onclick = function() {
             if (targetStatusFormId) {
+                disableThis(this);
                 document.getElementById(targetStatusFormId).submit();
             }
         };
