@@ -926,6 +926,9 @@
                 transform: translateY(0);
             }
         }
+        .icon-spacing {
+            margin-right: 8px; 
+        }
 
 
     </style>
@@ -940,9 +943,9 @@
                     <img src="images/LogoMaster.png" alt="Logo" class="logo-img" />
                 </div>
                 <div class="nav-buttons">
-                    <a href="#home" class="nav-btn">Home</a>
-                    <a href="#about" class="nav-btn">About</a>
-                    <a href="#" class="nav-btn" id="login-btn">Login</a>
+                    <a href="#home" class="nav-btn"><i class="fas fa-home icon-spacing"></i>Home</a>
+                    <a href="#about" class="nav-btn"><i class="fas fa-info-circle icon-spacing"></i>About</a>
+                    <a href="#" class="nav-btn" id="login-btn"><i class="fas fa-sign-in-alt icon-spacing"></i>Login</a>
                 </div>
                 <div class="nav-buttons">
                     <a href="#" class="nav-btn" data-bs-toggle="modal" data-bs-target="#adminLoginModal"><i class="fa-solid fa-user-tie"></i></a>
