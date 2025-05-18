@@ -116,6 +116,12 @@
                     @endforeach
                 @endif
             </div>
+                        <!-- Pagination Controls -->
+            <div class="pagination-controls">
+                <button id="prev-page" disabled>Previous</button>
+                <span id="page-info">Page 1 of 1</span>
+                <button id="next-page">Next</button>
+            </div>
         </section>
     </div>
 </div>
@@ -436,6 +442,32 @@
         border-radius: 5px;
         border: 1px solid #ccc;
     }
+   .pagination-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .pagination-controls button {
+        padding: 8px 16px;
+        margin: 0 10px;
+        background-color: #d87384;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .pagination-controls button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+    .pagination-controls span {
+        font-size: 1rem;
+        color: #333;
+    }
 
     @media (max-width: 768px) {
         .main-content {
@@ -482,7 +514,8 @@
         // Toggle the clicked details
         details.classList.toggle('open');
     }
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
+    // Handle success message fade-out (if present)
     const successMessage = document.querySelector('.success-message');
     if (successMessage) {
         setTimeout(() => {
@@ -492,15 +525,90 @@
             }, 1000);
         }, 5000);
     }
-});
-    document.getElementById('classFilter').addEventListener('change', function () {
-        const selected = this.value.toLowerCase();
-        const cards = document.querySelectorAll('.class-card');
 
-        cards.forEach(card => {
+    let currentPage = 1;
+    const perPage = 10;
+
+    function applyPagination() {
+        const selectedFilter = document.getElementById('classFilter').value.toLowerCase();
+        const allCards = document.querySelectorAll('.class-card');
+        const filteredCards = Array.from(allCards).filter(card => {
             const name = card.querySelector('.class-name').textContent.toLowerCase();
-            card.style.display = (selected === 'all' || name.includes(selected)) ? '' : 'none';
+            return selectedFilter === 'all' || name.includes(selectedFilter);
         });
+
+        const totalFiltered = filteredCards.length;
+        const totalPages = Math.ceil(totalFiltered / perPage);
+
+        // Handle case with no matching cards
+        if (totalPages === 0) {
+            document.getElementById('page-info').textContent = 'Page 0 of 0';
+            document.getElementById('prev-page').disabled = true;
+            document.getElementById('next-page').disabled = true;
+            allCards.forEach(card => card.style.display = 'none');
+            return;
+        }
+
+        // Adjust currentPage if it exceeds totalPages
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+
+        // Update pagination controls
+        document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
+        document.getElementById('prev-page').disabled = currentPage === 1;
+        document.getElementById('next-page').disabled = currentPage === totalPages;
+
+        // Calculate which cards to show
+        const start = (currentPage - 1) * perPage;
+        const end = start + perPage;
+
+        // Show/hide cards based on filter and page
+        allCards.forEach(card => {
+            if (filteredCards.includes(card)) {
+                const index = filteredCards.indexOf(card);
+                if (index >= start && index < end) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Filter change resets to page 1 and updates display
+    document.getElementById('classFilter').addEventListener('change', function () {
+        currentPage = 1;
+        applyPagination();
     });
+
+    // Previous button
+    document.getElementById('prev-page').addEventListener('click', function () {
+        if (currentPage > 1) {
+            currentPage--;
+            applyPagination();
+        }
+    });
+
+    // Next button
+    document.getElementById('next-page').addEventListener('click', function () {
+        const selectedFilter = document.getElementById('classFilter').value.toLowerCase();
+        const allCards = document.querySelectorAll('.class-card');
+        const filteredCards = Array.from(allCards).filter(card => {
+            const name = card.querySelector('.class-name').textContent.toLowerCase();
+            return selectedFilter === 'all' || name.includes(selectedFilter);
+        });
+        const totalPages = Math.ceil(filteredCards.length / perPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            applyPagination();
+        }
+    });
+
+    // Apply pagination on initial load
+    applyPagination();
+});
 </script>
 @endsection
