@@ -219,8 +219,13 @@
 
                     <div class="profile-actions">
                         <button type="submit" class="btn-save">Save</button>
-                        <a href="{{ route('profile.destroy') }}" class="btn-delete"
-                        onclick="return confirm('Are you sure you want to delete your account?');">Delete Account</a>
+                        <form action="{{ route('profile.destroy') }}" method="POST"
+                            onsubmit="return confirm('Are you sure you want to delete your account?');"
+                            style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-delete">Delete Account</button>
+                        </form>
                     </div>
                 </form>
                 <button onclick="closeProfile()" class="btn-close">&times;</button>

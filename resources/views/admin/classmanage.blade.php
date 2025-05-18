@@ -15,6 +15,7 @@
             margin: 0;
             padding: 0;
             background-color: #f5eaf3;
+            overflow: hidden;
         }
 
         .container {
@@ -549,6 +550,7 @@
                     <div class="form-group">
                         <label for="time">Select Instructor Available Time:</label>
                             <select id="time" name="time" required style="margin-right: 5px; width: 120px;">
+                                <option value="" selected disabled {{ old('time') ? '' : 'selected' }}>Select time</option>
                                 <option value="06:00:00" {{ old('time') == '06:00:00' ? 'selected' : '' }}>06:00 AM</option>
                                 <option value="07:00:00" {{ old('time') == '07:00:00' ? 'selected' : '' }}>07:00 AM</option>
                                 <option value="08:00:00" {{ old('time') == '08:00:00' ? 'selected' : '' }}>08:00 AM</option>
@@ -568,6 +570,7 @@
                     </div>
                     <div class="form-group">
                             <select id="end_time" name="end_time" required style="margin-right: 5px; width: 120px;">
+                                <option value="" selected disabled {{ old('end_time') ? '' : 'selected' }}>Select time</option>
                                 <option value="06:00:00" {{ old('end_time') == '06:00:00' ? 'selected' : '' }}>06:00 AM</option>
                                 <option value="07:00:00" {{ old('end_time') == '07:00:00' ? 'selected' : '' }}>07:00 AM</option>
                                 <option value="08:00:00" {{ old('end_time') == '08:00:00' ? 'selected' : '' }}>08:00 AM</option>
@@ -675,7 +678,7 @@
                         </div>
                         <div class="form-group">
                             <select id="end_time" name="end_time" required style="margin-right: 5px; width: 120px;">
-                                <option value="" selected disabled {{ old('time') ? '' : 'selected' }}>Select time</option>
+                                <option value="" selected disabled {{ old('end_time') ? '' : 'selected' }}>Select time</option>
                                 <option value="06:00:00" {{ old('end_time') == '06:00:00' ? 'selected' : '' }}>06:00 AM</option>
                                 <option value="07:00:00" {{ old('end_time') == '07:00:00' ? 'selected' : '' }}>07:00 AM</option>
                                 <option value="08:00:00" {{ old('end_time') == '08:00:00' ? 'selected' : '' }}>08:00 AM</option>
@@ -813,7 +816,6 @@
     const startSelect = document.getElementById("time");
     const endSelect = document.getElementById("end_time");
 
-    
     function validateTimeSelection() {
         const startTime = startSelect.value;
         const endTime = endSelect.value;
@@ -823,23 +825,26 @@
         const startHour = parseInt(startTime.split(':')[0]);
         const endHour = parseInt(endTime.split(':')[0]);
 
-        // Start must be between 6 and 11 (6 AM to 11 AM)
-        if (startHour < 6 || startHour > 11) {
-            alert("Start time must be between 6:00 AM and 11:00 AM.");
+        const isValidStart =
+            (startHour >= 6 && startHour <= 11) || (startHour >= 13 && startHour <= 18);
+        const isValidEnd =
+            (endHour >= 6 && endHour <= 11) || (endHour >= 13 && endHour <= 18);
+
+        if (!isValidStart) {
+            alert("Start time must be between 6:00 AM–11:00 AM or 1:00 PM–6:00 PM.");
             startSelect.value = "";
             return;
         }
 
-        // End must be between 13 and 18 (1 PM to 6 PM), skip 12
-        if (endHour < 13 || endHour > 18) {
-            alert("End time must be between 1:00 PM and 6:00 PM .");
+        if (!isValidEnd) {
+            alert("End time must be between 6:00 AM–11:00 AM or 1:00 PM–6:00 PM.");
             endSelect.value = "";
             return;
         }
 
-        // Ensure start is before end
+        // Ensure start is before end (on a 24-hour scale)
         if (startHour >= endHour) {
-            alert("End time must be later than start time.");
+            alert("Overtime Work is not Allowed!.");
             endSelect.value = "";
         }
     }
