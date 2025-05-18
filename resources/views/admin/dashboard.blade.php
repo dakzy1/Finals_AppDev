@@ -424,8 +424,8 @@
         }
 
         .form-group label[for="male"],
-        .form-group label[for="female"],
-        .form-group label[for="other"] {
+        .form-group label[for="female"]
+        {
             margin-right: 15px;
             font-weight: normal;
             vertical-align: middle;
@@ -578,11 +578,6 @@
                         <div style="display: inline-block;">
                             <input type="radio" id="female" name="gender" value="female" {{ $editUser->gender == 'female' ? 'checked' : '' }}>
                             <label for="female">Female</label>
-                        </div>
-
-                        <div style="display: inline-block;">
-                            <input type="radio" id="other" name="gender" value="other" {{ $editUser->gender == 'other' ? 'checked' : '' }}>
-                            <label for="other">Other</label>
                         </div>
                     </div>
 

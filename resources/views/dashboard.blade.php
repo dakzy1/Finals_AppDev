@@ -72,7 +72,7 @@
         <!-- Classes Section -->
         <section class="class-details">
             <h2>Classes</h2>
-            <label for="classFilter"><strong>Filter by Class:</strong></label>
+            <label for="classFilter"><strong class="filter-label">Filter by Class:</strong></label>
             <select id="classFilter">
                 <option value="all">All Classes</option>
                 @foreach($classes->unique('name') as $class)
@@ -181,6 +181,17 @@
         background-color: #fff;
         border-left: 6px solid #d87384;
     }
+    .upcoming-schedule-box h3 {
+        font-size: 1.2rem;
+        margin: 0;
+        color: #7a3558;
+        margin: 10px 0 10px 0;
+
+    }
+    .upcoming-schedule-box small {
+        font-size: 0.9rem;
+        color: #7a3558;
+    }
 
     .calendar-icon {
         font-size: 30px;
@@ -287,12 +298,13 @@
     .view-mode {
         padding: 0;
         margin: 0;
-        line-height: 1;
+        line-height: 1.5;
     }
     .view-mode p {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         margin: 0;
         padding: 0;
+        color: #7a3558;
     }
 
     .delete-btn {
@@ -334,7 +346,11 @@
         border-radius: 5px;
         border: 1px solid #ccc;
         max-width: 100px;
+        color: #7a3558;
+    }
 
+    .filter-label {
+        color: #7a3558;
     }
 
     .class-cards {
@@ -365,6 +381,8 @@
     .class-info p {
         font-size: 0.9rem;
         margin: 3px 0;
+        color: #7a3558;
+
     }
     .btn-book,
     .btn-booked,
