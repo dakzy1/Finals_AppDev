@@ -369,11 +369,7 @@
         max-width: 100px;
         color: #7a3558;
     }
-        color: #7a3558;
-    }
 
-    .filter-label {
-        color: #7a3558;
     .filter-label {
         color: #7a3558;
     }
