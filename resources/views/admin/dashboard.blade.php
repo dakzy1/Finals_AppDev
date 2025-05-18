@@ -451,6 +451,99 @@
             opacity: 0;
         }
 
+        /* Modal Header */
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            background-color: #f8f9fa;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .modal-header .modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+        }
+
+        .modal-header .close-btn {
+            font-size: 24px;
+            color: #aaa;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .modal-header .close-btn:hover {
+            color: #333;
+        }
+
+        /* Modal Body */
+        .modal-body {
+            padding: 20px;
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Modal Footer */
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 15px 20px;
+            border-top: 1px solid #ddd;
+            background-color: #f8f9fa;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .modal-footer .btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-footer .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .modal-footer .btn-danger:hover {
+            background-color: #b02a37;
+        }
+
+        .modal-footer .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .modal-footer .btn-secondary:hover {
+            background-color: #565e64;
+        }
+
+        /* Ensure modal dialog is centered and sized appropriately */
+        .modal-dialog {
+            max-width: 400px;
+            margin: 10% auto;
+        }
+
+        .modal-dialog-centered {
+            display: flex;
+            align-items: center;
+            min-height: calc(100% - 1rem);
+        }
 </style>
   
 
@@ -596,8 +689,6 @@
         </div>
         @endisset
 
-
-
         <table id="userTable" class="display">
             <thead>
                 <tr>
@@ -619,20 +710,36 @@
                     <td>{{ Str::limit($user->email, 20, '...') }}</td>
                     <td>
                         <a href="{{ route('admin.dashboard', ['edit' => $user->id]) }}" class="btn-edit">Edit</a>
-                        
-                        <form action="{{ route('admin.toggleStatus', $user->id) }}" method="POST" style="display:inline;">
+                        <form id="status-form-{{ $user->id }}" action="{{ route('admin.toggleStatus', $user->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('PUT')
-                            <button type="submit" class="btn-delete">
+                            <button type="button" class="btn-delete" data-action="{{ $user->status === 'active' ? 'deactivate' : 'activate' }}" data-form-id="status-form-{{ $user->id }}" onclick="setStatusAction(this)">
                                 {{ $user->status === 'active' ? 'Deactivate' : 'Activate' }}
                             </button>
                         </form>
                     </td>
                 </tr>
-
                 @endforeach
             </tbody>
         </table>
+    </div>
+</div>
+<!-- Confirmation Modal for Deactivate/Activate -->
+<div class="modal fade" id="confirmStatusModal" tabindex="-1" aria-labelledby="confirmStatusLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmStatusLabel">Confirm Status Change</h5>
+                <button type="button" class="close-btn" onclick="closeConfirmStatusModal()">×</button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to <span id="statusAction">deactivate</span> this user?
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="confirmStatusBtn" class="btn btn-danger">Yes, <span id="statusButtonText">Deactivate</span></button>
+                <button type="button" class="btn btn-secondary" onclick="closeConfirmStatusModal()">Cancel</button>
+            </div>
+        </div>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -669,6 +776,33 @@
         }, 3000);
     }
 });
+    // Confirmation modal for status change
+    let targetStatusFormId = null;
+
+    function setStatusAction(button) {
+        targetStatusFormId = button.getAttribute('data-form-id');
+        const action = button.getAttribute('data-action');
+        const confirmStatusModal = document.getElementById('confirmStatusModal');
+        const statusActionSpan = document.getElementById('statusAction');
+        const statusButtonTextSpan = document.getElementById('statusButtonText');
+
+        statusActionSpan.textContent = action;
+        statusButtonTextSpan.textContent = action.charAt(0).toUpperCase() + action.slice(1);
+        confirmStatusModal.style.display = 'block';
+
+        // Add event listener to the confirm button
+        const confirmStatusBtn = document.getElementById('confirmStatusBtn');
+        confirmStatusBtn.onclick = function() {
+            if (targetStatusFormId) {
+                document.getElementById(targetStatusFormId).submit();
+            }
+        };
+    }
+
+    function closeConfirmStatusModal() {
+        const confirmStatusModal = document.getElementById('confirmStatusModal');
+        confirmStatusModal.style.display = 'none';
+    }
 </script>
 </body>
 </html>
