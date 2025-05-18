@@ -355,7 +355,7 @@
         .modal {
             display: none;
             position: fixed;
-            z-index: 1050;
+            z-index: 1050; /* Bootstrap default */
             left: 0;
             top: 0;
             width: 100%;
@@ -363,7 +363,9 @@
             overflow: auto;
             background-color: rgba(0,0,0,0.5);
         }
-
+        .modal-backdrop {
+            z-index: 1040;
+        }
         .modal-content {
             background-color: #fff;
             margin: 10% auto;
@@ -492,7 +494,7 @@
                     </div>
                 @endif
 
-                <form id="editClassForm" method="POST" action="{{ route('class.update', $editClass->id) }}" onsubmit="return confirm('Are you sure you want to update this class?')">
+                <form id="editClassForm" method="POST" action="{{ route('class.update', $editClass->id) }}">
                     @csrf
                     @method('PUT')
 
@@ -742,11 +744,15 @@
                     <td>
                         <div class="btn-group">
                             <a href="{{ route('admin.classmanage', ['edit_class' => $class->id]) }}" class="btn-edit">Edit</a>
-                            <form action="{{ route('class.destroy', $class->id) }}" method="POST">
+                            <form id="delete-form-{{ $class->id }}" action="{{ route('class.destroy', $class->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn-delete" onclick="return confirm('Delete this class?')">Delete</button>
+                                <!-- Delete Button -->
+                                <button type="button" class="btn-delete" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" data-form-id="delete-form-{{ $class->id }}">
+                                    Delete
+                                </button>
                             </form>
+
                         </div>
                     </td>
                 </tr>
@@ -758,8 +764,44 @@
         <button class="toggle-form-btn" onclick="toggleAddClassForm()">Add Class</button>
         @endif
     </div>
-    
 </div>
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-labelledby="confirmUpdateModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmUpdateModalLabel">Confirm Update</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to update this class?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirmUpdateBtn">Yes, Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteConfirmLabel">Confirm Deletion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this class?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
@@ -805,6 +847,21 @@
     startSelect.addEventListener("change", validateTimeSelection);
     endSelect.addEventListener("change", validateTimeSelection);
 });
+</script>
+<script>
+    const editForm = document.getElementById('editClassForm');
+    const confirmModal = new bootstrap.Modal(document.getElementById('confirmUpdateModal'));
+    const confirmBtn = document.getElementById('confirmUpdateBtn');
+
+    editForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+        confirmModal.show(); // Show Bootstrap modal
+    });
+
+    confirmBtn.addEventListener('click', function() {
+        confirmModal.hide();
+        editForm.submit(); // Submit the form after confirmation
+    });
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -954,5 +1011,23 @@
     }
 });
 </script>
+<script>
+    let targetFormId = null;
+
+    const deleteModal = document.getElementById('deleteConfirmModal');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        targetFormId = button.getAttribute('data-form-id');
+    });
+
+    confirmDeleteBtn.addEventListener('click', function () {
+        if (targetFormId) {
+            document.getElementById(targetFormId).submit();
+        }
+    });
+</script>
+
 </body>
 </html>
