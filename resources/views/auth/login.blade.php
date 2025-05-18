@@ -374,6 +374,7 @@
         }
 
         .layer-1 {
+            position: relative;
             flex:1;
             width: 100%;
             background-image:url('images/bg-login.jpeg');
@@ -384,7 +385,23 @@
             align-items: center;     
             text-align: center;      
             height: 100vh;
-            min-height:100vh;  
+            min-height:100vh;
+            z-index: 0;
+            
+        }
+        .layer-1::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5); /* Adjust alpha to control darkness */
+            z-index: 1;
+        }
+
+        /* Make overlay content above the dark overlay */
+        .overlay {
+            position: relative;
+            z-index: 2;
+            color: white; /* Ensure text is visible */
         }
 
         .overlay h1 {
@@ -392,7 +409,8 @@
             font-style: italic;
             font-family: "Fugaz One", sans-serif;
             text-transform: uppercase;
-            background: linear-gradient(90deg,rgb(238, 231, 232),rgb(255, 255, 255));
+            background: linear-gradient(90deg, rgb(238, 231, 232), rgb(255, 255, 255));
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: 3px;
