@@ -56,14 +56,15 @@
                                         <form action="{{ route('bookclass.destroy', $schedule->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button"
-                                                    class="delete-btn"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal"
-                                                    data-action="{{ route('bookclass.destroy', $schedule->id) }}"
-                                                    title="Delete">
-                                                <i class="fa-regular fa-trash-can" style="color: #b00020; font-size: 18px;"></i>
-                                            </button>
+                                        <button type="button"
+                                            class="delete-btn"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal"
+                                            data-action="{{ route('bookclass.destroy', $schedule->id) }}"
+                                            onclick="setDeleteAction(this)"
+                                            title="Delete">
+                                            <i class="fa-regular fa-trash-can" style="color: #b00020; font-size: 18px;"></i>
+                                        </button>
 
                                         </form>
                                     </div>
@@ -116,7 +117,7 @@
                             @elseif ($isBooked)
                                 <button class="btn-booked" disabled>Already Booked</button>
                             @else
-                                <a href="{{ route('viewclass', $class->id) }}" class="btn-book">View</a>
+                                <a href="{{ route('viewclass', $class->id) }}" class="btn-book" onclick="disableThis(this)">View</a>
                             @endif
                         </div>
                     @endforeach
@@ -124,9 +125,9 @@
             </div>
             <!-- Pagination Controls -->
             <div class="pagination-controls">
-                <button id="prev-page" disabled>Previous</button>
+                <button id="prev-page" disabled onclick="disableThis(this)">Previous</button>
                 <span id="page-info">Page 1 of 1</span>
-                <button id="next-page">Next</button>
+                <button id="next-page" onclick="disableThis(this)">Next</button>
             </div>
         </section>
     </div>
@@ -141,14 +142,14 @@
                 @method('DELETE')
                 <div class="modal-header">
                     <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="disableThis(this)"></button>
                 </div>
                 <div class="modal-body">
                     Are you sure you want to delete this schedule?
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-delete">Yes, Delete</button>
-                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-delete" onclick="disableThis(this)">Yes, Delete</button>
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal" onclick="disableThis(this)">Cancel</button>
                 </div>
             </form>
         </div>
@@ -216,7 +217,6 @@
         margin: 0;
         color: #7a3558;
         margin: 10px 0 10px 0;
-
     }
     .upcoming-schedule-box small {
         font-size: 0.9rem;
@@ -323,14 +323,11 @@
         padding: 0;
         margin: 0;
         line-height: 1.5;
-        line-height: 1.5;
     }
     .view-mode p {
         font-size: 0.9rem;
-        font-size: 0.9rem;
         margin: 0;
         padding: 0;
-        color: #7a3558;
         color: #7a3558;
     }
 
@@ -347,6 +344,11 @@
     .delete-btn:hover i {
         transform: scale(1.2);
         color: darkred;
+    }
+
+    .delete-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
     }
 
     .class-details {
@@ -409,7 +411,6 @@
         font-size: 0.9rem;
         margin: 3px 0;
         color: #7a3558;
-
     }
     .btn-book,
     .btn-booked,
@@ -429,6 +430,10 @@
     .btn-book:hover {
         background-color: #c05c6f;
         transform: scale(1.03);
+    }
+    .btn-book.disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
     }
     .btn-booked {
         background-color: #ffe5ec;
@@ -596,19 +601,60 @@
         transition: background-color 0.2s ease-in-out;
     }
 
-    .btn-cancel:hover {
+    .btn-cancel:disabled,
+    .btn-delete:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .btn-cancel:hover:not(:disabled) {
         background-color: #5a6268;
     }
 
-    .btn-delete:hover {
+    .btn-delete:hover:not(:disabled) {
         background-color: #c82333;
     }
 </style>
+<script>
+    function setDeleteAction(button) {
+        const form = document.getElementById('deleteForm');
+        const action = button.getAttribute('data-action');
+        form.setAttribute('action', action);
+    }
+</script>
 
 <script>
     function toggleDetails(headerElement) {
         const content = headerElement.nextElementSibling;
         content.classList.toggle('open');
+    }
+
+    // Modified disableThis function
+    function disableThis(button) {
+        if (button.tagName === 'A') {
+            // For anchor tags: disable and navigate
+            button.classList.add('disabled');
+            button.style.pointerEvents = 'none';
+            button.style.opacity = '0.6';
+        } else {
+            // For buttons: check if it's the delete button in the modal
+            if (button.classList.contains('btn-delete')) {
+                // Delay disabling to allow form submission
+                setTimeout(() => {
+                    button.disabled = true;
+                }, 100); // Small delay to allow form submission
+            } else {
+                // For other buttons, disable immediately
+                button.disabled = true;
+            }
+        }
+
+        // For buttons opening modals, restore them after a while (if not overridden by modal close)
+        if (button.getAttribute('data-bs-toggle') === 'modal') {
+            setTimeout(() => {
+                button.disabled = false;
+            }, 3000); // re-enable after 3 seconds if needed
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -704,20 +750,35 @@
             const form = deleteModal.querySelector('#deleteForm');
             form.action = `/bookclass/${scheduleId}`;
         });
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var deleteModal = document.getElementById('deleteModal');
-        var deleteForm = document.getElementById('deleteForm');
 
-        deleteModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget;
-            var action = button.getAttribute('data-action');
-            deleteForm.setAttribute('action', action);
+        // Re-enable modal buttons when the modal closes
+        deleteModal.addEventListener('hidden.bs.modal', function () {
+            document.querySelectorAll('.delete-btn, .btn-delete, .btn-cancel, .btn-close').forEach(button => {
+                button.disabled = false;
+            });
         });
+    });
+
+    const deleteModal = document.getElementById('deleteModal');
+    const deleteForm = document.getElementById('deleteForm');
+
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const action = button.getAttribute('data-action');
+
+        if (action) {
+            deleteForm.setAttribute('action', action);
+        }
+    });
+
+    // Optional: disable button to prevent multiple submissions
+    deleteForm.addEventListener('submit', function () {
+        const submitBtn = deleteForm.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Deleting...';
     });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 @endsection
