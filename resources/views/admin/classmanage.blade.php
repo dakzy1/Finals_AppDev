@@ -772,11 +772,10 @@
                                 @csrf
                                 @method('DELETE')
                                 <!-- Delete Button -->
-                                <button type="button" class="btn-delete" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" data-form-id="delete-form-{{ $class->id }}">
+                                <button type="button" class="btn-delete" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" data-form-id="delete-form-{{ $class->id }}" onclick="setDeleteAction(this)">
                                     Delete
                                 </button>
                             </form>
-
                         </div>
                     </td>
                 </tr>
@@ -807,24 +806,26 @@
     </div>
   </div>
 </div>
+
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteConfirmLabel">Confirm Deletion</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this class?
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Yes, Delete</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-      </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this class?
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="confirmDeleteBtn" class="btn btn-danger" onclick="disableThis(this); document.getElementById(targetFormId).submit();">Yes, Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -1025,36 +1026,70 @@
         });
     });
 });
-
 </script>
 <script>
-    let targetFormId = null;
+    // Function to disable the submit button
+let targetFormId = null;
 
     const deleteModal = document.getElementById('deleteConfirmModal');
-    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+    // Function to disable buttons (adapted from dashboard.blade.php)
+    function disableThis(button) {
+        if (button.tagName === 'A') {
+            // For anchor tags: disable and navigate
+            button.classList.add('disabled');
+            button.style.pointerEvents = 'none';
+            button.style.opacity = '0.6';
+        } else {
+            // For buttons: check if it's the confirm delete button in the modal
+            if (button.id === 'confirmDeleteBtn') {
+                button.disabled = true;
+                button.textContent = 'Deleting...'; // Optional: Update text for feedback
+            } else if (button.classList.contains('btn-delete')) {
+                // For delete buttons opening the modal: delay disabling to allow modal to open
+                setTimeout(() => {
+                    button.disabled = true;
+                }, 100);
+            } else {
+                // For other buttons: disable immediately
+                button.disabled = true;
+            }
+        }
+
+        // For buttons opening modals, restore them after a while
+        if (button.getAttribute('data-bs-toggle') === 'modal') {
+            setTimeout(() => {
+                button.disabled = false;
+            }, 3000); // Re-enable after 3 seconds if needed
+        }
+    }
+
+    // Function to set the form ID and disable the delete button
+    function setDeleteAction(button) {
+        targetFormId = button.getAttribute('data-form-id');
+        disableThis(button); // Disable the delete button after click
+    }
 
     deleteModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
         targetFormId = button.getAttribute('data-form-id');
+        // Reset the confirm button state when the modal opens
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        confirmDeleteBtn.disabled = false;
+        confirmDeleteBtn.textContent = 'Yes, Delete';
     });
 
-    confirmDeleteBtn.addEventListener('click', function () {
-        if (targetFormId) {
-            document.getElementById(targetFormId).submit();
+    document.addEventListener('DOMContentLoaded', function () {
+        const successMessage = document.querySelector('.success-message');
+        if (successMessage) {
+            setTimeout(() => {
+                successMessage.classList.add('fade-out');
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 1000);
+            }, 3000);
         }
     });
-    document.addEventListener('DOMContentLoaded', function () {
-    const successMessage = document.querySelector('.success-message');
-    if (successMessage) {
-        setTimeout(() => {
-            successMessage.classList.add('fade-out');
-            setTimeout(() => {
-                successMessage.remove();
-            }, 1000);
-        }, 3000);
-    }
-});
 </script>
-
 </body>
 </html>

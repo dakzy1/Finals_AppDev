@@ -785,7 +785,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
-
+    // Delete confirmation modal
     const deleteModal = document.getElementById('deleteModal');
     const deleteForm = document.getElementById('deleteForm');
 
