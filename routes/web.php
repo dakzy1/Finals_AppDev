@@ -33,7 +33,7 @@ Route::get('/dashboard', [ClassPageController::class, 'upcomSchedule'])->name('d
 //Profile
 Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 
