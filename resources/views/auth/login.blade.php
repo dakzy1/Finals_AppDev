@@ -530,6 +530,7 @@
 
         .highlight {
             color: #8884ff;
+            font-style: italic;
         }
 
         .slider-wrapper {
