@@ -127,7 +127,7 @@
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
         flex-shrink: 0;
         margin-left: 23px;
-        margin-top: 230px;
+        margin-top: 10px;
 
     }
 

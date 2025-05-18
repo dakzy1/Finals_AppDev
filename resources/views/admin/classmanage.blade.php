@@ -15,7 +15,7 @@
             margin: 0;
             padding: 0;
             background-color: #f5eaf3;
-            overflow: hidden;
+            overflow: auto;
         }
 
         .container {
@@ -375,6 +375,7 @@
             width: 90%;
             max-width: 600px;
             position: relative;
+            overflow: hidden;
         }
 
         .close-btn {

@@ -9,7 +9,7 @@
             <div class="welcome-section">
                 <div class="welcome-card">
                     <div class="welcome-header">
-                        <h1>Welcome to FitZone{{ Auth::check() ? ', ' . Str::limit(Auth::user()->first_name, 10) : '' }} </h1>
+                        <h1>Welcome to FitZone{{ Auth::check() ? ', ' . Str::limit(Auth::user()->first_name, 10) : '' }}</h1>
                     </div>
                     <div class="schedule-box upcoming-schedule-box">
                         <div>
@@ -55,12 +55,19 @@
                                         <p><strong>Date:</strong> {{ \Carbon\Carbon::parse($schedule->date)->format('F j, Y') }}</p>
                                         <p><strong>Time:</strong> {{ \Carbon\Carbon::parse($schedule->time)->format('g:i A') }}</p>
                                         <p><strong>Trainer:</strong> {{ Str::limit($schedule->trainer, 20, '...') }}</p>
-                                        <form action="{{ route('bookclass.destroy', $schedule->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this schedule?')">
+
+                                        <form action="{{ route('bookclass.destroy', $schedule->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="delete-btn" title="Delete">
+                                            <button type="button"
+                                                    class="delete-btn"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal"
+                                                    data-action="{{ route('bookclass.destroy', $schedule->id) }}"
+                                                    title="Delete">
                                                 <i class="fa-regular fa-trash-can" style="color: #b00020; font-size: 18px;"></i>
                                             </button>
+
                                         </form>
                                     </div>
                                 </div>
@@ -74,7 +81,7 @@
         <!-- Classes Section -->
         <section class="class-details">
             <h2>Classes</h2>
-            <label for="classFilter"><strong>Filter by Class:</strong></label>
+            <label for="classFilter"><strong class="filter-label">Filter by Class:</strong></label>
             <select id="classFilter">
                 <option value="all">All Classes</option>
                 @foreach($classes->unique('name') as $class)
@@ -118,7 +125,6 @@
                     @endforeach
                 @endif
             </div>
-
             <!-- Pagination Controls -->
             <div class="pagination-controls">
                 <button id="prev-page" disabled>Previous</button>
@@ -126,6 +132,29 @@
                 <button id="next-page">Next</button>
             </div>
         </section>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="deleteForm" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this schedule?
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-delete">Yes, Delete</button>
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -159,6 +188,7 @@
     }
 
     .welcome-card {
+        max-width: 300px;
         background: linear-gradient(to right, #fdeff4, #f9c5d1);
         border-radius: 15px;
         padding: 20px;
@@ -183,6 +213,17 @@
         padding: 15px;
         background-color: #fff;
         border-left: 6px solid #d87384;
+    }
+    .upcoming-schedule-box h3 {
+        font-size: 1.2rem;
+        margin: 0;
+        color: #7a3558;
+        margin: 10px 0 10px 0;
+
+    }
+    .upcoming-schedule-box small {
+        font-size: 0.9rem;
+        color: #7a3558;
     }
 
     .calendar-icon {
@@ -285,13 +326,17 @@
     .view-mode {
         padding: 0;
         margin: 0;
-        line-height: 1;
+        line-height: 1.5;
+        line-height: 1.5;
     }
 
     .view-mode p {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
+        font-size: 0.9rem;
         margin: 0;
         padding: 0;
+        color: #7a3558;
+        color: #7a3558;
     }
 
     .delete-btn {
@@ -333,6 +378,11 @@
         border-radius: 5px;
         border: 1px solid #ccc;
         max-width: 100px;
+        color: #7a3558;
+    }
+
+    .filter-label {
+        color: #7a3558;
     }
 
     .class-cards {
@@ -365,6 +415,8 @@
     .class-info p {
         font-size: 0.9rem;
         margin: 3px 0;
+        color: #7a3558;
+
     }
 
     .btn-book,
@@ -416,7 +468,23 @@
     .success-message.fade-out {
         opacity: 0;
     }
+    #classFilter {
+        width: 100%;
+        margin-bottom: 15px;
+        padding: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
+    .pagination-controls button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+    .pagination-controls span {
+        font-size: 1rem;
+        color: #333;
+    }
     .pagination-controls {
         display: flex;
         justify-content: center;
@@ -468,109 +536,220 @@
             align-items: flex-start;
         }
     }
+
+    /* Modal Styling (Adapted from your other page) */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1050;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-dialog {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100%;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 400px;
+        position: relative;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .modal-title {
+        font-size: 1.25rem;
+        color: #333;
+    }
+
+    .btn-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .modal-body {
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        padding-top: 10px;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .btn-cancel {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .btn-cancel:hover {
+        background-color: #5a6268;
+    }
+
+    .btn-delete:hover {
+        background-color: #c82333;
+    }
 </style>
 
 <script>
-    function toggleDetails(header) {
-        const details = header.nextElementSibling;
-        const allDetails = document.querySelectorAll('.schedule-details-content');
-        
-        // Close all other open details
-        allDetails.forEach(item => {
-            if (item !== details && item.classList.contains('open')) {
-                item.classList.remove('open');
-            }
-        });
-        
-        // Toggle the clicked details
-        details.classList.toggle('open');
+    function toggleDetails(headerElement) {
+        const content = headerElement.nextElementSibling;
+        content.classList.toggle('open');
     }
 
-document.addEventListener('DOMContentLoaded', function () {
-    const successMessage = document.querySelector('.success-message');
-    if (successMessage) {
-        setTimeout(() => {
-            successMessage.classList.add('fade-out');
+    document.addEventListener('DOMContentLoaded', function () {
+        const successMessage = document.querySelector('.success-message');
+        if (successMessage) {
             setTimeout(() => {
-                successMessage.remove();
-            }, 1000);
-        }, 5000);
-    }
-
-    let currentPage = 1;
-    const perPage = 10;
-
-    function applyPagination() {
-        const selectedFilter = document.getElementById('classFilter').value.toLowerCase();
-        const allCards = document.querySelectorAll('.class-card');
-        const filteredCards = Array.from(allCards).filter(card => {
-            const name = card.querySelector('.class-name').textContent.toLowerCase();
-            return selectedFilter === 'all' || name.includes(selectedFilter);
-        });
-
-        const totalFiltered = filteredCards.length;
-        const totalPages = Math.ceil(totalFiltered / perPage);
-
-        if (totalPages === 0) {
-            document.getElementById('page-info').textContent = 'Page 0 of 0';
-            document.getElementById('prev-page').disabled = true;
-            document.getElementById('next-page').disabled = true;
-            allCards.forEach(card => card.style.display = 'none');
-            return;
+                successMessage.classList.add('fade-out');
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 1000);
+            }, 5000);
         }
 
-        if (currentPage > totalPages) {
-            currentPage = totalPages;
-        }
+        let currentPage = 1;
+        const perPage = 10;
 
-        document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
-        document.getElementById('prev-page').disabled = currentPage === 1;
-        document.getElementById('next-page').disabled = currentPage === totalPages;
+        function applyPagination() {
+            const selectedFilter = document.getElementById('classFilter').value.toLowerCase();
+            const allCards = document.querySelectorAll('.class-card');
+            const filteredCards = Array.from(allCards).filter(card => {
+                const name = card.querySelector('.class-name').textContent.toLowerCase();
+                return selectedFilter === 'all' || name.includes(selectedFilter);
+            });
 
-        const start = (currentPage - 1) * perPage;
-        const end = start + perPage;
+            const totalFiltered = filteredCards.length;
+            const totalPages = Math.ceil(totalFiltered / perPage);
 
-        allCards.forEach(card => {
-            if (filteredCards.includes(card)) {
-                const index = filteredCards.indexOf(card);
-                if (index >= start && index < end) {
-                    card.style.display = '';
+            if (totalPages === 0) {
+                document.getElementById('page-info').textContent = 'Page 0 of 0';
+                document.getElementById('prev-page').disabled = true;
+                document.getElementById('next-page').disabled = true;
+                allCards.forEach(card => card.style.display = 'none');
+                return;
+            }
+
+            if (currentPage > totalPages) {
+                currentPage = totalPages;
+            }
+
+            document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
+            document.getElementById('prev-page').disabled = currentPage === 1;
+            document.getElementById('next-page').disabled = currentPage === totalPages;
+
+            const start = (currentPage - 1) * perPage;
+            const end = start + perPage;
+
+            allCards.forEach(card => {
+                if (filteredCards.includes(card)) {
+                    const index = filteredCards.indexOf(card);
+                    if (index >= start && index < end) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
                 } else {
                     card.style.display = 'none';
                 }
-            } else {
-                card.style.display = 'none';
+            });
+        }
+
+        document.getElementById('classFilter').addEventListener('change', function () {
+            currentPage = 1;
+            applyPagination();
+        });
+
+        document.getElementById('prev-page').addEventListener('click', function () {
+            if (currentPage > 1) {
+                currentPage--;
+                applyPagination();
             }
         });
-    }
 
-    document.getElementById('classFilter').addEventListener('change', function () {
-        currentPage = 1;
-        applyPagination();
-    });
-
-    document.getElementById('prev-page').addEventListener('click', function () {
-        if (currentPage > 1) {
-            currentPage--;
-            applyPagination();
-        }
-    });
-
-    document.getElementById('next-page').addEventListener('click', function () {
-        const selectedFilter = document.getElementById('classFilter').value.toLowerCase();
-        const allCards = document.querySelectorAll('.class-card');
-        const filteredCards = Array.from(allCards).filter(card => {
-            const name = card.querySelector('.class-name').textContent.toLowerCase();
-            return selectedFilter === 'all' || name.includes(selectedFilter);
+        document.getElementById('next-page').addEventListener('click', function () {
+            const selectedFilter = document.getElementById('classFilter').value.toLowerCase();
+            const allCards = document.querySelectorAll('.class-card');
+            const filteredCards = Array.from(allCards).filter(card => {
+                const name = card.querySelector('.class-name').textContent.toLowerCase();
+                return selectedFilter === 'all' || name.includes(selectedFilter);
+            });
+            const totalPages = Math.ceil(filteredCards.length / perPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                applyPagination();
+            }
         });
+
+        applyPagination();
+
+        const deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const scheduleId = button.getAttribute('data-schedule-id');
+            const form = deleteModal.querySelector('#deleteForm');
+            form.action = `/bookclass/${scheduleId}`;
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var deleteModal = document.getElementById('deleteModal');
+        var deleteForm = document.getElementById('deleteForm');
+
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var action = button.getAttribute('data-action');
+            deleteForm.setAttribute('action', action);
+        });
+
         const totalPages = Math.ceil(filteredCards.length / perPage);
         if (currentPage < totalPages) {
             currentPage++;
             applyPagination();
         }
-    });
 
-    applyPagination();
-});
+        applyPagination(); // Ensure this is inside DOMContentLoaded
+    });
 </script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 @endsection
