@@ -36,7 +36,9 @@
                 <h2>Schedule</h2>
                 <div class="schedule-items">
                     @if (session('success'))
-                        <div class="success-message">{{ session('success') }}</div>
+                        <div class="success-message {{ session('message_type') === 'danger' ? 'danger' : 'success' }}">
+                            {{ session('success') }}
+                        </div>
                     @endif
 
                     @if($schedules->isEmpty())
@@ -299,6 +301,7 @@
         cursor: pointer;
         transition: transform 0.2s ease;
         margin-bottom: 5px;
+        color: #7a3558;
     }
 
     .schedule-box:hover {
@@ -447,19 +450,39 @@
     }
 
     .success-message {
-        background-color: #e6f4ea;
-        color: #2e7d32;
-        padding: 8px 12px;
+        padding: 10px 15px;
         border-radius: 8px;
-        border-left: 4px solid #4caf50;
         margin-bottom: 10px;
-        font-size: 0.9rem;
-        opacity: 1;
-        transition: opacity 1s ease;
+        font-weight: bold;
+        width: fit-content;
+        animation: fadeIn 0.5s ease-in-out;
     }
+
+    .success-message.success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .success-message.danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeOut {
+        from { opacity: 1; transform: translateY(0); }
+        to { opacity: 0; transform: translateY(-5px); }
+    }
+
     .success-message.fade-out {
-        opacity: 0;
+        animation: fadeOut 0.5s ease-in-out forwards;
     }
+
     #classFilter {
         width: 100%;
         margin-bottom: 15px;

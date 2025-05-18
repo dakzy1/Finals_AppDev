@@ -1,4 +1,4 @@
-@extends('layouts.navbar') 
+@extends('layouts.navbar')
 
 @section('content')
 <div class="container">
@@ -13,7 +13,7 @@
             <p><strong>Instructor Available Time:</strong> {{ \Carbon\Carbon::parse($class->time)->format('g:i A') }} to {{ \Carbon\Carbon::parse($class->end_time)->format('g:i A') }}</p>
         </div>
         
-        <form class="booking-form" method="POST" action="{{ route('bookclass.store', $class->id) }}"  style="display: flex; flex-direction: column; height: 100%;">
+        <form class="booking-form" method="POST" action="{{ route('bookclass.store', $class->id) }}" style="display: flex; flex-direction: column; height: 100%;">
             @csrf
             <label for="trainer">Trainer:</label>
             <select id="trainer" name="trainer" required>
@@ -71,14 +71,12 @@
                 <div class="error">{{ $message }}</div>
             @enderror
 
-       
-            <!-- Debugging: Check if the warning message is being passed -->
             @if (isset($warningMessage))
                 <p style="color: red;">{{ $warningMessage }}</p>
             @endif
 
             <div style="margin-top: auto;">
-                <button type="submit" class="btn-book">Book Now</button>
+                <button type="submit" class="btn-book" onclick="disableThis(this)">Book Now</button>
             </div>
         </form>
     </div>
@@ -92,7 +90,6 @@
         <div class="calendar-grid" id="calendarGrid"></div>
     </div>
 </div>
-
 
 <style>
     html, body {
@@ -145,7 +142,6 @@
 
     .right-panel {
         background-color: #f8f8f8;
-        
     }
 
     .class-details h2 {
@@ -181,6 +177,11 @@
         display: block;
         margin-top: auto;
         align-self: center;
+    }
+
+    .btn-book:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
     }
 
     .calendar-header {
@@ -226,9 +227,8 @@
         background-color: #f5f5f5;
         border-radius: 0 0 10px 10px;
         flex-grow: 1;
-        height: 300px;  
-        flex-grow: 0;      
-
+        height: 300px;
+        flex-grow: 0;
     }
 
     .calendar-grid div {
@@ -277,6 +277,33 @@
 </style>
 
 <script>
+    function disableThis(button) {
+        if (button.tagName === 'A') {
+            // For anchor tags: disable and navigate
+            button.classList.add('disabled');
+            button.style.pointerEvents = 'none';
+            button.style.opacity = '0.6';
+        } else {
+            // For buttons: check if it's the delete or book button in the form
+            if (button.classList.contains('btn-delete') || button.classList.contains('btn-book')) {
+                // Delay disabling to allow form submission
+                setTimeout(() => {
+                    button.disabled = true;
+                }, 100); // Small delay to allow form submission
+            } else {
+                // For other buttons, disable immediately
+                button.disabled = true;
+            }
+        }
+
+        // For buttons opening modals, restore them after a while (if not overridden by modal close)
+        if (button.getAttribute('data-bs-toggle') === 'modal') {
+            setTimeout(() => {
+                button.disabled = false;
+            }, 3000); // re-enable after 3 seconds if needed
+        }
+    }
+
     let currentDate = new Date();
     const monthNames = [
         "January", "February", "March", "April", "May", "June",
@@ -335,7 +362,6 @@
 
             calendarGrid.appendChild(dayCell);
         }
-
     }
 
     function selectDate(day) {
