@@ -20,7 +20,11 @@
                     @foreach($schedules as $schedule)
                         <div class="schedule-box" data-schedule-id="{{ $schedule->id }}">
                             <div class="schedule-header" onclick="toggleDetails(this)">
-                                <h4>{{ e($schedule->fitnessClass->name) }}</h4>
+                                @if ($schedule->fitnessClass)
+                                    <h4>{{ e($schedule->fitnessClass->name) }}</h4>
+                                @else
+                                    <h4>Class Not Found</h4>
+                                @endif
                             </div>
                             <div class="schedule-details-content">
                                 <div class="view-mode visible-fade">
