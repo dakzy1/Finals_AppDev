@@ -11,7 +11,6 @@
                     <div class="welcome-header">
                         <h1>Welcome to FitZone{{ Auth::check() ? ', ' . Str::limit(Auth::user()->first_name, 10) : '' }} </h1>
                     </div>
-
                     <div class="schedule-box upcoming-schedule-box">
                         <div>
                             <small class="label">Upcoming Class</small>
@@ -52,7 +51,6 @@
                                         <p><strong>Date:</strong> {{ \Carbon\Carbon::parse($schedule->date)->format('F j, Y') }}</p>
                                         <p><strong>Time:</strong> {{ \Carbon\Carbon::parse($schedule->time)->format('g:i A') }}</p>
                                         <p><strong>Trainer:</strong> {{ Str::limit($schedule->trainer, 20, '...') }}</p>
-
                                         <form action="{{ route('bookclass.destroy', $schedule->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this schedule?')">
                                             @csrf
                                             @method('DELETE')
@@ -98,7 +96,7 @@
 
                         <div class="class-card">
                             <div class="class-info">
-                                <h3 class="class-name"> {{ e($class->name) }}</h3>
+                                <h3 class="class-name">{{ e($class->name) }}</h3>
                                 <p><strong>Level:</strong> {{ e($class->level) }}</p>
                                 <p><strong>Duration:</strong> {{ e($class->duration) }} Minutes</p>
                                 <p><strong>Trainer:</strong> {{ e($class->trainer) }}</p>
@@ -116,6 +114,13 @@
                     @endforeach
                 @endif
             </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-controls">
+                <button id="prev-page" disabled>Previous</button>
+                <span id="page-info">Page 1 of 1</span>
+                <button id="next-page">Next</button>
+            </div>
         </section>
     </div>
 </div>
@@ -131,7 +136,6 @@
         max-width: 1300px;
         margin: auto;
         padding: 0;
-        margin: 0;
     }
 
     .left-column {
@@ -143,9 +147,9 @@
         flex-shrink: 0;
     }
 
-   .welcome-section {
+    .welcome-section {
         text-align: center;
-        width: 1000px;
+        width: 100%;
         max-width: 300px;
         margin-bottom: 20px;
     }
@@ -160,11 +164,6 @@
     .welcome-header {
         text-align: center;
         color: #834c71;
-    }
-
-    .welcome-header i {
-        font-size: 30px;
-        margin-bottom: 0px;
     }
 
     .welcome-header h1 {
@@ -222,20 +221,15 @@
         padding-bottom: 5px;
     }
 
-    .sidebar h4 {
-        font-size: 1.0rem;
-        margin-bottom: 15px;
-        color: #d87384;
-    }
-
     .schedule-items {
         display: flex;
         flex-direction: column;
         gap: 10px;
-        max-height: 240px; /* Approx height for 3 schedule boxes */
+        max-height: 240px;
         overflow-y: auto;
         padding-right: 5px;
     }
+
     .schedule-items::-webkit-scrollbar {
         width: 6px;
     }
@@ -289,6 +283,7 @@
         margin: 0;
         line-height: 1;
     }
+
     .view-mode p {
         font-size: 0.8rem;
         margin: 0;
@@ -311,8 +306,8 @@
     }
 
     .class-details {
-        width: 100%; 
-        max-width: 850px; 
+        width: 100%;
+        max-width: 850px;
         margin-left: 40px;
         flex: 1;
         background-color: #f7d9eb;
@@ -321,7 +316,7 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         flex-grow: 1;
     }
-    
+
     .class-details h2 {
         font-size: 1.5rem;
         margin-bottom: 10px;
@@ -334,7 +329,6 @@
         border-radius: 5px;
         border: 1px solid #ccc;
         max-width: 100px;
-
     }
 
     .class-cards {
@@ -342,6 +336,7 @@
         grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
         gap: 20px;
     }
+
     .class-card {
         background-color: #fff;
         border-radius: 12px;
@@ -349,6 +344,7 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
         transition: transform 0.2s;
     }
+
     .class-card:hover {
         transform: translateY(-5px);
     }
@@ -366,6 +362,7 @@
         font-size: 0.9rem;
         margin: 3px 0;
     }
+
     .btn-book,
     .btn-booked,
     .btn-full {
@@ -377,19 +374,23 @@
         text-align: center;
         transition: background-color 0.3s, transform 0.2s;
     }
+
     .btn-book {
         background-color: #d87384;
         color: white;
     }
+
     .btn-book:hover {
         background-color: #c05c6f;
         transform: scale(1.03);
     }
+
     .btn-booked {
         background-color: #ffe5ec;
         color: #d87384;
         cursor: not-allowed;
     }
+
     .btn-full {
         background-color: #f5c6cb;
         color: #721c24;
@@ -397,25 +398,46 @@
     }
 
     .success-message {
-        background-color: #e6f4ea; /* Light green background */
-        color: #2e7d32; /* Dark green text */
+        background-color: #e6f4ea;
+        color: #2e7d32;
         padding: 8px 12px;
         border-radius: 8px;
-        border-left: 4px solid #4caf50; /* Green border for emphasis */
+        border-left: 4px solid #4caf50;
         margin-bottom: 10px;
         font-size: 0.9rem;
         opacity: 1;
         transition: opacity 1s ease;
     }
+
     .success-message.fade-out {
         opacity: 0;
     }
-    #classFilter {
-        width: 100%;
-        margin-bottom: 15px;
-        padding: 5px;
+
+    .pagination-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .pagination-controls button {
+        padding: 8px 16px;
+        margin: 0 10px;
+        background-color: #d87384;
+        color: white;
+        border: none;
         border-radius: 5px;
-        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+    .pagination-controls button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+    .pagination-controls span {
+        font-size: 1rem;
+        color: #333;
     }
 
     @media (max-width: 768px) {
@@ -445,10 +467,6 @@
 </style>
 
 <script>
-    function toggleDetails(headerElement) {
-        const content = headerElement.nextElementSibling;
-        content.classList.toggle('open');
-    }
     function toggleDetails(header) {
         const details = header.nextElementSibling;
         const allDetails = document.querySelectorAll('.schedule-details-content');
@@ -463,7 +481,8 @@
         // Toggle the clicked details
         details.classList.toggle('open');
     }
-    document.addEventListener('DOMContentLoaded', function () {
+
+document.addEventListener('DOMContentLoaded', function () {
     const successMessage = document.querySelector('.success-message');
     if (successMessage) {
         setTimeout(() => {
@@ -473,15 +492,81 @@
             }, 1000);
         }, 5000);
     }
-});
-    document.getElementById('classFilter').addEventListener('change', function () {
-        const selected = this.value.toLowerCase();
-        const cards = document.querySelectorAll('.class-card');
 
-        cards.forEach(card => {
+    let currentPage = 1;
+    const perPage = 10;
+
+    function applyPagination() {
+        const selectedFilter = document.getElementById('classFilter').value.toLowerCase();
+        const allCards = document.querySelectorAll('.class-card');
+        const filteredCards = Array.from(allCards).filter(card => {
             const name = card.querySelector('.class-name').textContent.toLowerCase();
-            card.style.display = (selected === 'all' || name.includes(selected)) ? '' : 'none';
+            return selectedFilter === 'all' || name.includes(selectedFilter);
         });
+
+        const totalFiltered = filteredCards.length;
+        const totalPages = Math.ceil(totalFiltered / perPage);
+
+        if (totalPages === 0) {
+            document.getElementById('page-info').textContent = 'Page 0 of 0';
+            document.getElementById('prev-page').disabled = true;
+            document.getElementById('next-page').disabled = true;
+            allCards.forEach(card => card.style.display = 'none');
+            return;
+        }
+
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+
+        document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
+        document.getElementById('prev-page').disabled = currentPage === 1;
+        document.getElementById('next-page').disabled = currentPage === totalPages;
+
+        const start = (currentPage - 1) * perPage;
+        const end = start + perPage;
+
+        allCards.forEach(card => {
+            if (filteredCards.includes(card)) {
+                const index = filteredCards.indexOf(card);
+                if (index >= start && index < end) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    document.getElementById('classFilter').addEventListener('change', function () {
+        currentPage = 1;
+        applyPagination();
     });
+
+    document.getElementById('prev-page').addEventListener('click', function () {
+        if (currentPage > 1) {
+            currentPage--;
+            applyPagination();
+        }
+    });
+
+    document.getElementById('next-page').addEventListener('click', function () {
+        const selectedFilter = document.getElementById('classFilter').value.toLowerCase();
+        const allCards = document.querySelectorAll('.class-card');
+        const filteredCards = Array.from(allCards).filter(card => {
+            const name = card.querySelector('.class-name').textContent.toLowerCase();
+            return selectedFilter === 'all' || name.includes(selectedFilter);
+        });
+        const totalPages = Math.ceil(filteredCards.length / perPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            applyPagination();
+        }
+    });
+
+    applyPagination();
+});
 </script>
 @endsection
