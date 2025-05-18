@@ -375,6 +375,7 @@
             width: 90%;
             max-width: 600px;
             position: relative;
+            overflow: hidden;
         }
 
         .close-btn {
