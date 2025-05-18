@@ -7,6 +7,8 @@
     <link rel="shortcut icon" href="{{ asset('images/Appdev_logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -28,7 +30,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #4b2953;
+            background-color: #834c71;
             color: white;
             padding: 15px 30px;
         }
@@ -137,7 +139,7 @@
         }
 
         th {
-            background-color: #e44b8d;
+            background-color: #834c71;
             color: white;
         }
 
@@ -193,10 +195,25 @@
             display: none;
         }
 
-        .alert-success {
-            color: green;
+        .success-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e6f4ea; /* Light green background */
+            color: #2e7d32; /* Dark green text */
+            padding: 8px 12px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50; /* Green border for emphasis */
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            opacity: 1;
+            transition: opacity 1s ease;
+            max-width: 300px;
             text-align: center;
-            margin-bottom: 15px;
+            margin: 20px auto; 
+        }
+        .success-message.fade-out {
+            opacity: 0;
         }
         #backdrop {
         position: fixed;
@@ -264,8 +281,9 @@
         .button-container {
             display: flex;
             flex-direction: column;
+            gap: 10px;
             width: 100%;
-            margin-top: 10px;
+            align-items: center;
         }
 
         .button-container form,
@@ -338,7 +356,7 @@
         .modal {
             display: none;
             position: fixed;
-            z-index: 1050;
+            z-index: 1050; /* Bootstrap default */
             left: 0;
             top: 0;
             width: 100%;
@@ -346,7 +364,9 @@
             overflow: auto;
             background-color: rgba(0,0,0,0.5);
         }
-
+        .modal-backdrop {
+            z-index: 1040;
+        }
         .modal-content {
             background-color: #fff;
             margin: 10% auto;
@@ -455,7 +475,7 @@
         <h2>Class Management</h2>
 
         @if(session('success'))
-            <div class="alert-success">{{ session('success') }}</div>
+            <div class="success-message">{{ session('success') }}</div>
         @endif
 
         @if($editClass)
@@ -475,7 +495,7 @@
                     </div>
                 @endif
 
-                <form id="editClassForm" method="POST" action="{{ route('class.update', $editClass->id) }}" onsubmit="return confirm('Are you sure you want to update this class?')">
+                <form id="editClassForm" method="POST" action="{{ route('class.update', $editClass->id) }}">
                     @csrf
                     @method('PUT')
 
@@ -727,11 +747,15 @@
                     <td>
                         <div class="btn-group">
                             <a href="{{ route('admin.classmanage', ['edit_class' => $class->id]) }}" class="btn-edit">Edit</a>
-                            <form action="{{ route('class.destroy', $class->id) }}" method="POST">
+                            <form id="delete-form-{{ $class->id }}" action="{{ route('class.destroy', $class->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn-delete" onclick="return confirm('Delete this class?')">Delete</button>
+                                <!-- Delete Button -->
+                                <button type="button" class="btn-delete" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" data-form-id="delete-form-{{ $class->id }}">
+                                    Delete
+                                </button>
                             </form>
+
                         </div>
                     </td>
                 </tr>
@@ -743,8 +767,44 @@
         <button class="toggle-form-btn" onclick="toggleAddClassForm()">Add Class</button>
         @endif
     </div>
-    
 </div>
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-labelledby="confirmUpdateModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmUpdateModalLabel">Confirm Update</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to update this class?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="confirmUpdateBtn">Yes, Update</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteConfirmLabel">Confirm Deletion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this class?
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Yes, Delete</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
@@ -792,6 +852,21 @@
     startSelect.addEventListener("change", validateTimeSelection);
     endSelect.addEventListener("change", validateTimeSelection);
 });
+</script>
+<script>
+    const editForm = document.getElementById('editClassForm');
+    const confirmModal = new bootstrap.Modal(document.getElementById('confirmUpdateModal'));
+    const confirmBtn = document.getElementById('confirmUpdateBtn');
+
+    editForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+        confirmModal.show(); // Show Bootstrap modal
+    });
+
+    confirmBtn.addEventListener('click', function() {
+        confirmModal.hide();
+        editForm.submit(); // Submit the form after confirmation
+    });
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -913,8 +988,6 @@
        
     }
 
-
-
     document.addEventListener('DOMContentLoaded', function () {
     const forms = document.querySelectorAll('form');
 
@@ -931,6 +1004,35 @@
         });
     });
 });
+    document.addEventListener('DOMContentLoaded', function () {
+    const successMessage = document.querySelector('.success-message');
+    if (successMessage) {
+        setTimeout(() => {
+            successMessage.classList.add('fade-out');
+            setTimeout(() => {
+                successMessage.remove();
+            }, 1000);
+        }, 3000);
+    }
+});
 </script>
+<script>
+    let targetFormId = null;
+
+    const deleteModal = document.getElementById('deleteConfirmModal');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        targetFormId = button.getAttribute('data-form-id');
+    });
+
+    confirmDeleteBtn.addEventListener('click', function () {
+        if (targetFormId) {
+            document.getElementById(targetFormId).submit();
+        }
+    });
+</script>
+
 </body>
 </html>

@@ -19,7 +19,7 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            background-color: #4b2953;
+            background-color: #834c71;
             color: white;
             padding: 10px 20px;
             height: 30px;
@@ -111,7 +111,7 @@
             border-bottom: 1px solid #ccc;   
         }
         th{
-            background-color: #e44b8d;
+            background-color: #834c71;
         }
 
         tr:nth-child(even) {
@@ -430,6 +430,26 @@
             font-weight: normal;
             vertical-align: middle;
         }
+        .success-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e6f4ea; /* Light green background */
+            color: #2e7d32; /* Dark green text */
+            padding: 8px 12px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50; /* Green border for emphasis */
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            opacity: 1;
+            transition: opacity 1s ease;
+            max-width: 400px;
+            text-align: center;
+            margin: 20px auto; 
+        }
+        .success-message.fade-out {
+            opacity: 0;
+        }
 
 </style>
   
@@ -503,7 +523,7 @@
         <h2>User Management</h2>
 
         @if(session('success'))
-            <div style="color: green; margin-bottom: 10px;">{{ session('success') }}</div>
+            <div class="success-message">{{ session('success') }}</div>
         @endif
 
         @isset($editUser)
@@ -643,6 +663,17 @@
             });
         });
     });
+        document.addEventListener('DOMContentLoaded', function () {
+    const successMessage = document.querySelector('.success-message');
+    if (successMessage) {
+        setTimeout(() => {
+            successMessage.classList.add('fade-out');
+            setTimeout(() => {
+                successMessage.remove();
+            }, 1000);
+        }, 3000);
+    }
+});
 </script>
 </body>
 </html>
