@@ -96,7 +96,7 @@ class ClassPageController extends Controller
         $validated = $request->validate([
             'trainer' => 'required|string|max:255',
             'time' => 'required',
-            'date' => 'required|date'
+            'date' => ['required', 'date', 'after_or_equal:today'],
         ]);
     
         $user = Auth::user();
@@ -105,10 +105,9 @@ class ClassPageController extends Controller
         
         $selectedTime = Carbon::parse($validated['time'])->format('H:i');
     
-        // 🔥 FIX: Remove class_id from conflict check
         $hasConflict = Schedule::where('user_id', $user->id)
             ->where('time', $selectedTime)
-            ->first(); // changed from exists() to first() so we can access conflict details
+            ->first();
 
         if ($hasConflict) {
             
@@ -123,7 +122,7 @@ class ClassPageController extends Controller
         Schedule::create([
             'user_id' => $user->id,
             'class_id' => $class->id,
-            'date' => $validated['date'], // Use the selected date
+            'date' => $validated['date'],
             'time' => $selectedTime,
             'trainer' => $validated['trainer'],
         ]);
