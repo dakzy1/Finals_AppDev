@@ -345,7 +345,7 @@
         border: none;
         cursor: pointer;
         margin-top: 5px;
-        margin-left: 200px;
+        margin-left: 160px;
         padding: 0;
         transition: transform 0.3s, color 0.3s;
     }
