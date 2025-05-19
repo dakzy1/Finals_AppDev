@@ -128,7 +128,9 @@ class ClassPageController extends Controller
             'trainer' => $validated['trainer'],
         ]);
     
-        return redirect()->route('dashboard')->with('success', 'Class booked successfully!');
+            return redirect()->route('dashboard')
+                ->with('success', 'Class booked successfully!')
+                ->with('message_type', 'success');
     }
 
     /**
@@ -160,6 +162,8 @@ class ClassPageController extends Controller
         $schedule = Schedule::findOrFail($id);
         $schedule->delete();
 
-        return redirect()->back()->with('success', 'Schedule deleted successfully!');
+        return redirect()->back()
+            ->with('success', 'Schedule deleted successfully!')
+            ->with('message_type', 'danger');
     }
 }

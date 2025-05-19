@@ -179,6 +179,11 @@
             color: #ddd;
         }
 
+        .logout-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .icon-left-margin {
             margin-right: 5px;
         }
@@ -258,8 +263,13 @@
             transition: background-color 0.2s ease-in-out;
         }
 
-        .btn-purple:hover {
-            background-color: #5a6268;
+        .btn-purple:hover:not(:disabled) {
+            background-color: #c82333;
+        }
+
+        .btn-purple:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .cancel-btn {
@@ -272,8 +282,13 @@
             transition: background-color 0.2s ease-in-out;
         }
 
-        .cancel-btn:hover {
+        .cancel-btn:hover:not(:disabled) {
             background-color: #5a6268;
+        }
+
+        .cancel-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         /* Optional: Close button in top right corner */
@@ -281,11 +296,14 @@
             position: absolute;
             right: 15px;
             top: 15px;
-            color: white;
+            color: #666;
             font-size: 1.25rem;
         }
 
-
+        .btn-close:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -341,7 +359,7 @@
         @auth
         <form action="{{ route('logout') }}" method="POST" id="logoutForm" class="logout-form">
             @csrf
-            <button type="button" class="logout-btn" data-bs-toggle="modal" data-bs-target="#logoutModal" title="Logout">
+            <button type="button" class="logout-btn" data-bs-toggle="modal" data-bs-target="#logoutModal" title="Logout" onclick="disableThis(this)">
                 <i class="fas fa-sign-out-alt"></i>
             </button>
         </form>
@@ -353,28 +371,27 @@
         @yield('content')
     </div>
 
-        <!-- Logout Modal -->
-        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content logout-modal-content">
-            <div class="modal-header logout-modal-header">
-                <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-                <p>Are you sure you want to logout?</p>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                @csrf
-                <button type="submit" class="btn btn-purple">Yes, Logout</button>
-                </form>
-                <button type="button" class="btn btn-light cancel-btn" data-bs-dismiss="modal">Cancel</button>
-            </div>
+                <div class="modal-header logout-modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="disableThis(this)"></button>
+                </div>
+                <div class="modal-body text-center logout-modal-body">
+                    <p>Are you sure you want to logout?</p>
+                </div>
+                <div class="modal-footer justify-content-center logout-modal-footer">
+                    <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-purple" onclick="disableThis(this)">Yes, Logout</button>
+                    </form>
+                    <button type="button" class="btn cancel-btn" data-bs-dismiss="modal" onclick="disableThis(this)">Cancel</button>
+                </div>
             </div>
         </div>
-        </div>
-
+    </div>
 
     <!-- Add Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -388,6 +405,44 @@
             document.getElementById('profileOverlay').classList.add('hidden');
             document.body.classList.remove('blurred');
         }
+
+        // Modified disableThis function
+        function disableThis(button) {
+            if (button.tagName === 'A') {
+                // For anchor tags: disable and navigate
+                button.classList.add('disabled');
+                button.style.pointerEvents = 'none';
+                button.style.opacity = '0.6';
+            } else {
+                // For buttons: check if it's a button that submits a form
+                if (button.classList.contains('btn-delete') || button.classList.contains('btn-book') || button.classList.contains('btn-purple')) {
+                    // Delay disabling to allow form submission
+                    setTimeout(() => {
+                        button.disabled = true;
+                    }, 100); // Small delay to allow form submission
+                } else {
+                    // For other buttons (like cancel or modal close), disable immediately
+                    button.disabled = true;
+                }
+            }
+
+            // For buttons opening modals, restore them after a while (if not overridden by modal close)
+            if (button.getAttribute('data-bs-toggle') === 'modal') {
+                setTimeout(() => {
+                    button.disabled = false;
+                }, 3000); // re-enable after 3 seconds if needed
+            }
+        }
+
+        // Re-enable modal buttons when the logout modal closes
+        document.addEventListener('DOMContentLoaded', function () {
+            const logoutModal = document.getElementById('logoutModal');
+            logoutModal.addEventListener('hidden.bs.modal', function () {
+                document.querySelectorAll('.logout-btn, .btn-purple, .cancel-btn, .btn-close').forEach(button => {
+                    button.disabled = false;
+                });
+            });
+        });
     </script>
 </body>
 </html>

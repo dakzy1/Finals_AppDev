@@ -7,11 +7,13 @@
     </a>
     <div class="main-content">
         <!-- Sidebar (Schedule) -->
-        <aside class="sidebar">
-            <h2>Schedule</h2>
-            <div class="schedule-items">
+            <aside class="sidebar">
+                <h2>Schedule</h2>
+                <div class="schedule-items">
                     @if (session('success'))
-                        <div class="success-message">{{ session('success') }}</div>
+                        <div class="success-message {{ session('message_type') === 'danger' ? 'danger' : 'success' }}">
+                            {{ session('success') }}
+                        </div>
                     @endif
 
                 @if($schedules->isEmpty())
@@ -32,19 +34,27 @@
                                     <p><strong>Time:</strong> {{ \Carbon\Carbon::parse($schedule->time)->format('g:i A') }}</p>
                                     <p><strong>Trainer:</strong> {{ Str::limit($schedule->trainer, 20, '...') }}</p>
 
-                                    <form action="{{ route('bookclass.destroy', $schedule->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this schedule?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="delete-btn" title="Delete">
+                                        <form action="{{ route('bookclass.destroy', $schedule->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                        <button type="button"
+                                            class="delete-btn"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal"
+                                            data-action="{{ route('bookclass.destroy', $schedule->id) }}"
+                                            onclick="setDeleteAction(this)"
+                                            title="Delete">
                                             <i class="fa-regular fa-trash-can" style="color: #b00020; font-size: 18px;"></i>
                                         </button>
-                                    </form>
+
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
-                @endif
-            </div>
+                        @endforeach
+                    @endif
+                </div>
+            </aside>
         </aside>
 
         <!-- Class Details -->
@@ -55,7 +65,7 @@
             </div>
 
             <div class="book-box">
-                <a href="{{ route('bookclass', $class->id) }}" class="btn-book">Book Now</a>
+                <a href="{{ route('bookclass', $class->id) }}" class="btn-book" onclick="disableThis(this)">Book Now</a>
                 <p><strong>Level:</strong> {{ $class->level }}</p>
                 <p><strong>Duration:</strong> {{ $class->duration }} Minutes</p>
                 <p><strong>Trainer:</strong> {{ $class->trainer }}</p>
@@ -78,7 +88,28 @@
         </section>
     </div>
 </div>
-
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="deleteForm" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="disableThis(this)"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this schedule?
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-delete" onclick="disableThis(this)">Yes, Delete</button>
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal" onclick="disableThis(this)">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <style>
     body {
         font-family: 'Poppins', sans-serif;
@@ -187,6 +218,7 @@
         cursor: pointer;
         transition: transform 0.2s ease;
         margin-bottom: 5px;
+        color: #7a3558;
     }
 
     .schedule-box:hover {
@@ -210,13 +242,15 @@
     .view-mode {
         padding: 0;
         margin: 0;
-        line-height: 1;
+        line-height: 1.5;
     }
 
     .view-mode p {
         font-size: 0.8rem;
         margin: 0;
         padding: 0;
+        color: #7a3558;
+
     }
 
     .delete-btn {
@@ -224,7 +258,7 @@
         border: none;
         cursor: pointer;
         margin-top: 5px;
-        margin-left: 140px;
+        margin-left: 200px;
         padding: 0;
         transition: transform 0.3s, color 0.3s;
     }
@@ -284,19 +318,31 @@
         color: #4c305f;
     }
     .success-message {
-        background-color: #e6f4ea; /* Light green background */
-        color: #2e7d32; /* Dark green text */
-        padding: 8px 12px;
+        padding: 10px 15px;
         border-radius: 8px;
-        border-left: 4px solid #4caf50; /* Green border for emphasis */
         margin-bottom: 10px;
-        font-size: 0.9rem;
-        opacity: 1;
-        transition: opacity 1s ease;
+        font-weight: bold;
+        width: fit-content;
+        animation: fadeIn 0.5s ease-in-out;
     }
-    .success-message.fade-out {
-        opacity: 0;
+
+    .success-message.success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
     }
+
+    .success-message.danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     @media (max-width: 768px) {
         .main-content {
             flex-direction: column;
@@ -311,9 +357,130 @@
             max-width: 100%;
         }
     }
+        /* Modal Styling (Adapted from your other page) */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1050;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-dialog {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100%;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 400px;
+        position: relative;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .modal-title {
+        font-size: 1.25rem;
+        color: #333;
+    }
+
+    .btn-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .modal-body {
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        padding-top: 10px;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .btn-cancel {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .btn-cancel:disabled,
+    .btn-delete:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .btn-cancel:hover:not(:disabled) {
+        background-color: #5a6268;
+    }
+
+    .btn-delete:hover:not(:disabled) {
+        background-color: #c82333;
+    }
 </style>
 
 <script>
+        function disableThis(button) {
+        if (button.tagName === 'A') {
+            // For anchor tags: disable and navigate
+            button.classList.add('disabled');
+            button.style.pointerEvents = 'none';
+            button.style.opacity = '0.6';
+        } else {
+            // For buttons: check if it's the delete button in the modal
+            if (button.classList.contains('btn-delete')) {
+                // Delay disabling to allow form submission
+                setTimeout(() => {
+                    button.disabled = true;
+                }, 100); // Small delay to allow form submission
+            } else {
+                // For other buttons, disable immediately
+                button.disabled = true;
+            }
+        }
+
+        // For buttons opening modals, restore them after a while (if not overridden by modal close)
+        if (button.getAttribute('data-bs-toggle') === 'modal') {
+            setTimeout(() => {
+                button.disabled = false;
+            }, 3000); // re-enable after 3 seconds if needed
+        }
+    }
     function toggleDetails(header) {
         const details = header.nextElementSibling;
         const allDetails = document.querySelectorAll('.schedule-details-content');
@@ -339,5 +506,23 @@
         }, 5000);
     }
 });
+    const deleteModal = document.getElementById('deleteModal');
+    const deleteForm = document.getElementById('deleteForm');
+
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const action = button.getAttribute('data-action');
+
+        if (action) {
+            deleteForm.setAttribute('action', action);
+        }
+    });
+
+    // Optional: disable button to prevent multiple submissions
+    deleteForm.addEventListener('submit', function () {
+        const submitBtn = deleteForm.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Deleting...';
+    });
 </script>
 @endsection

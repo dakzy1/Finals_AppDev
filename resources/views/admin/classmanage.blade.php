@@ -195,25 +195,63 @@
             display: none;
         }
 
+        /* Success message (green) for added/updated users */
         .success-message {
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #e6f4ea; /* Light green background */
-            color: #2e7d32; /* Dark green text */
-            padding: 8px 12px;
-            border-radius: 8px;
-            border-left: 4px solid #4caf50; /* Green border for emphasis */
-            margin-bottom: 10px;
-            font-size: 0.9rem;
+            background-color: #e6ffe6;
+            color: #155724;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border-left: 6px solid #28a745;
+            margin-bottom: 15px;
+            font-size: 14px;
             opacity: 1;
-            transition: opacity 1s ease;
-            max-width: 300px;
+            transition: opacity 0.5s ease-out;
+            max-width: 600px;
             text-align: center;
-            margin: 20px auto; 
+            margin: 20px auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        .success-message.fade-out {
+
+        /* Danger message (red) for deleted users */
+        .danger-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border-left: 6px solid #dc3545;
+            margin-bottom: 15px;
+            font-size: 14px;
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+            max-width: 600px;
+            text-align: center;
+            margin: 20px auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Fade-out animation for both alerts */
+        .success-message.fade-out,
+        .danger-message.fade-out {
             opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-5px); }
+        }
+
+        .success-message.fade-out {
+            animation: fadeOut 0.5s ease-in-out forwards;
         }
         #backdrop {
         position: fixed;
@@ -249,6 +287,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 5px;
         }
 
         #offcanvas.active {
@@ -277,7 +316,6 @@
             margin-bottom: 20px;
         }
 
-/* Button container styling inside offcanvas */
         .button-container {
             display: flex;
             flex-direction: column;
@@ -364,9 +402,11 @@
             overflow: auto;
             background-color: rgba(0,0,0,0.5);
         }
+
         .modal-backdrop {
             z-index: 1040;
         }
+
         .modal-content {
             background-color: #fff;
             margin: 10% auto;
@@ -376,28 +416,58 @@
             max-width: 600px;
             position: relative;
             overflow: hidden;
+            margin-top: 50px; /* Adjusted to center the modal */
         }
 
-        .close-btn {
+        /* Specific styling for confirmUpdateModal to fix it at the center of the screen */
+        #confirmUpdateModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1060; /* Matches other confirmation modals to ensure it stays on top */
+            display: none; /* Controlled by Bootstrap JavaScript */
+        }
+
+        #confirmUpdateModal .modal-dialog {
             position: absolute;
-            right: 15px;
-            top: 10px;
-            font-size: 28px;
-            color: #aaa;
-            cursor: pointer;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin: 0; /* Remove default margin to center precisely */
+            max-width: 500px; /* Increased from 400px to make the modal larger */
+            width: 90%; /* Ensure it scales down on smaller screens */
         }
 
-        .close-btn:hover {
-            color: black;
-        }
-        .button-container {
-        margin-bottom: 15px; /* Adjust this value to control the space */
-        }
-
-        .button-container:last-child {
-            margin-bottom: 0; /* Removes margin from last button (logout button) */
+        #confirmUpdateModal .modal-content {
+            margin: 0; /* Remove default margin to center precisely */
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Optional: Add shadow for better visibility */
+            width: 100%; /* Ensure it takes the full width of the modal-dialog */
         }
 
+        /* Adjust inner modal elements for better spacing */
+        #confirmUpdateModal .modal-header {
+            padding: 15px 20px; /* Slightly reduce padding for a more spacious feel */
+            font-size: 18px; /* Increase font size of the title */
+        }
+
+        #confirmUpdateModal .modal-body {
+            padding: 20px; /* Keep padding but ensure content is readable */
+            font-size: 16px; /* Increase font size for better readability */
+            line-height: 1.5; /* Improve text readability */
+        }
+
+        #confirmUpdateModal .modal-footer {
+            padding: 15px 20px; /* Slightly reduce padding */
+        }
+
+        /* Ensure buttons are appropriately sized */
+        #confirmUpdateModal .modal-footer .btn {
+            padding: 10px 20px; /* Increase button padding for better clickability */
+            font-size: 16px; /* Increase font size for buttons */
+        }
     </style>
     <script>
         function toggleAddClassForm() {
@@ -474,11 +544,11 @@
 <div id="class" class="tab-content">
     <div class="container">
         <h2>Class Management</h2>
-
-        @if(session('success'))
-            <div class="success-message">{{ session('success') }}</div>
+        @if (session('success'))
+            <div class="success-message {{ session('message_type') === 'danger' ? 'danger' : 'success' }}">
+                {{ session('success') }}
+            </div>
         @endif
-
         @if($editClass)
         <!-- Edit Class Modal -->
         <div id="editClassModal" class="modal" style="display: block;">
@@ -752,11 +822,10 @@
                                 @csrf
                                 @method('DELETE')
                                 <!-- Delete Button -->
-                                <button type="button" class="btn-delete" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" data-form-id="delete-form-{{ $class->id }}">
+                                <button type="button" class="btn-delete" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" data-form-id="delete-form-{{ $class->id }}" onclick="setDeleteAction(this)">
                                     Delete
                                 </button>
                             </form>
-
                         </div>
                     </td>
                 </tr>
@@ -787,24 +856,26 @@
     </div>
   </div>
 </div>
+
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteConfirmLabel">Confirm Deletion</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this class?
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Yes, Delete</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-      </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this class?
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="confirmDeleteBtn" class="btn btn-danger" onclick="disableThis(this); document.getElementById(targetFormId).submit();">Yes, Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -1005,35 +1076,70 @@
         });
     });
 });
-    document.addEventListener('DOMContentLoaded', function () {
-    const successMessage = document.querySelector('.success-message');
-    if (successMessage) {
-        setTimeout(() => {
-            successMessage.classList.add('fade-out');
-            setTimeout(() => {
-                successMessage.remove();
-            }, 1000);
-        }, 3000);
-    }
-});
 </script>
 <script>
-    let targetFormId = null;
+    // Function to disable the submit button
+let targetFormId = null;
 
     const deleteModal = document.getElementById('deleteConfirmModal');
-    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+    // Function to disable buttons (adapted from dashboard.blade.php)
+    function disableThis(button) {
+        if (button.tagName === 'A') {
+            // For anchor tags: disable and navigate
+            button.classList.add('disabled');
+            button.style.pointerEvents = 'none';
+            button.style.opacity = '0.6';
+        } else {
+            // For buttons: check if it's the confirm delete button in the modal
+            if (button.id === 'confirmDeleteBtn') {
+                button.disabled = true;
+                button.textContent = 'Deleting...'; // Optional: Update text for feedback
+            } else if (button.classList.contains('btn-delete')) {
+                // For delete buttons opening the modal: delay disabling to allow modal to open
+                setTimeout(() => {
+                    button.disabled = true;
+                }, 100);
+            } else {
+                // For other buttons: disable immediately
+                button.disabled = true;
+            }
+        }
+
+        // For buttons opening modals, restore them after a while
+        if (button.getAttribute('data-bs-toggle') === 'modal') {
+            setTimeout(() => {
+                button.disabled = false;
+            }, 3000); // Re-enable after 3 seconds if needed
+        }
+    }
+
+    // Function to set the form ID and disable the delete button
+    function setDeleteAction(button) {
+        targetFormId = button.getAttribute('data-form-id');
+        disableThis(button); // Disable the delete button after click
+    }
 
     deleteModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
         targetFormId = button.getAttribute('data-form-id');
+        // Reset the confirm button state when the modal opens
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        confirmDeleteBtn.disabled = false;
+        confirmDeleteBtn.textContent = 'Yes, Delete';
     });
 
-    confirmDeleteBtn.addEventListener('click', function () {
-        if (targetFormId) {
-            document.getElementById(targetFormId).submit();
+    document.addEventListener('DOMContentLoaded', function () {
+        const successMessage = document.querySelector('.success-message');
+        if (successMessage) {
+            setTimeout(() => {
+                successMessage.classList.add('fade-out');
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 1000);
+            }, 3000);
         }
     });
 </script>
-
 </body>
 </html>
