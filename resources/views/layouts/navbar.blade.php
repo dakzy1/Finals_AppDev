@@ -119,33 +119,51 @@
         }
         .profile-actions {
             display: flex;
-            justify-content: space-between;
+            flex-direction: row; /* Explicitly horizontal */
+            justify-content: center; /* Center the buttons horizontally */
+            gap: 90px; /* Space between buttons */
             margin-top: 20px;
+            flex-wrap: nowrap; /* Prevent wrapping to a new line */
         }
+
+        .btn-save, .btn-delete {
+            flex: 0 1 auto; /* Allow buttons to shrink if needed, but not grow */
+            width: 150px; /* Fixed width to ensure they fit side by side */
+            padding: 8px 0; /* Adjusted padding for balance */
+            border-radius: 6px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            font-size: 14px;
+            transition: background-color 0.2s ease-in-out;
+            gap: 5px; /* Space between icon and text */
+        }
+
         .btn-save {
             background-color: #9c27b0;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
         }
+
+        .btn-save:hover:not(:disabled) {
+            background-color: #7b1fa2;
+        }
+
+        .btn-save:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .btn-delete {
             background-color: #f44336;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            text-decoration: none;
         }
-        .btn-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: transparent;
-            border: none;
-            font-size: 1.5rem;
-            color: #666;
-            cursor: pointer;
+
+        .btn-delete:hover:not(:disabled) {
+            background-color: #d32f2f;
+        }
+
+        .btn-delete:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         /* Optional: blur background when overlay is active */
@@ -314,43 +332,42 @@
             <i class="fas fa-user-circle" style="font-size: 50px; color:rgb(160, 100, 140);"></i>
         </button>
 
-        <!-- Profile Overlay -->
-        <div id="profileOverlay" class="profile-overlay hidden">
-            <div class="profile-modal">
-                <button class="btn-close" onclick="closeProfile()">×</button>
-                <h2>User Profile</h2>
-                @if ($errors->any())
-                    <div style="color: red; margin-bottom: 10px;">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-                <form action="{{ route('profile.update') }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <label>Name:</label>
-                    <input type="text" name="first_name" maxlength="25" value="{{ Auth::user()->first_name }}" required>
+    <!-- Profile Overlay -->
+    <div id="profileOverlay" class="profile-overlay">
+        <div class="profile-modal">
+            <button class="btn-close" onclick="closeProfile()">×</button>
+            <h2>User Profile</h2>
+            @if ($errors->any())
+                <div style="color: red; margin-bottom: 10px;">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <!-- Update Form -->
+            <form action="{{ route('profile.update') }}" method="POST" id="profileUpdateForm">
+                @csrf
+                @method('PUT')
+                <label>Name:</label>
+                <input type="text" name="first_name" maxlength="25" value="{{ Auth::user()->first_name }}" required>
 
-                    <label>Email:</label>
-                    <input type="email" name="email" maxlength="25" value="{{ Auth::user()->email }}" required>
-
-                    <div class="profile-actions">
-                        <button type="submit" class="btn-save">Save</button>
-                        <form action="{{ route('profile.destroy') }}" method="POST"
-                            onsubmit="return confirm('Are you sure you want to delete your account?');"
-                            style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn-delete">Delete Account</button>
-                        </form>
-                    </div>
-                </form>
-                <button onclick="closeProfile()" class="btn-close">×</button>
+                <label>Email:</label>
+                <input type="email" name="email" maxlength="25" value="{{ Auth::user()->email }}" required>
+            </form>
+            <!-- Delete Form -->
+            <form action="{{ route('profile.destroy') }}" method="POST" id="profileDeleteForm" style="display: inline;">
+                @csrf
+                @method('DELETE')
+            </form>
+            <!-- Combined Buttons -->
+            <div class="profile-actions">
+                <button type="submit" form="profileUpdateForm" class="btn-save">Save Changes</button>
+                <button type="button" class="btn-delete" onclick="showDeleteConfirmModal()">Delete Account</button>
             </div>
         </div>
+    </div>
 
         <div class="nav-links">
             <h2>FitZone</h2>
