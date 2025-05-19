@@ -195,32 +195,50 @@
             display: none;
         }
 
+        /* Success message (green) for added/updated users */
         .success-message {
             display: flex;
-            justify-content: center; /* Centers the text inside the message */
+            justify-content: center;
             align-items: center;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin: 10px auto 20px; /* Centers the box horizontally and adds spacing */
-            font-weight: bold;
-            width: fit-content; /* Keeps the width based on content */
-            animation: fadeIn 0.5s ease-in-out;
-            position: relative;
-            opacity: 1;
-            transition: opacity 1s ease-in-out;
-            max-width: 100%; /* Prevents overflow on small screens */
-        }
-
-        .success-message.success {
-            background-color: #d4edda;
+            background-color: #e6ffe6;
             color: #155724;
-            border: 1px solid #c3e6cb;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border-left: 6px solid #28a745;
+            margin-bottom: 15px;
+            font-size: 14px;
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+            max-width: 600px;
+            text-align: center;
+            margin: 20px auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .success-message.danger {
+        /* Danger message (red) for deleted users */
+        .danger-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             background-color: #f8d7da;
             color: #721c24;
-            border: 1px solid #f5c6cb;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border-left: 6px solid #dc3545;
+            margin-bottom: 15px;
+            font-size: 14px;
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+            max-width: 600px;
+            text-align: center;
+            margin: 20px auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Fade-out animation for both alerts */
+        .success-message.fade-out,
+        .danger-message.fade-out {
+            opacity: 0;
         }
 
         @keyframes fadeIn {
@@ -269,6 +287,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 5px;
         }
 
         #offcanvas.active {
@@ -297,7 +316,6 @@
             margin-bottom: 20px;
         }
 
-/* Button container styling inside offcanvas */
         .button-container {
             display: flex;
             flex-direction: column;
@@ -384,9 +402,11 @@
             overflow: auto;
             background-color: rgba(0,0,0,0.5);
         }
+
         .modal-backdrop {
             z-index: 1040;
         }
+
         .modal-content {
             background-color: #fff;
             margin: 10% auto;
@@ -396,28 +416,58 @@
             max-width: 600px;
             position: relative;
             overflow: hidden;
+            margin-top: 50px; /* Adjusted to center the modal */
         }
 
-        .close-btn {
+        /* Specific styling for confirmUpdateModal to fix it at the center of the screen */
+        #confirmUpdateModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1060; /* Matches other confirmation modals to ensure it stays on top */
+            display: none; /* Controlled by Bootstrap JavaScript */
+        }
+
+        #confirmUpdateModal .modal-dialog {
             position: absolute;
-            right: 15px;
-            top: 10px;
-            font-size: 28px;
-            color: #aaa;
-            cursor: pointer;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin: 0; /* Remove default margin to center precisely */
+            max-width: 500px; /* Increased from 400px to make the modal larger */
+            width: 90%; /* Ensure it scales down on smaller screens */
         }
 
-        .close-btn:hover {
-            color: black;
-        }
-        .button-container {
-        margin-bottom: 15px; /* Adjust this value to control the space */
-        }
-
-        .button-container:last-child {
-            margin-bottom: 0; /* Removes margin from last button (logout button) */
+        #confirmUpdateModal .modal-content {
+            margin: 0; /* Remove default margin to center precisely */
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Optional: Add shadow for better visibility */
+            width: 100%; /* Ensure it takes the full width of the modal-dialog */
         }
 
+        /* Adjust inner modal elements for better spacing */
+        #confirmUpdateModal .modal-header {
+            padding: 15px 20px; /* Slightly reduce padding for a more spacious feel */
+            font-size: 18px; /* Increase font size of the title */
+        }
+
+        #confirmUpdateModal .modal-body {
+            padding: 20px; /* Keep padding but ensure content is readable */
+            font-size: 16px; /* Increase font size for better readability */
+            line-height: 1.5; /* Improve text readability */
+        }
+
+        #confirmUpdateModal .modal-footer {
+            padding: 15px 20px; /* Slightly reduce padding */
+        }
+
+        /* Ensure buttons are appropriately sized */
+        #confirmUpdateModal .modal-footer .btn {
+            padding: 10px 20px; /* Increase button padding for better clickability */
+            font-size: 16px; /* Increase font size for buttons */
+        }
     </style>
     <script>
         function toggleAddClassForm() {

@@ -65,8 +65,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('admin.dashboard')->with('success', 'User deleted successfully.');
-    }
+        return redirect()->route('admin.dashboard')->with('success', 'User updated successfully.')->with('message_type', 'success');    }
 
     // CRUD for FitnessClass
     public function storeFitnessClass(Request $request)
@@ -184,8 +183,10 @@ class UserController extends Controller
         $user->status = $user->status === 'active' ? 'deactivated' : 'active';
         $user->save();
 
-        return redirect()->route('admin.dashboard')->with('success', 'User status updated successfully.');
-    }
+        $message = $user->status === 'deactivated' ? 'User deleted successfully.' : 'User status updated successfully.';
+        $messageType = $user->status === 'deactivated' ? 'danger' : 'success';
+
+        return redirect()->route('admin.dashboard')->with('success', $message)->with('message_type', $messageType);    }
 
 
 }
