@@ -44,7 +44,7 @@ class ClassPageControllerTest extends TestCase
         ]);
 
         $this->actingAs($user)
-            ->get('/dashboard') // adjust if upcomSchedule has a unique route
+            ->get('/dashboard')
             ->assertStatus(200)
             ->assertViewHas('upcomingSchedule');
     }
@@ -71,7 +71,23 @@ class ClassPageControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_prevents_booking_conflict()
+    public function it_fails_booking_for_past_dates()
+    {
+        $user = User::factory()->create();
+        $class = FitnessClass::factory()->create();
+
+        $this->actingAs($user)
+            ->post("/class/{$class->id}/book", [
+                'trainer' => 'Coach X',
+                'date' => now()->subDays(1)->format('Y-m-d'), 
+                'time' => '10:00',
+            ])
+            ->assertSessionHasErrors('date'); 
+    }
+
+
+    /** @test */
+    public function it_prevents_booking_time_conflict()
     {
         $user = User::factory()->create();
         $class = FitnessClass::factory()->create();
