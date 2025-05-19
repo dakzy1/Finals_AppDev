@@ -821,8 +821,7 @@
             </thead>
             <tbody>
                 @foreach ($users as $user)
-                <tr @if($user->status === 'deactivated') style="background-color: #e9ecef; color: #6c757d;" @endif>
-                    <td>{{ Str::limit($user->first_name, 10, '...') }}</td>
+                    <tr @if($user->status === 'deactivated') style="background-color: #f8d7da; color: #721c24;" @endif>                    <td>{{ Str::limit($user->first_name, 10, '...') }}</td>
                     <td>{{ Str::limit($user->middle_name, 10, '...') }}</td>
                     <td>{{ Str::limit($user->last_name, 10, '...') }}</td>
                     <td>{{ ucfirst($user->gender) }}</td>
