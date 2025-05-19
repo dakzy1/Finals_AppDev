@@ -175,11 +175,11 @@
     }
 
     .left-column {
-        margin-left: 50px;
+        margin-left: 20px;
         display: flex;
         flex-direction: column;
         width: 100%;
-        max-width: 259px;
+        max-width: 266px;
         flex-shrink: 0;
     }
 
@@ -242,7 +242,7 @@
 
     .main-content {
         display: flex;
-        gap: 80px;
+        gap: 100px;
         padding: 20px 10px;
         flex-wrap: wrap;
         align-items: flex-start;
@@ -255,6 +255,7 @@
         border-radius: 16px;
         padding: 20px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+        max-width: 225px;
     }
 
     .sidebar h2 {
@@ -362,7 +363,6 @@
     .class-details {
         width: 100%;
         max-width: 850px;
-        margin-left: 40px;
         flex: 1;
         background-color: #f7d9eb;
         padding: 15px 40px 10px 40px;
