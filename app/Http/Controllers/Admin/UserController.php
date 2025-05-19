@@ -183,7 +183,7 @@ class UserController extends Controller
         $user->status = $user->status === 'active' ? 'deactivated' : 'active';
         $user->save();
 
-        $message = $user->status === 'deactivated' ? 'User deleted successfully.' : 'User status updated successfully.';
+        $message = $user->status === 'deactivated' ? 'User deactivated successfully.' : 'User status updated successfully.';
         $messageType = $user->status === 'deactivated' ? 'danger' : 'success';
 
         return redirect()->route('admin.dashboard')->with('success', $message)->with('message_type', $messageType);    }
