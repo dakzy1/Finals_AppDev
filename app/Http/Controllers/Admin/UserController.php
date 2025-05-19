@@ -65,8 +65,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('admin.dashboard')->with('success', 'User deleted successfully.');
-    }
+        return redirect()->route('admin.dashboard')->with('success', 'User updated successfully.')->with('message_type', 'success');    }
 
     // CRUD for FitnessClass
     public function storeFitnessClass(Request $request)
@@ -101,17 +100,20 @@ class UserController extends Controller
             'end_time' => 'required',
         ]);
 
-        $fitnessClass = FitnessClass::findOrFail($id);
-        $fitnessClass->update($request->all());
-        return redirect()->route('admin.classmanage')->with('success', 'Fitness Class updated successfully');
-    }
+    $fitnessClass = FitnessClass::findOrFail($id);
+    $fitnessClass->update($request->all());
+    return redirect()->route('admin.classmanage')
+        ->with('success', 'Fitness Class updated successfully')
+        ->with('message_type', 'success');    }
 
     public function destroyFitnessClass($id)
     {
-        $fitnessClass = FitnessClass::findOrFail($id);
-        $fitnessClass->delete();
-        return redirect()->route('admin.classmanage')->with('success', 'Fitness Class deleted successfully');
-    }
+    $fitnessClass = FitnessClass::findOrFail($id);
+    $fitnessClass->delete();
+    return redirect()->route('admin.classmanage')
+        ->with('success', 'Fitness Class deleted successfully')
+        ->with('message_type', 'danger');
+        }
 
     // CRUD for Schedule
     public function storeSchedule(Request $request)
@@ -181,8 +183,10 @@ class UserController extends Controller
         $user->status = $user->status === 'active' ? 'deactivated' : 'active';
         $user->save();
 
-        return redirect()->route('admin.dashboard')->with('success', 'User status updated successfully.');
-    }
+        $message = $user->status === 'deactivated' ? 'User deleted successfully.' : 'User status updated successfully.';
+        $messageType = $user->status === 'deactivated' ? 'danger' : 'success';
+
+        return redirect()->route('admin.dashboard')->with('success', $message)->with('message_type', $messageType);    }
 
 
 }

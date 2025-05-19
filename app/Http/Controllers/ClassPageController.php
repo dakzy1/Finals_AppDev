@@ -34,6 +34,7 @@ class ClassPageController extends Controller
         $userId = Auth::id();
 
         $upcomingSchedule = Schedule::where('user_id', $userId)
+            ->whereHas('fitnessClass')
             ->with('fitnessClass')
             ->orderBy('created_at')
             ->first();
@@ -46,6 +47,7 @@ class ClassPageController extends Controller
         // Add these:
         $schedules = Schedule::where('user_id', $userId)->with('fitnessClass')->get();
         $classes = FitnessClass::with('schedules')->get(); // Assuming you have a FitnessClass model
+        
 
         return view('dashboard', compact('upcomingSchedule', 'schedules', 'classes'));
     }
@@ -94,7 +96,7 @@ class ClassPageController extends Controller
         $validated = $request->validate([
             'trainer' => 'required|string|max:255',
             'time' => 'required',
-            'date' => 'required|date'
+            'date' => ['required', 'date', 'after_or_equal:today'],
         ]);
     
         $user = Auth::user();
@@ -103,10 +105,9 @@ class ClassPageController extends Controller
         
         $selectedTime = Carbon::parse($validated['time'])->format('H:i');
     
-        // 🔥 FIX: Remove class_id from conflict check
         $hasConflict = Schedule::where('user_id', $user->id)
             ->where('time', $selectedTime)
-            ->first(); // changed from exists() to first() so we can access conflict details
+            ->first();
 
         if ($hasConflict) {
             
@@ -121,12 +122,14 @@ class ClassPageController extends Controller
         Schedule::create([
             'user_id' => $user->id,
             'class_id' => $class->id,
-            'date' => $validated['date'], // Use the selected date
+            'date' => $validated['date'],
             'time' => $selectedTime,
             'trainer' => $validated['trainer'],
         ]);
     
-        return redirect()->route('dashboard')->with('success', 'Class booked successfully!');
+            return redirect()->route('dashboard')
+                ->with('success', 'Class booked successfully!')
+                ->with('message_type', 'success');
     }
 
     /**
@@ -158,6 +161,8 @@ class ClassPageController extends Controller
         $schedule = Schedule::findOrFail($id);
         $schedule->delete();
 
-        return redirect()->back()->with('success', 'Schedule deleted successfully!');
+        return redirect()->back()
+            ->with('success', 'Schedule deleted successfully!')
+            ->with('message_type', 'danger');
     }
 }
