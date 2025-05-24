@@ -83,11 +83,15 @@
             height: 100vh;
             backdrop-filter: blur(6px); /* background blur */
             background-color: rgba(0, 0, 0, 0.3); /* semi-transparent dark background */
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             z-index: 1000;
         }
+        .profile-overlay.active {
+            display: flex; /* Only shown when .active is added */
+        }
+
 
         /* Modal container */
         .profile-modal {
@@ -414,14 +418,21 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function openProfile() {
-            document.getElementById('profileOverlay').classList.remove('hidden');
-            document.body.classList.add('blurred');
+    const profileOverlay = document.getElementById('profileOverlay');
+    if (!profileOverlay.classList.contains('active')) {
+        profileOverlay.classList.add('active');
+        document.body.classList.add('blurred');
+            }
         }
 
         function closeProfile() {
-            document.getElementById('profileOverlay').classList.add('hidden');
-            document.body.classList.remove('blurred');
+            const profileOverlay = document.getElementById('profileOverlay');
+            if (profileOverlay.classList.contains('active')) {
+                profileOverlay.classList.remove('active');
+                document.body.classList.remove('blurred');
+            }
         }
+
 
         // Modified disableThis function
         function disableThis(button) {

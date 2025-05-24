@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('fitness_class_id')->constrained('fitness_classes')->onDelete('cascade');
             $table->timestamps();
         });
-        
     }
 
     /**
